@@ -176,6 +176,7 @@ async def process_unknown(
                     m["mx_asns"] = sorted(mx_asns)
                 if autodiscover:
                     m["autodiscover"] = autodiscover
+                m.pop("contact_email", None)  # ne pas publier
                 return m
 
         print(
@@ -321,16 +322,6 @@ async def run(data_path: Path) -> None:
                 domain = m["domain"]
                 mx = await lookup_mx(domain)
 
-                # Si pas de MX sur le domaine du site, essayer le domaine de l'email de contact
-                if not mx:
-                    contact_email = m.get("contact_email", "")
-                    if contact_email and "@" in contact_email:
-                        email_domain = contact_email.split("@")[1].lower().strip()
-                        if email_domain and email_domain != domain:
-                            mx = await lookup_mx(email_domain)
-                            if mx:
-                                domain = email_domain
-
                 if not mx:
                     return m
                 spf = await lookup_spf(domain)
@@ -464,6 +455,17 @@ async def run(data_path: Path) -> None:
             if m["provider"] != "unknown":
                 resolved += 1
         print(f"\nResolved {resolved}/{len(unknowns)} via scraping")
+
+    # Etape finale : masquer la partie locale des emails avant publication
+    # mairie-xxx@orange.fr -> [omis]@orange.fr
+    email_masked = 0
+    for m in communes.values():
+        raw = m.get("contact_email", "")
+        if raw and "@" in raw:
+            domain_part = raw.split("@", 1)[1]
+            m["contact_email"] = f"[omis]@{domain_part}"
+            email_masked += 1
+    print(f"  {email_masked} adresses email masquees")
 
     # Recompute counts
     counts: dict[str, int] = {}

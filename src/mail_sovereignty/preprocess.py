@@ -13,7 +13,7 @@ from urllib.parse import urlparse
 
 import httpx
 
-from mail_sovereignty.classify import classify, detect_gateway
+from mail_sovereignty.classify import classify, classify_from_mx, detect_gateway
 from mail_sovereignty.constants import CONCURRENCY, SPARQL_URL, SPARQL_QUERY
 from mail_sovereignty.dns import (
     lookup_autodiscover,
@@ -123,7 +123,10 @@ def dept_from_insee(insee: str) -> str:
     return insee[:2]
 
 
+
+
 def url_to_domain(url: str | None) -> str | None:
+    """Extrait le domaine de base depuis une URL."""
     if not url:
         return None
     parsed = urlparse(url if "://" in url else f"https://{url}")
@@ -179,19 +182,18 @@ def parse_service(svc: dict) -> tuple[str, dict[str, str]] | None:
 
     name = (svc.get("nom") or f"INSEE-{insee}").strip()
 
-    # site_internet est une liste de dicts {"libelle": "", "valeur": "https://..."}
-    sites = svc.get("site_internet") or []
-    website = sites[0].get("valeur", "") if sites else ""
-
     # adresse_courriel est une liste de chaines
+    emails = svc.get("adresse_courriel") or []
+    email = emails[0].strip() if emails else ""
+
     dept_code = dept_from_insee(insee)
     return insee, {
         "insee": insee,
         "name": name,
-        "website": website,
         "departement": DEPT_NAMES.get(dept_code, ""),
         "region": DEPT_TO_REGION.get(dept_code, ""),
-            }
+        "contact_email": email,
+    }
 
 
 def _check_mapshaper() -> bool:
@@ -344,14 +346,10 @@ async def fetch_dila() -> dict[str, dict[str, str]]:
                 insee, commune = result
                 if insee not in communes:
                     communes[insee] = commune
-                elif not communes[insee]["website"] and commune["website"]:
-                    communes[insee]["website"] = commune["website"]
+
             break  # Un seul fichier JSON local dans l'archive
 
-    print(
-        f"  {len(communes)} mairies extraites, "
-        f"{sum(1 for c in communes.values() if c['website'])} avec site web"
-    )
+    print(f"  {len(communes)} mairies extraites")
     return communes
 
 
@@ -376,40 +374,101 @@ async def fetch_wikidata() -> dict[str, dict[str, str]]:
     for row in data["results"]["bindings"]:
         insee = row["insee"]["value"]
         name = row.get("communeLabel", {}).get("value", f"INSEE-{insee}")
-        website = row.get("website", {}).get("value", "")
         departement = row.get("departementLabel", {}).get("value", "")
         region = row.get("regionLabel", {}).get("value", "")
         if insee not in communes:
             communes[insee] = {
-                "insee": insee, "name": name, "website": website,
-                "departement": departement, "region": region,             }
-        elif not communes[insee]["website"] and website:
-            communes[insee]["website"] = website
+                "insee": insee, "name": name,
+                "departement": departement, "region": region, "contact_email": "",
+            }
+
     print(f"  {len(communes)} communes depuis Wikidata")
     return communes
 
 
+def _build_entry(m: dict, domain: str, mx: list, spf: str, provider: str, gateway) -> dict[str, Any]:
+    """Construit l'entrée de résultat pour une commune."""
+    entry: dict[str, Any] = {
+        "insee": m["insee"],
+        "name": m["name"],
+        "departement": m.get("departement", ""),
+        "region": m.get("region", ""),
+        "domain": domain or "",
+        "mx": mx,
+        "spf": spf,
+        "provider": provider,
+    }
+    if m.get("contact_email"):
+        entry["contact_email"] = m["contact_email"]
+    if gateway:
+        entry["gateway"] = gateway
+    return entry
+
+
+
 async def scan_commune(m: dict[str, str], semaphore: asyncio.Semaphore) -> dict[str, Any]:
     async with semaphore:
-        domain = url_to_domain(m.get("website", ""))
-        mx, spf = [], ""
+        site_domain = url_to_domain(m.get("website", ""))
+        contact_email = m.get("contact_email", "")
+        email_domain = (
+            contact_email.split("@")[1].lower().strip()
+            if contact_email and "@" in contact_email
+            else ""
+        )
 
-        # 1. Essayer le domaine du site web
-        if domain:
-            mx = await lookup_mx(domain)
+        # --- Résolution en cascade, du plus précis au plus générique ---
+        #
+        # Principe : on évite tout lookup DNS inutile.
+        # Si le domaine (email ou site) est reconnu directement par ses keywords,
+        # on retourne immédiatement sans aucune requête réseau.
+        # On ne fait un lookup MX que si le domaine est inconnu ET qu'on
+        # n'a pas encore de résultat.
+
+        domain = ""
+        mx: list[str] = []
+        spf = ""
+
+        # Étape 1 : classifier le domaine de l'email de contact directement
+        if email_domain:
+            direct = classify_from_mx([email_domain])
+            if direct and direct != "independent":
+                # @orange.fr, @gmail.com, @ovh.net… — provider connu, 0 lookup
+                return _build_entry(m, email_domain, [], "", direct, None)
+            # Domaine inconnu (@mairie-truc.fr) — lookup MX seulement maintenant
+            mx = await lookup_mx(email_domain)
             if mx:
-                spf = await lookup_spf(domain)
+                domain = email_domain
+                spf = await lookup_spf(email_domain)
 
-        # 2. Essayer des variantes de domaine devinées depuis le nom de la commune
+        # Normalisation pour comparaison : retirer les tirets pour éviter
+        # les faux "domaines différents" (vigneux-de-bretagne.fr vs vigneuxdebretagne.fr)
+        def _normalize(d):
+            return d.replace("-", "").lower() if d else ""
+
+        # Étape 2 : site web — seulement si l'email n'a rien donné
+        # On considère les domaines comme identiques s'ils se normalisent pareil
+        if not mx and site_domain and _normalize(site_domain) != _normalize(email_domain):
+            direct = classify_from_mx([site_domain])
+            if direct and direct != "independent":
+                return _build_entry(m, site_domain, [], "", direct, None)
+            mx = await lookup_mx(site_domain)
+            if mx:
+                domain = site_domain
+                spf = await lookup_spf(site_domain)
+
+        # Étape 3 : variantes devinées — dernier recours
         if not mx:
+            tried = {_normalize(d) for d in (email_domain, site_domain) if d}
             for guess in guess_domains(m["name"]):
-                if guess == domain:
+                if _normalize(guess) in tried:
                     continue
                 mx = await lookup_mx(guess)
                 if mx:
                     domain = guess
                     spf = await lookup_spf(guess)
                     break
+
+        # Lookups complémentaires uniquement si on a un MX
         spf_resolved = await resolve_spf_includes(spf) if spf else ""
         mx_cnames = await resolve_mx_cnames(mx) if mx else {}
         mx_asns = await resolve_mx_asns(mx) if mx else set()
@@ -419,20 +478,9 @@ async def scan_commune(m: dict[str, str], semaphore: asyncio.Semaphore) -> dict[
             resolved_spf=spf_resolved or None, autodiscover=autodiscover or None,
         )
         gateway = detect_gateway(mx) if mx else None
-        entry: dict[str, Any] = {
-            "insee": m["insee"],
-            "name": m["name"],
-            "departement": m.get("departement", ""),
-            "region": m.get("region", ""),
-            "domain": domain or "",
-            "mx": mx,
-            "spf": spf,
-            "provider": provider,
-        }
+        entry = _build_entry(m, domain, mx, spf, provider, gateway)
         if spf_resolved and spf_resolved != spf:
             entry["spf_resolved"] = spf_resolved
-        if gateway:
-            entry["gateway"] = gateway
         if mx_cnames:
             entry["mx_cnames"] = mx_cnames
         if mx_asns:
@@ -454,8 +502,7 @@ async def run(output_path: Path) -> None:
         if insee not in communes:
             communes[insee] = c
             added_from_wikidata += 1
-        elif not communes[insee]["website"] and c["website"]:
-            communes[insee]["website"] = c["website"]
+
     if added_from_wikidata:
         print(f"  {added_from_wikidata} communes ajoutees depuis Wikidata (fallback)")
 
