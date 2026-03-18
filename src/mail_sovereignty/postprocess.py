@@ -104,7 +104,7 @@ def build_urls(domain: str) -> list[str]:
 
 
 async def scrape_email_domains(client: httpx.AsyncClient, domain: str) -> set[str]:
-    """Scrape a municipality website for email domains."""
+    """Scrape a commune website for email domains."""
     if not domain:
         return set()
 
@@ -129,14 +129,14 @@ async def scrape_email_domains(client: httpx.AsyncClient, domain: str) -> set[st
 async def process_unknown(
     client: httpx.AsyncClient, semaphore: asyncio.Semaphore, m: dict[str, Any]
 ) -> dict[str, Any]:
-    """Try to resolve an unknown municipality by scraping its website."""
+    """Try to resolve an unknown commune by scraping its website."""
     async with semaphore:
-        bfs = m["bfs"]
+        insee = m["insee"]
         name = m["name"]
         domain = m.get("domain", "")
 
         if not domain:
-            print(f"  SKIP     {bfs:>5} {name:<30} (no domain)")
+            print(f"  SKIP     {insee:>6} {name:<30} (no domain)")
             return m
 
         email_domains = await scrape_email_domains(client, domain)
@@ -159,7 +159,7 @@ async def process_unknown(
                 )
                 gateway = detect_gateway(mx)
                 print(
-                    f"  RESOLVED {bfs:>5} {name:<30} "
+                    f"  RESOLVED {insee:>6} {name:<30} "
                     f"email_domain={email_domain} -> {provider}"
                 )
                 m["mx"] = mx
@@ -179,153 +179,24 @@ async def process_unknown(
                 return m
 
         print(
-            f"  UNKNOWN  {bfs:>5} {name:<30} "
+            f"  UNKNOWN  {insee:>6} {name:<30} "
             f"(scraped email domains: {email_domains or 'none'})"
         )
         return m
 
 
-MANUAL_OVERRIDES = {
-    # Neuchatel canton: all use @ne.ch (cantonal mail gateway operated by SIEN,
-    # MX points to cantonal servers nemx9a.ne.ch / ne2mx9a.ne.ch on SWITCH AS559)
-    "6404": {
-        "domain": "ne.ch",
-        "provider": "swiss-isp",
-        "gateway": "cantonal-ne",
-        "mx": ["nemx9a.ne.ch", "ne2mx9a.ne.ch"],
-        "spf": "v=spf1 include:spf1.ne.ch include:spf.protection.outlook.com ~all",
-    },  # Boudry
-    "6408": {
-        "domain": "ne.ch",
-        "provider": "swiss-isp",
-        "gateway": "cantonal-ne",
-        "mx": ["nemx9a.ne.ch", "ne2mx9a.ne.ch"],
-        "spf": "v=spf1 include:spf1.ne.ch include:spf.protection.outlook.com ~all",
-    },  # Cortaillod
-    "6413": {
-        "domain": "ne.ch",
-        "provider": "swiss-isp",
-        "gateway": "cantonal-ne",
-        "mx": ["nemx9a.ne.ch", "ne2mx9a.ne.ch"],
-        "spf": "v=spf1 include:spf1.ne.ch include:spf.protection.outlook.com ~all",
-    },  # Rochefort
-    "6416": {
-        "domain": "ne.ch",
-        "provider": "swiss-isp",
-        "gateway": "cantonal-ne",
-        "mx": ["nemx9a.ne.ch", "ne2mx9a.ne.ch"],
-        "spf": "v=spf1 include:spf1.ne.ch include:spf.protection.outlook.com ~all",
-    },  # Milvignes
-    "6417": {
-        "domain": "ne.ch",
-        "provider": "swiss-isp",
-        "gateway": "cantonal-ne",
-        "mx": ["nemx9a.ne.ch", "ne2mx9a.ne.ch"],
-        "spf": "v=spf1 include:spf1.ne.ch include:spf.protection.outlook.com ~all",
-    },  # La Grande Beroche
-    "6432": {
-        "domain": "ne.ch",
-        "provider": "swiss-isp",
-        "gateway": "cantonal-ne",
-        "mx": ["nemx9a.ne.ch", "ne2mx9a.ne.ch"],
-        "spf": "v=spf1 include:spf1.ne.ch include:spf.protection.outlook.com ~all",
-    },  # La Brevine
-    "6433": {
-        "domain": "ne.ch",
-        "provider": "swiss-isp",
-        "gateway": "cantonal-ne",
-        "mx": ["nemx9a.ne.ch", "ne2mx9a.ne.ch"],
-        "spf": "v=spf1 include:spf1.ne.ch include:spf.protection.outlook.com ~all",
-    },  # Brot-Plamboz
-    "6434": {
-        "domain": "ne.ch",
-        "provider": "swiss-isp",
-        "gateway": "cantonal-ne",
-        "mx": ["nemx9a.ne.ch", "ne2mx9a.ne.ch"],
-        "spf": "v=spf1 include:spf1.ne.ch include:spf.protection.outlook.com ~all",
-    },  # Le Cerneux-Pequignot
-    "6435": {
-        "domain": "ne.ch",
-        "provider": "swiss-isp",
-        "gateway": "cantonal-ne",
-        "mx": ["nemx9a.ne.ch", "ne2mx9a.ne.ch"],
-        "spf": "v=spf1 include:spf1.ne.ch include:spf.protection.outlook.com ~all",
-    },  # La Chaux-du-Milieu
-    "6437": {
-        "domain": "ne.ch",
-        "provider": "swiss-isp",
-        "gateway": "cantonal-ne",
-        "mx": ["nemx9a.ne.ch", "ne2mx9a.ne.ch"],
-        "spf": "v=spf1 include:spf1.ne.ch include:spf.protection.outlook.com ~all",
-    },  # Les Ponts-de-Martel
-    "6451": {
-        "domain": "ne.ch",
-        "provider": "swiss-isp",
-        "gateway": "cantonal-ne",
-        "mx": ["nemx9a.ne.ch", "ne2mx9a.ne.ch"],
-        "spf": "v=spf1 include:spf1.ne.ch include:spf.protection.outlook.com ~all",
-    },  # Cornaux
-    "6455": {
-        "domain": "ne.ch",
-        "provider": "swiss-isp",
-        "gateway": "cantonal-ne",
-        "mx": ["nemx9a.ne.ch", "ne2mx9a.ne.ch"],
-        "spf": "v=spf1 include:spf1.ne.ch include:spf.protection.outlook.com ~all",
-    },  # Le Landeron
-    "6456": {
-        "domain": "ne.ch",
-        "provider": "swiss-isp",
-        "gateway": "cantonal-ne",
-        "mx": ["nemx9a.ne.ch", "ne2mx9a.ne.ch"],
-        "spf": "v=spf1 include:spf1.ne.ch include:spf.protection.outlook.com ~all",
-    },  # Lignieres
-    "6504": {
-        "domain": "ne.ch",
-        "provider": "swiss-isp",
-        "gateway": "cantonal-ne",
-        "mx": ["nemx9a.ne.ch", "ne2mx9a.ne.ch"],
-        "spf": "v=spf1 include:spf1.ne.ch include:spf.protection.outlook.com ~all",
-    },  # La Cote-aux-Fees
-    "6423": {
-        "domain": "ne.ch",
-        "provider": "swiss-isp",
-        "gateway": "cantonal-ne",
-        "mx": ["nemx9a.ne.ch", "ne2mx9a.ne.ch"],
-        "spf": "v=spf1 include:spf1.ne.ch include:spf.protection.outlook.com ~all",
-    },  # La Sagne
-    "6458": {
-        "domain": "ne.ch",
-        "provider": "swiss-isp",
-        "gateway": "cantonal-ne",
-        "mx": ["nemx9a.ne.ch", "ne2mx9a.ne.ch"],
-        "spf": "v=spf1 include:spf1.ne.ch include:spf.protection.outlook.com ~all",
-    },  # Neuchatel
-    "6487": {
-        "domain": "ne.ch",
-        "provider": "swiss-isp",
-        "gateway": "cantonal-ne",
-        "mx": ["nemx9a.ne.ch", "ne2mx9a.ne.ch"],
-        "spf": "v=spf1 include:spf1.ne.ch include:spf.protection.outlook.com ~all",
-    },  # Val-de-Ruz
-    # Other manual resolutions
-    "261": {
-        "domain": "zuerich.ch",
-        "provider": "independent",
-    },  # Zürich (not gemeinde-zuerich.ch)
-    "422": {
-        "domain": "ruetibeilyssach.ch",
-        "provider": "infomaniak",
-    },  # Rueti bei Lyssach
-    "2056": {
-        "name": "Fétigny-Ménières",
-        "canton": "Kanton Freiburg",
-        "domain": "fetigny-menieres.ch",
-        "provider": "microsoft",
-    },  # Missing from Wikidata
-    "6172": {
-        "domain": "gemeinde-bister.ch",
-        "provider": "microsoft",
-    },  # Bister VS
+# Overrides manuels pour la France.
+# Clé = code INSEE, valeur = champs à écraser.
+# Cas typiques :
+#   - domaine mutualisé à l'échelle d'un département / EPCI
+#   - commune absente de Wikidata (ajouter "name" + "departement" + "region")
+#   - correction d'une mauvaise détection automatique
+MANUAL_OVERRIDES: dict[str, dict[str, Any]] = {
+    # Exemple : communes utilisant la messagerie mutualisée du département du Nord
+    # "59001": {
+    #     "domain": "lenord.fr",
+    #     "provider": "microsoft",
+    # },
 }
 
 
@@ -333,55 +204,55 @@ async def run(data_path: Path) -> None:
     with open(data_path, encoding="utf-8") as f:
         data = json.load(f)
 
-    muni = data["municipalities"]
+    communes = data["communes"]
 
     # Step 1: Apply manual overrides
     print("Applying manual overrides...")
-    dns_relookup = []  # (bfs, domain) pairs needing MX/SPF re-lookup
-    for bfs, override in MANUAL_OVERRIDES.items():
-        if bfs not in muni and "name" in override:
-            muni[bfs] = {
-                "bfs": bfs,
+    dns_relookup = []  # (insee, domain) pairs needing MX/SPF re-lookup
+    for insee, override in MANUAL_OVERRIDES.items():
+        if insee not in communes and "name" in override:
+            communes[insee] = {
+                "insee": insee,
                 "name": override["name"],
-                "canton": override.get("canton", ""),
+                "departement": override.get("departement", ""),
+                "region": override.get("region", ""),
                 "domain": "",
                 "mx": [],
                 "spf": "",
                 "provider": "unknown",
             }
-            print(f"  {bfs:>5} {override['name']:<30} (added missing municipality)")
-        if bfs not in muni:
+            print(f"  {insee:>6} {override['name']:<30} (added missing commune)")
+        if insee not in communes:
             continue
-        if bfs in muni:
-            if "domain" in override:
-                muni[bfs]["domain"] = override["domain"]
-            if "provider" in override:
-                muni[bfs]["provider"] = override["provider"]
-            if "gateway" in override:
-                muni[bfs]["gateway"] = override["gateway"]
-            if "mx" in override:
-                muni[bfs]["mx"] = override["mx"]
-            if "spf" in override:
-                muni[bfs]["spf"] = override["spf"]
-            if override.get("provider") == "merged":
-                muni[bfs]["mx"] = []
-                muni[bfs]["spf"] = ""
-            # Domain-only override: need to re-lookup MX/SPF from DNS
-            if (
-                "domain" in override
-                and override["domain"]
-                and "mx" not in override
-                and "provider" not in override
-            ):
-                dns_relookup.append((bfs, override["domain"]))
-            else:
-                print(
-                    f"  {bfs:>5} {muni[bfs]['name']:<30} -> {override.get('provider', '?')}"
-                )
+        if "domain" in override:
+            communes[insee]["domain"] = override["domain"]
+        if "provider" in override:
+            communes[insee]["provider"] = override["provider"]
+        if "gateway" in override:
+            communes[insee]["gateway"] = override["gateway"]
+        if "mx" in override:
+            communes[insee]["mx"] = override["mx"]
+        if "spf" in override:
+            communes[insee]["spf"] = override["spf"]
+        if override.get("provider") == "merged":
+            communes[insee]["mx"] = []
+            communes[insee]["spf"] = ""
+        # Domain-only override: need to re-lookup MX/SPF from DNS
+        if (
+            "domain" in override
+            and override["domain"]
+            and "mx" not in override
+            and "provider" not in override
+        ):
+            dns_relookup.append((insee, override["domain"]))
+        else:
+            print(
+                f"  {insee:>6} {communes[insee]['name']:<30} -> {override.get('provider', '?')}"
+            )
 
     if dns_relookup:
 
-        async def _relookup(bfs, domain):
+        async def _relookup(insee, domain):
             mx = await lookup_mx(domain)
             spf = await lookup_spf(domain)
             spf_resolved = await resolve_spf_includes(spf) if spf else ""
@@ -398,7 +269,7 @@ async def run(data_path: Path) -> None:
             )
             gateway = detect_gateway(mx) if mx else None
             return (
-                bfs,
+                insee,
                 mx,
                 spf,
                 spf_resolved,
@@ -409,9 +280,9 @@ async def run(data_path: Path) -> None:
                 autodiscover,
             )
 
-        results = await asyncio.gather(*[_relookup(b, d) for b, d in dns_relookup])
+        results = await asyncio.gather(*[_relookup(i, d) for i, d in dns_relookup])
         for (
-            bfs,
+            insee,
             mx,
             spf,
             spf_resolved,
@@ -421,38 +292,54 @@ async def run(data_path: Path) -> None:
             gateway,
             autodiscover,
         ) in results:
-            muni[bfs]["mx"] = mx
-            muni[bfs]["spf"] = spf
-            muni[bfs]["provider"] = provider
+            communes[insee]["mx"] = mx
+            communes[insee]["spf"] = spf
+            communes[insee]["provider"] = provider
             if spf_resolved and spf_resolved != spf:
-                muni[bfs]["spf_resolved"] = spf_resolved
+                communes[insee]["spf_resolved"] = spf_resolved
             if gateway:
-                muni[bfs]["gateway"] = gateway
+                communes[insee]["gateway"] = gateway
             if mx_cnames:
-                muni[bfs]["mx_cnames"] = mx_cnames
+                communes[insee]["mx_cnames"] = mx_cnames
             if mx_asns:
-                muni[bfs]["mx_asns"] = sorted(mx_asns)
+                communes[insee]["mx_asns"] = sorted(mx_asns)
             if autodiscover:
-                muni[bfs]["autodiscover"] = autodiscover
-            print(f"  {bfs:>5} {muni[bfs]['name']:<30} -> {provider} (DNS re-lookup)")
+                communes[insee]["autodiscover"] = autodiscover
+            print(
+                f"  {insee:>6} {communes[insee]['name']:<30} -> {provider} (DNS re-lookup)"
+            )
 
-    # Step 2: Retry DNS for unknowns that have a domain
+    # Step 2: Retry DNS for unknowns that have a domain (asynchrone + verbose)
     dns_retry_candidates = [
-        m for m in muni.values() if m["provider"] == "unknown" and m.get("domain")
+        m for m in communes.values() if m["provider"] == "unknown" and m.get("domain")
     ]
     if dns_retry_candidates:
         print(f"\nRetrying DNS for {len(dns_retry_candidates)} unknown domains...")
-        for m in dns_retry_candidates:
-            mx = await lookup_mx(m["domain"])
-            if mx:
-                spf = await lookup_spf(m["domain"])
+
+        async def _dns_retry(m: dict[str, Any], sem: asyncio.Semaphore) -> dict[str, Any]:
+            async with sem:
+                domain = m["domain"]
+                mx = await lookup_mx(domain)
+
+                # Si pas de MX sur le domaine du site, essayer le domaine de l'email de contact
+                if not mx:
+                    contact_email = m.get("contact_email", "")
+                    if contact_email and "@" in contact_email:
+                        email_domain = contact_email.split("@")[1].lower().strip()
+                        if email_domain and email_domain != domain:
+                            mx = await lookup_mx(email_domain)
+                            if mx:
+                                domain = email_domain
+
+                if not mx:
+                    return m
+                spf = await lookup_spf(domain)
                 spf_resolved = await resolve_spf_includes(spf) if spf else ""
                 mx_cnames = await resolve_mx_cnames(mx)
                 mx_asns = await resolve_mx_asns(mx)
-                autodiscover = await lookup_autodiscover(m["domain"])
+                autodiscover = await lookup_autodiscover(domain)
                 provider = classify(
-                    mx,
-                    spf,
+                    mx, spf,
                     mx_cnames=mx_cnames,
                     mx_asns=mx_asns or None,
                     resolved_spf=spf_resolved or None,
@@ -472,24 +359,58 @@ async def run(data_path: Path) -> None:
                     m["mx_asns"] = sorted(mx_asns)
                 if autodiscover:
                     m["autodiscover"] = autodiscover
-                print(f"  RECOVERED {m['bfs']:>5} {m['name']:<30} -> {provider}")
+                return m
+
+        retry_sem = asyncio.Semaphore(CONCURRENCY_POSTPROCESS)
+        retry_tasks = [_dns_retry(m, retry_sem) for m in dns_retry_candidates]
+        recovered = 0
+        done_retry = 0
+        total_retry = len(retry_tasks)
+        no_mx_domains: list[str] = []
+
+        for coro in asyncio.as_completed(retry_tasks):
+            m = await coro
+            done_retry += 1
+            if m["provider"] != "unknown":
+                recovered += 1
+                print(
+                    f"  RECOVERED [{done_retry:4d}/{total_retry}] "
+                    f"{m['insee']:>6} {m['name']:<30} "
+                    f"domain={m['domain']:<35} -> {m['provider']}"
+                )
+            else:
+                no_mx_domains.append(m["domain"])
+                if done_retry % 100 == 0 or done_retry == total_retry:
+                    print(
+                        f"  Progress  [{done_retry:4d}/{total_retry}] "
+                        f"recovered={recovered} still_unknown={done_retry - recovered}"
+                    )
+
+        print(f"  DNS retry complete : {recovered}/{total_retry} resolus")
+        if no_mx_domains:
+            # Afficher un echantillon des domaines sans MX
+            sample = no_mx_domains[:20]
+            print(f"  Domaines sans MX ({len(no_mx_domains)} total, echantillon) :")
+            for d in sample:
+                print(f"    {d}")
+            if len(no_mx_domains) > 20:
+                print(f"    ... et {len(no_mx_domains) - 20} autres")
 
     # Step 2.5: SMTP banner check for independent/unknown with MX records
     smtp_candidates = [
         m
-        for m in muni.values()
+        for m in communes.values()
         if m["provider"] in ("independent", "unknown") and m.get("mx")
     ]
     if smtp_candidates:
-        # Deduplicate: map each unique MX host -> list of BFS numbers
-        mx_host_to_bfs: dict[str, list[str]] = {}
+        mx_host_to_insee: dict[str, list[str]] = {}
         for m in smtp_candidates:
             primary_mx = m["mx"][0]
-            mx_host_to_bfs.setdefault(primary_mx, []).append(m["bfs"])
+            mx_host_to_insee.setdefault(primary_mx, []).append(m["insee"])
 
         print(
             f"\nSMTP banner check: {len(smtp_candidates)} entries, "
-            f"{len(mx_host_to_bfs)} unique MX hosts..."
+            f"{len(mx_host_to_insee)} unique MX hosts..."
         )
         smtp_semaphore = asyncio.Semaphore(CONCURRENCY_SMTP)
 
@@ -499,7 +420,7 @@ async def run(data_path: Path) -> None:
                 return mx_host, res
 
         banner_results = await asyncio.gather(
-            *[_fetch_banner(host) for host in mx_host_to_bfs]
+            *[_fetch_banner(host) for host in mx_host_to_insee]
         )
 
         smtp_reclassified = 0
@@ -509,28 +430,28 @@ async def run(data_path: Path) -> None:
             if not banner:
                 continue
             provider = classify_from_smtp_banner(banner, ehlo)
-            for bfs in mx_host_to_bfs[mx_host]:
-                muni[bfs]["smtp_banner"] = banner
-                if provider and muni[bfs]["provider"] in ("independent", "unknown"):
-                    old = muni[bfs]["provider"]
-                    muni[bfs]["provider"] = provider
+            for insee in mx_host_to_insee[mx_host]:
+                communes[insee]["smtp_banner"] = banner
+                if provider and communes[insee]["provider"] in ("independent", "unknown"):
+                    old = communes[insee]["provider"]
+                    communes[insee]["provider"] = provider
                     smtp_reclassified += 1
                     print(
-                        f"  SMTP     {bfs:>5} {muni[bfs]['name']:<30} "
+                        f"  SMTP     {insee:>6} {communes[insee]['name']:<30} "
                         f"{old} -> {provider} ({mx_host})"
                     )
 
         print(f"  SMTP reclassified: {smtp_reclassified}")
 
     # Step 3: Scrape remaining unknowns
-    unknowns = [m for m in muni.values() if m["provider"] == "unknown"]
-    print(f"\n{len(unknowns)} unknown municipalities to investigate\n")
+    unknowns = [m for m in communes.values() if m["provider"] == "unknown"]
+    print(f"\n{len(unknowns)} unknown communes to investigate\n")
 
     if unknowns:
         semaphore = asyncio.Semaphore(CONCURRENCY_POSTPROCESS)
         async with httpx.AsyncClient(
             headers={
-                "User-Agent": "mxmap.ch/1.0 (https://github.com/davidhuser/mxmap)"
+                "User-Agent": "mxmap.fr/1.0 (https://github.com/davidhuser/mxmap)"
             },
             follow_redirects=True,
         ) as client:
@@ -539,28 +460,29 @@ async def run(data_path: Path) -> None:
 
         resolved = 0
         for m in results:
-            muni[m["bfs"]] = m
+            communes[m["insee"]] = m
             if m["provider"] != "unknown":
                 resolved += 1
         print(f"\nResolved {resolved}/{len(unknowns)} via scraping")
 
     # Recompute counts
-    counts = {}
-    for m in muni.values():
+    counts: dict[str, int] = {}
+    for m in communes.values():
         counts[m["provider"]] = counts.get(m["provider"], 0) + 1
     data["counts"] = dict(sorted(counts.items()))
-    data["total"] = len(muni)
-    data["municipalities"] = dict(sorted(muni.items(), key=lambda kv: int(kv[0])))
+    data["total"] = len(communes)
+    data["communes"] = dict(sorted(communes.items(), key=lambda kv: kv[0]))
 
     remaining = counts.get("unknown", 0)
     print(f"\nFinal counts: {json.dumps(counts)}")
 
     if remaining > 0:
         print(f"\nStill unknown ({remaining}, for manual review):")
-        for m in sorted(muni.values(), key=lambda x: int(x["bfs"])):
+        for m in sorted(communes.values(), key=lambda x: x["insee"]):
             if m["provider"] == "unknown":
                 print(
-                    f"  {m['bfs']:>5}  {m['name']:<30} {m['canton']:<20} domain={m['domain']}"
+                    f"  {m['insee']:>6}  {m['name']:<30} "
+                    f"{m.get('departement', ''):.<20} domain={m['domain']}"
                 )
 
     with open(data_path, "w", encoding="utf-8") as f:

@@ -1,13 +1,18 @@
 from mail_sovereignty.constants import (
     AWS_KEYWORDS,
+    BOUYGUES_KEYWORDS,
     FOREIGN_SENDER_KEYWORDS,
+    FREE_KEYWORDS,
+    FRENCH_ISP_ASNS,
     GATEWAY_KEYWORDS,
     GOOGLE_KEYWORDS,
-    INFOMANIAK_KEYWORDS,
+    GANDI_KEYWORDS,
     MICROSOFT_KEYWORDS,
+    ORANGE_KEYWORDS,
+    OVH_KEYWORDS,
     PROVIDER_KEYWORDS,
+    SFR_KEYWORDS,
     SMTP_BANNER_KEYWORDS,
-    SWISS_ISP_ASNS,
 )
 
 
@@ -43,7 +48,7 @@ def detect_gateway(mx_records: list[str]) -> str | None:
 
 
 def _check_spf_for_provider(spf_blob: str) -> str | None:
-    """Check an SPF blob for hyperscaler keywords, return provider or None."""
+    """Check an SPF blob for provider keywords, return provider or None."""
     for provider, keywords in PROVIDER_KEYWORDS.items():
         if any(k in spf_blob for k in keywords):
             return provider
@@ -61,33 +66,56 @@ def classify(
     """Classify email provider based on MX, CNAME targets, and SPF.
 
     MX records are checked first (they show where mail is actually delivered).
-    CNAME targets of MX hosts are checked next (to detect hidden hyperscaler usage).
+    CNAME targets of MX hosts are checked next (to detect hidden provider usage).
     If MX points to a known gateway, SPF (including resolved includes) is checked
     to identify the actual mailbox provider behind the gateway.
     SPF is only used as fallback when MX alone is inconclusive.
     """
     mx_blob = " ".join(mx_records).lower()
 
+    # --- Check MX directly ---
     if any(k in mx_blob for k in MICROSOFT_KEYWORDS):
         return "microsoft"
     if any(k in mx_blob for k in GOOGLE_KEYWORDS):
         return "google"
-    if any(k in mx_blob for k in INFOMANIAK_KEYWORDS):
-        return "infomaniak"
+    if any(k in mx_blob for k in OVH_KEYWORDS):
+        return "ovh"
+    if any(k in mx_blob for k in GANDI_KEYWORDS):
+        return "gandi"
     if any(k in mx_blob for k in AWS_KEYWORDS):
         return "aws"
+    if any(k in mx_blob for k in ORANGE_KEYWORDS):
+        return "orange"
+    if any(k in mx_blob for k in FREE_KEYWORDS):
+        return "free"
+    if any(k in mx_blob for k in SFR_KEYWORDS):
+        return "sfr"
+    if any(k in mx_blob for k in BOUYGUES_KEYWORDS):
+        return "bouygues"
 
+    # --- Check CNAME targets of MX hosts ---
     if mx_records and mx_cnames:
         cname_blob = " ".join(mx_cnames.values()).lower()
         if any(k in cname_blob for k in MICROSOFT_KEYWORDS):
             return "microsoft"
         if any(k in cname_blob for k in GOOGLE_KEYWORDS):
             return "google"
-        if any(k in cname_blob for k in INFOMANIAK_KEYWORDS):
-            return "infomaniak"
+        if any(k in cname_blob for k in OVH_KEYWORDS):
+            return "ovh"
+        if any(k in cname_blob for k in GANDI_KEYWORDS):
+            return "gandi"
         if any(k in cname_blob for k in AWS_KEYWORDS):
             return "aws"
+        if any(k in cname_blob for k in ORANGE_KEYWORDS):
+            return "orange"
+        if any(k in cname_blob for k in FREE_KEYWORDS):
+            return "free"
+        if any(k in cname_blob for k in SFR_KEYWORDS):
+            return "sfr"
+        if any(k in cname_blob for k in BOUYGUES_KEYWORDS):
+            return "bouygues"
 
+    # --- MX points to a known security gateway: look behind it via SPF/autodiscover ---
     if mx_records and detect_gateway(mx_records):
         spf_blob = (spf_record or "").lower()
         provider = _check_spf_for_provider(spf_blob)
@@ -95,25 +123,37 @@ def classify(
             provider = _check_spf_for_provider(resolved_spf.lower())
         if provider:
             return provider
-        # No hyperscaler in SPF — check autodiscover for backend provider
         ad_provider = classify_from_autodiscover(autodiscover)
         if ad_provider:
             return ad_provider
         # Gateway relays to independent, fall through
 
+    # --- MX exists but no known provider matched ---
     if mx_records:
-        if mx_asns and mx_asns & SWISS_ISP_ASNS.keys():
-            # Check autodiscover for hyperscaler backend behind Swiss ISP relay
+        if mx_asns and mx_asns & FRENCH_ISP_ASNS.keys():
+            # Check autodiscover for a provider hidden behind a French ISP relay
             ad_provider = classify_from_autodiscover(autodiscover)
             if ad_provider:
                 return ad_provider
-            return "swiss-isp"
-        # Check autodiscover for hyperscaler backend behind independent MX
+            # Identifier le FAI par son ASN
+            asn_match = mx_asns & FRENCH_ISP_ASNS.keys()
+            asn = next(iter(asn_match))
+            isp_name = FRENCH_ISP_ASNS[asn].lower()
+            if "orange" in isp_name or "wanadoo" in isp_name:
+                return "orange"
+            if "free" in isp_name or "iliad" in isp_name:
+                return "free"
+            if "sfr" in isp_name or "numericable" in isp_name or "cegetel" in isp_name:
+                return "sfr"
+            if "bouygues" in isp_name:
+                return "bouygues"
+            return "french-isp"
         ad_provider = classify_from_autodiscover(autodiscover)
         if ad_provider:
             return ad_provider
         return "independent"
 
+    # --- No MX: fall back to SPF ---
     spf_blob = (spf_record or "").lower()
     provider = _check_spf_for_provider(spf_blob)
     if not provider and resolved_spf:

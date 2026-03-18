@@ -19,27 +19,9 @@ MIN_AVERAGE_SCORE = int(os.environ.get("MIN_AVERAGE_SCORE", "70"))
 MIN_HIGH_CONFIDENCE_PCT = int(os.environ.get("MIN_HIGH_CONFIDENCE_PCT", "80"))
 HIGH_CONFIDENCE_THRESHOLD = 80
 
-MANUAL_OVERRIDE_BFS = {
-    "6404",
-    "6408",
-    "6413",
-    "6416",
-    "6417",
-    "6423",
-    "6432",
-    "6433",
-    "6434",
-    "6435",
-    "6437",
-    "6451",
-    "6455",
-    "6456",
-    "6458",
-    "6487",
-    "6504",
-    "422",
-}
-
+# INSEE codes des communes ajoutées via MANUAL_OVERRIDES dans postprocess.py.
+# Elles reçoivent un bonus de +5 points dans le scoring.
+MANUAL_OVERRIDE_INSEE: set[str] = set()
 
 POTENTIAL_GATEWAY_THRESHOLD = 5
 
@@ -47,9 +29,9 @@ POTENTIAL_GATEWAY_THRESHOLD = 5
 def _detect_potential_gateways(
     scored_entries: list[dict[str, Any]],
 ) -> list[tuple[str, int, list[str]]]:
-    """Find MX domain suffixes shared by many independent municipalities.
+    """Find MX domain suffixes shared by many independent communes.
 
-    Returns a list of (suffix, municipality_count, sample_names) tuples
+    Returns a list of (suffix, commune_count, sample_names) tuples
     sorted by count descending, for suffixes with count >= threshold.
     """
     known_suffixes: set[str] = set()
@@ -59,7 +41,7 @@ def _detect_potential_gateways(
             if len(parts) >= 2:
                 known_suffixes.add(".".join(parts[-2:]))
 
-    suffix_municipalities: dict[str, list[str]] = {}
+    suffix_communes: dict[str, list[str]] = {}
     for entry in scored_entries:
         if entry.get("provider") != "independent":
             continue
@@ -81,30 +63,28 @@ def _detect_potential_gateways(
                 continue
             if suffix in known_suffixes:
                 continue
-            if suffix not in suffix_municipalities:
-                suffix_municipalities[suffix] = []
-            suffix_municipalities[suffix].append(entry.get("name", ""))
+            if suffix not in suffix_communes:
+                suffix_communes[suffix] = []
+            suffix_communes[suffix].append(entry.get("name", ""))
 
     results = []
-    for suffix, names in sorted(
-        suffix_municipalities.items(), key=lambda x: -len(x[1])
-    ):
+    for suffix, names in sorted(suffix_communes.items(), key=lambda x: -len(x[1])):
         if len(names) >= POTENTIAL_GATEWAY_THRESHOLD:
             results.append((suffix, len(names), names[:3]))
     return results
 
 
 def score_entry(entry: dict[str, Any]) -> dict[str, Any]:
-    """Score a municipality entry 0-100 with explanatory flags."""
+    """Score a commune entry 0-100 with explanatory flags."""
     provider = entry.get("provider", "unknown")
     domain = entry.get("domain", "")
     mx = entry.get("mx", [])
     spf = entry.get("spf", "")
-    bfs = entry.get("bfs", "")
+    insee = entry.get("insee", "")
 
     # Merged entries: automatically 100
     if provider == "merged":
-        return {"score": 100, "flags": ["merged_municipality"]}
+        return {"score": 100, "flags": ["merged_commune"]}
 
     score = 0
     flags = []
@@ -215,7 +195,7 @@ def score_entry(entry: dict[str, Any]) -> dict[str, Any]:
             flags.append(f"autodiscover_suggests:{ad_provider}")
 
     # Manual override (+5)
-    if bfs in MANUAL_OVERRIDE_BFS:
+    if insee in MANUAL_OVERRIDE_INSEE:
         score += 5
         flags.append("manual_override")
 
@@ -233,7 +213,7 @@ def print_report(scored_entries: list[dict[str, Any]]) -> None:
     total = len(scores)
 
     print(f"\n{'=' * 60}")
-    print(f"  VALIDATION REPORT  ({total} municipalities)")
+    print(f"  VALIDATION REPORT  ({total} communes)")
     print(f"{'=' * 60}")
 
     buckets = {"90-100": 0, "70-89": 0, "50-69": 0, "30-49": 0, "0-29": 0}
@@ -268,7 +248,7 @@ def print_report(scored_entries: list[dict[str, Any]]) -> None:
     avg = sum(scores) / total if total else 0
     print(f"\n  Average score: {avg:.1f}")
 
-    flag_counts = {}
+    flag_counts: dict[str, int] = {}
     for e in scored_entries:
         for f in e["flags"]:
             flag_name = f.split(":")[0]
@@ -278,16 +258,16 @@ def print_report(scored_entries: list[dict[str, Any]]) -> None:
     for flag, count in sorted(flag_counts.items(), key=lambda x: -x[1]):
         print(f"    {flag:<35} {count:>5}")
 
-    non_merged = [e for e in scored_entries if "merged_municipality" not in e["flags"]]
+    non_merged = [e for e in scored_entries if "merged_commune" not in e["flags"]]
     lowest = sorted(non_merged, key=lambda x: x["score"])[:15]
 
     print("\n  Lowest-confidence entries (for review):")
-    print(f"    {'BFS':>5}  {'Score':>5}  {'Provider':<12} {'Name':<30} Flags")
-    print(f"    {'-' * 5}  {'-' * 5}  {'-' * 12} {'-' * 30} {'-' * 20}")
+    print(f"    {'INSEE':>6}  {'Score':>5}  {'Provider':<12} {'Name':<30} Flags")
+    print(f"    {'-' * 6}  {'-' * 5}  {'-' * 12} {'-' * 30} {'-' * 20}")
     for e in lowest:
         flags_str = ", ".join(e["flags"])
         print(
-            f"    {e['bfs']:>5}  {e['score']:>5}  {e['provider']:<12} "
+            f"    {e['insee']:>6}  {e['score']:>5}  {e['provider']:<12} "
             f"{e['name']:<30} {flags_str}"
         )
 
@@ -296,7 +276,7 @@ def print_report(scored_entries: list[dict[str, Any]]) -> None:
         print(f"\n  MX/SPF mismatches ({len(mismatched)}):")
         for e in sorted(mismatched, key=lambda x: x["score"]):
             print(
-                f"    {e['bfs']:>5}  {e['name']:<30} "
+                f"    {e['insee']:>6}  {e['name']:<30} "
                 f"mx_provider={classify_from_mx(e.get('mx_raw', []))} "
                 f"spf_provider={classify_from_spf(e.get('spf_raw', ''))}"
             )
@@ -306,7 +286,7 @@ def print_report(scored_entries: list[dict[str, Any]]) -> None:
         print("\n  Potential undetected gateways:")
         for suffix, count, samples in potential_gateways:
             sample_str = ", ".join(samples)
-            print(f"    {suffix:<30} {count:>3} municipalities  (e.g. {sample_str})")
+            print(f"    {suffix:<30} {count:>3} communes  (e.g. {sample_str})")
 
     print(f"\n{'=' * 60}\n")
 
@@ -319,14 +299,14 @@ def run(data_path: Path, output_dir: Path, quality_gate: bool = False) -> bool:
         print("Error: data.json not found. Run preprocess first.")
         sys.exit(1)
 
-    municipalities = data["municipalities"]
+    communes = data["communes"]
     scored = []
 
-    for bfs, entry in municipalities.items():
+    for insee, entry in communes.items():
         result = score_entry(entry)
         scored.append(
             {
-                "bfs": entry["bfs"],
+                "insee": entry["insee"],
                 "name": entry["name"],
                 "provider": entry["provider"],
                 "domain": entry.get("domain", ""),
@@ -355,7 +335,7 @@ def run(data_path: Path, output_dir: Path, quality_gate: bool = False) -> bool:
         "high_confidence_pct": high_confidence_pct,
         "quality_passed": quality_passed,
         "entries": {
-            e["bfs"]: {
+            e["insee"]: {
                 "name": e["name"],
                 "provider": e["provider"],
                 "domain": e["domain"],
@@ -376,11 +356,11 @@ def run(data_path: Path, output_dir: Path, quality_gate: bool = False) -> bool:
     sorted_entries = sorted(scored, key=lambda e: (e["score"], e["name"]))
     with open(csv_path, "w", encoding="utf-8", newline="") as f:
         writer = csv.writer(f)
-        writer.writerow(["bfs", "name", "provider", "domain", "confidence", "flags"])
+        writer.writerow(["insee", "name", "provider", "domain", "confidence", "flags"])
         for e in sorted_entries:
             writer.writerow(
                 [
-                    e["bfs"],
+                    e["insee"],
                     e["name"],
                     e["provider"],
                     e["domain"],

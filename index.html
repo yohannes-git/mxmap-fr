@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -15,23 +15,19 @@
 <link rel="dns-prefetch" href="https://b.basemaps.cartocdn.com">
 <link rel="dns-prefetch" href="https://c.basemaps.cartocdn.com">
 <link rel="dns-prefetch" href="https://d.basemaps.cartocdn.com">
-<title>MXmap — Email Providers of Swiss Municipalities</title>
-<meta name="description" content="Interactive map showing the email providers of all ~2,100 Swiss municipalities, based on DNS analysis of MX and SPF records.">
-<meta name="keywords" content="Switzerland, municipalities, email, sovereignty, CLOUD Act, MX records, SPF, DNS, Microsoft 365, Google Workspace, digital sovereignty, data protection">
+<title>MXmap — Hébergeurs de messagerie des communes françaises</title>
+<meta name="description" content="Carte interactive montrant les hébergeurs de messagerie de toutes les communes françaises, basée sur l'analyse DNS des enregistrements MX et SPF.">
+<meta name="keywords" content="France, communes, email, souveraineté numérique, CLOUD Act, MX, SPF, DNS, Microsoft 365, Google Workspace, OVH, souveraineté des données">
 <meta name="author" content="David Huser">
 <meta name="robots" content="index, follow">
-<link rel="canonical" href="https://mxmap.ch/">
 <meta property="og:type" content="website">
-<meta property="og:title" content="MXmap — Email Providers of Swiss Municipalities">
-<meta property="og:description" content="Interactive map showing where Swiss municipalities host their official email. DNS analysis of all ~2,100 municipalities, color-coded by provider.">
-<meta property="og:url" content="https://mxmap.ch/">
-<meta property="og:locale" content="en_CH">
+<meta property="og:title" content="MXmap — Hébergeurs de messagerie des communes françaises">
+<meta property="og:description" content="Carte interactive montrant où les communes françaises hébergent leur messagerie officielle. Analyse DNS de toutes les communes, colorées par hébergeur.">
+<meta property="og:locale" content="fr_FR">
 <meta property="og:site_name" content="MXmap">
-<meta property="og:image" content="https://mxmap.ch/og-image.jpg">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="MXmap — Email Providers of Swiss Municipalities">
-<meta name="twitter:description" content="Interactive map showing where Swiss municipalities host their official email. DNS analysis of all ~2,100 municipalities.">
-<meta name="twitter:image" content="https://mxmap.ch/og-image.jpg">
+<meta name="twitter:title" content="MXmap — Hébergeurs de messagerie des communes françaises">
+<meta name="twitter:description" content="Carte interactive montrant où les communes françaises hébergent leur messagerie officielle.">
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect x='2' y='7' width='28' height='18' rx='2' fill='%231a1a2e'/%3E%3Cpath d='M2 9l14 9 14-9' fill='none' stroke='%2316a34a' stroke-width='2'/%3E%3C/svg%3E">
 <link rel="preload" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
 <noscript><link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"></noscript>
@@ -123,55 +119,71 @@
     font-size: 10px; font-weight: 600; line-height: 1.6;
   }
   .cat-badge.hyperscaler { background: #fde8e8; color: #E83838; }
-  .cat-badge.swiss { background: #e0f5f1; color: #10B898; }
+  .cat-badge.french { background: #e0f0ff; color: #1d6fbf; }
+  .cat-badge.fai-fr { background: #f3e8ff; color: #7c3aed; }
   .cat-badge.foreign { background: #fef3c7; color: #b45309; }
   .cat-badge.unknown { background: #f3f4f6; color: #6b7280; }
   .legend-group { margin-top: 8px; }
   .legend-group:first-child { margin-top: 4px; }
   .legend-group-label { font-size: 11px; color: #999; text-transform: uppercase; letter-spacing: 0.3px; font-weight: 600; display: block; margin-bottom: 2px; }
+  .popup-meta { font-size: 11px; color: #888; margin-top: 4px; }
+  .legend-item {
+    display: flex; align-items: center; gap: 6px;
+    padding: 2px 4px; border-radius: 3px; cursor: pointer;
+    user-select: none; transition: opacity 0.15s;
+  }
+  .legend-item:hover { background: rgba(0,0,0,0.05); }
+  .legend-item input[type=checkbox] { cursor: pointer; margin: 0; width: 13px; height: 13px; accent-color: #1a1a2e; }
+  .legend-item.disabled { opacity: 0.35; }
+  .legend-item label { cursor: pointer; font-size: 12px; line-height: 1.4; }
+  .legend-actions { display: flex; gap: 6px; margin-top: 8px; padding-top: 8px; border-top: 1px solid #e5e7eb; }
+  .legend-btn {
+    flex: 1; font-size: 11px; padding: 3px 0; border: 1px solid #d1d5db;
+    border-radius: 3px; background: #f9fafb; cursor: pointer; color: #374151;
+    transition: background 0.1s;
+  }
+  .legend-btn:hover { background: #e5e7eb; }
 </style>
 </head>
 <body>
 <header id="header">
   <div class="header-left">
     <h1 class="brand">MXmap</h1>
-    <span class="beta-badge" title="Beta status, this website may contain errors">beta</span>
+    <span class="beta-badge" title="Version bêta, ce site peut contenir des erreurs">beta</span>
     <span class="separator">|</span>
-    <span class="tagline">Email Providers of Swiss Municipalities</span>
+    <span class="tagline">Messagerie des communes françaises</span>
   </div>
   <div class="header-right">
-    <a href="/impressum.html" class="header-link">Impressum</a>
-    <a href="/datenschutz.html" class="header-link">Datenschutz</a>
-    <button class="toggle-info" id="toggle-info" aria-expanded="true" aria-controls="info-bar">About &#9652;</button>
+<button class="toggle-info" id="toggle-info" aria-expanded="true" aria-controls="info-bar">À propos &#9652;</button>
   </div>
 </header>
-<section id="info-bar" aria-label="About this project">
+<section id="info-bar" aria-label="À propos de ce projet">
 <script>if(window.innerWidth<=600)document.getElementById('info-bar').classList.add('collapsed');</script>
-  <h2 class="info-title">Email Providers of Swiss Municipalities</h2>
+  <h2 class="info-title">Messagerie des communes françaises</h2>
   <div class="info-grid">
     <div class="info-card">
-      <h3>What is this?</h3>
-      <p>A map of all ~2,100 Swiss municipalities showing which provider handles their official email — grouped by jurisdiction — based on public DNS records.</p>
+      <h3>C'est quoi ?</h3>
+      <p>Une carte de toutes les communes françaises montrant quel hébergeur gère leur messagerie officielle — regroupées par département et région — à partir des enregistrements DNS publics.</p>
     </div>
     <div class="info-card">
-      <h3>Context</h3>
-      <p>Digital sovereignty: US-based providers are subject to the US CLOUD Act, which allows US authorities to request stored data, regardless of where it is physically hosted. This map makes the current provider landscape visible.</p>
+      <h3>Contexte</h3>
+      <p>Souveraineté numérique : les hébergeurs américains sont soumis au CLOUD Act, qui permet aux autorités américaines d'accéder aux données stockées, quel que soit le pays d'hébergement physique. Cette carte rend visible le paysage actuel.</p>
     </div>
     <div class="info-card">
-      <h3>How does it work?</h3>
-      <p>Each municipality's official domain is checked via public DNS records (MX + SPF) and classified by provider type.</p>
-      <p style="font-size:12px;color:#777;margin-top:6px;">Disclaimer: DNS records indicate mail routing and authorized senders, not necessarily where data is stored.</p>
+      <h3>Comment ça marche ?</h3>
+      <p>Le domaine officiel de chaque commune est analysé via les enregistrements DNS publics (MX + SPF) et classifié par type d'hébergeur.</p>
+      <p style="font-size:12px;color:#777;margin-top:6px;">Avertissement : les enregistrements DNS indiquent le routage du courrier et les expéditeurs autorisés, pas nécessairement le lieu de stockage des données.</p>
     </div>
     <div class="info-card">
-      <h3>Open source &amp; open data</h3>
-      <p>The code and data are on <a href="https://github.com/davidhuser/mxmap" target="_blank">GitHub</a>.<br>
-      If you have noticed an error, please <a href="https://github.com/davidhuser/mxmap/issues" target="_blank">submit an issue</a>.</p>
+      <h3>Open data</h3>
+      <p>Les données sont issues de l'<a href="https://lannuaire.service-public.gouv.fr/" target="_blank">annuaire service-public.fr</a> (DILA) et de l'analyse DNS publique des enregistrements MX et SPF.</p>
+      <p style="font-size:12px;color:#666;margin-top:6px;">Ce projet est un fork de <a href="https://mxmap.ch/" target="_blank">mxmap.ch</a>, adapté pour les communes françaises — code source original sur <a href="https://github.com/davidhuser/mxmap" target="_blank">GitHub</a>. Code source de ce fork : <a href="https://github.com/yohannes-git/mxmap-fr" target="_blank">yohannes-git/mxmap-fr</a>.</p>
       <p id="generated"></p>
     </div>
   </div>
 </section>
-<main id="map" role="application" aria-label="Interactive map of Swiss municipality email providers">
-  <div id="map-loading" style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;z-index:1000;background:rgba(255,255,255,0.85);font-size:15px;color:#555;">Loading map data&hellip;</div>
+<main id="map" role="application" aria-label="Carte interactive des hébergeurs de messagerie des communes françaises">
+  <div id="map-loading" style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;z-index:1000;background:rgba(255,255,255,0.85);font-size:15px;color:#555;">Chargement des données&hellip;</div>
 </main>
 
 <script>
@@ -179,24 +191,38 @@ document.addEventListener('DOMContentLoaded', function () {
 if (!CSS.supports('height', '100dvh')) {
   document.body.style.height = window.innerHeight + 'px';
 }
+
 const COLORS = {
-  microsoft:      '#E83838',  // punchy vivid red — US cloud
-  google:         '#FFAB96',  // bright warm peach — US cloud
-  aws:            '#FF7A5C',  // bright hot coral — US cloud
-  infomaniak:     '#78FFD6',  // vivid bright mint — Swiss provider
-  'swiss-isp':    '#2EDBA8',  // neon-ish seafoam — Swiss ISP
-  'independent':  '#10B898',  // vivid bright teal — independent
-  unknown:        '#BFBFBF'   // neutral mid-gray with hatching
+  // Cloud US — rouges/oranges vifs, très visibles (CLOUD Act)
+  microsoft:      '#E8001C',  // rouge vif
+  google:         '#FF3B00',  // rouge-orangé
+  aws:            '#FF8000',  // orange
+  // Hébergeurs FR/EU — bleus
+  ovh:            '#1A6FD4',  // bleu OVHcloud
+  gandi:          '#0070B4',  // bleu Gandi
+  independent:    '#3B82F6',  // bleu clair — indépendant
+  // FAI français — verts clairs en nuances
+  orange:         '#86EFAC',  // vert clair pastel
+  free:           '#6EE7B7',  // vert menthe
+  sfr:            '#A7F3D0',  // vert très clair
+  bouygues:       '#4ADE80',  // vert moyen
+  'french-isp':   '#BBF7D0',  // vert pâle
+  unknown:        '#E0E0E0'   // gris pâle
 };
 
 const LABELS = {
   microsoft:      'Microsoft 365',
   google:         'Google Workspace',
   aws:            'Amazon Web Services',
-  infomaniak:     'Infomaniak',
-  'swiss-isp':    'Swiss ISP',
-  'independent':  'Independent',
-  unknown:        'Unknown'
+  ovh:            'OVHcloud',
+  gandi:          'Gandi',
+  orange:         'Orange / Wanadoo',
+  free:           'Free / Alice / Tiscali',
+  sfr:            'SFR / Neuf / Cegetel',
+  bouygues:       'Bouygues Telecom',
+  'french-isp':   'Autre FAI français',
+  independent:    'Indépendant',
+  unknown:        'Inconnu'
 };
 
 function escapeHtml(str) {
@@ -207,17 +233,23 @@ function escapeHtml(str) {
 
 function classifyHost(host) {
   const h = host.toLowerCase();
-  // Hyperscalers
+  // Hyperscalers US
   if (['mail.protection.outlook.com','outlook.com','microsoft','office365','onmicrosoft','spf.protection.outlook.com','sharepointonline'].some(k => h.includes(k)))
     return { name: 'Microsoft', category: 'hyperscaler' };
   if (['google','googlemail','gmail','aspmx.l.google.com','_spf.google.com'].some(k => h.includes(k)))
     return { name: 'Google', category: 'hyperscaler' };
   if (['amazonaws','amazonses','awsdns'].some(k => h.includes(k)))
     return { name: 'AWS', category: 'hyperscaler' };
-  // Swiss (explicit)
-  if (['infomaniak','mxpool.infomaniak'].some(k => h.includes(k)))
-    return { name: 'Infomaniak', category: 'swiss' };
-  // Foreign senders
+  // Hébergeurs français / européens
+  if (['ovh.net','ovhcloud.com','mx.ovh.com','ovh.com'].some(k => h.includes(k)))
+    return { name: 'OVHcloud', category: 'french' };
+  if (['gandi.net','gandimail.net'].some(k => h.includes(k)))
+    return { name: 'Gandi', category: 'french' };
+  if (h.includes('infomaniak'))
+    return { name: 'Infomaniak', category: 'french' };
+  if (h.includes('vaderetro') || h.includes('vade-retro'))
+    return { name: 'Vade Retro', category: 'french' };
+  // Expéditeurs tiers (marketing, sécurité)
   if (['mandrillapp.com','mandrill','mcsv.net'].some(k => h.includes(k)))
     return { name: 'Mailchimp', category: 'foreign' };
   if (h.includes('sendgrid'))
@@ -227,17 +259,13 @@ function classifyHost(host) {
   if (h.includes('mailgun'))
     return { name: 'Mailgun', category: 'foreign' };
   if (['sendinblue','brevo'].some(k => h.includes(k)))
-    return { name: 'Brevo', category: 'foreign' };
+    return { name: 'Brevo', category: 'french' };
   if (h.includes('mailchannels'))
     return { name: 'MailChannels', category: 'foreign' };
   if (h.includes('smtp2go'))
     return { name: 'SMTP2GO', category: 'foreign' };
-  if (h.includes('nl2go'))
-    return { name: 'Newsletter2Go', category: 'foreign' };
   if (h.includes('hubspotemail'))
     return { name: 'HubSpot', category: 'foreign' };
-  if (h.includes('knowbe4'))
-    return { name: 'KnowBe4', category: 'foreign' };
   if (['sophos','sophosxl'].some(k => h.includes(k)))
     return { name: 'Sophos', category: 'foreign' };
   if (h.includes('trendmicro'))
@@ -246,34 +274,32 @@ function classifyHost(host) {
     return { name: 'Hornetsecurity', category: 'foreign' };
   if (h.includes('barracudanetworks'))
     return { name: 'Barracuda', category: 'foreign' };
-  if (h.includes('mlsend'))
-    return { name: 'MailerLite', category: 'foreign' };
-  if (h.includes('createsend'))
-    return { name: 'Campaign Monitor', category: 'foreign' };
-  if (h.includes('exclaimer'))
-    return { name: 'Exclaimer', category: 'foreign' };
-  if (h.includes('turbo-smtp'))
-    return { name: 'turboSMTP', category: 'foreign' };
-  if (h.includes('letsignit'))
-    return { name: 'Letsignit', category: 'foreign' };
-  if (h.includes('codetwo'))
-    return { name: 'CodeTwo', category: 'foreign' };
-  if (h.includes('freshservice'))
-    return { name: 'Freshservice', category: 'foreign' };
-  // Known Swiss providers with non-.ch TLDs
-  const SWISS_DOMAINS = [
-    'abxsec.com','swiss-egov.cloud','sui-inter.net','ch-dns.net','cyon.net',
-    'seppmail.cloud','swisscom.com','privasphere.com','tinext.com','cloudrexx.com',
-    'mailomat.cloud','comp-sys.net','engadin.cloud','ti-informatique.com',
-    'assolo.net','moresi.com'
+  if (h.includes('mimecast'))
+    return { name: 'Mimecast', category: 'foreign' };
+  if (h.includes('proofpoint') || h.includes('ppe-hosted'))
+    return { name: 'Proofpoint', category: 'foreign' };
+  // FAI français grand public
+  if (['orange.fr','orange.com','wanadoo.fr','wanadoo.com','francetelecom.com'].some(k => h.includes(k)))
+    return { name: 'Orange / Wanadoo', category: 'fai-fr' };
+  if (['free.fr','aliceadsl.fr','tiscali.fr','proxad.net','iliad.fr'].some(k => h.includes(k)))
+    return { name: 'Free / Alice', category: 'fai-fr' };
+  if (['sfr.fr','sfr.com','sfr.net','numericable.fr','neuf.fr','cegetel.net','club-internet.fr','9online.fr'].some(k => h.includes(k)))
+    return { name: 'SFR / Neuf', category: 'fai-fr' };
+  if (['bbox.fr','bouyguestelecom.fr','bouygtel.com'].some(k => h.includes(k)))
+    return { name: 'Bouygues Telecom', category: 'fai-fr' };
+  // Domaines français connus hors .fr
+  const FRENCH_DOMAINS = [
+    'gandi.net', 'online.net', 'scaleway.com', 'o2switch.net',
+    'lws.fr', 'nuxit.net', 'planethoster.net', 'ikoula.com',
+    'celeste.fr', 'renater.fr'
   ];
-  if (SWISS_DOMAINS.some(d => h.endsWith(d) || h.endsWith('.' + d)))
-    return { name: h.replace(/^_/, '').split('.').slice(-2).join('.'), category: 'swiss' };
-  // TLD-based fallback
+  if (FRENCH_DOMAINS.some(d => h.endsWith(d) || h.endsWith('.' + d)))
+    return { name: h.replace(/^_/, '').split('.').slice(-2).join('.'), category: 'french' };
+  // Fallback TLD
   const parts = host.replace(/^_/, '').split('.');
   const name = parts.length >= 2 ? parts.slice(-2).join('.') : host;
-  if (h.endsWith('.ch') || h.endsWith('.swiss'))
-    return { name, category: 'swiss' };
+  if (h.endsWith('.fr'))
+    return { name, category: 'french' };
   return { name, category: 'unknown' };
 }
 
@@ -300,13 +326,14 @@ function renderTable(hosts) {
 }
 
 const map = L.map('map', {
-  center: [46.8, 8.2],
-  zoom: 8,
-  minZoom: 7,
+  center: [46.6, 2.3],
+  zoom: 6,
+  minZoom: 5,
   maxZoom: 14,
   renderer: L.canvas()
 });
 
+// Fond CartoDB Light — léger, noms en français
 L.tileLayer('https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png', {
   attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OSM</a> &copy; <a href="https://carto.com/">CARTO</a>',
   subdomains: 'abcd',
@@ -332,7 +359,7 @@ function toggleInfo() {
   const btn = document.getElementById('toggle-info');
   bar.classList.toggle('collapsed');
   const collapsed = bar.classList.contains('collapsed');
-  btn.innerHTML = collapsed ? 'About \u25be' : 'About \u25b4';
+  btn.innerHTML = collapsed ? 'À propos \u25be' : 'À propos \u25b4';
   btn.setAttribute('aria-expanded', String(!collapsed));
 }
 
@@ -341,11 +368,10 @@ document.getElementById('toggle-info').addEventListener('click', function () {
   map.invalidateSize({ animate: false });
 });
 
-// Collapse info bar by default on mobile
 if (window.innerWidth <= 600) {
   document.getElementById('info-bar').classList.add('collapsed');
   const btn = document.getElementById('toggle-info');
-  btn.innerHTML = 'About \u25be';
+  btn.innerHTML = 'À propos \u25be';
   btn.setAttribute('aria-expanded', 'false');
 }
 
@@ -354,137 +380,216 @@ function toggleLegend() {
   const btn = legend.querySelector('.legend-toggle');
   legend.classList.toggle('legend-collapsed');
   const collapsed = legend.classList.contains('legend-collapsed');
-  btn.textContent = collapsed ? 'Legend \u25B8' : '\u2715';
+  btn.textContent = collapsed ? 'Légende \u25B8' : '\u2715';
   btn.setAttribute('aria-expanded', String(!collapsed));
 }
 
+// Etat des filtres : tous actifs par defaut
+const activeFilters = new Set(Object.keys(COLORS));
+let geoLayer = null;
+
+function applyFilters() {
+  if (!geoLayer) return;
+  // Avec le renderer Canvas de Leaflet, on redessine chaque layer
+  // en mettant fillOpacity/opacity a 0 pour les masquer
+  geoLayer.eachLayer(function(layer) {
+    const provider = layer.options._provider || 'unknown';
+    const visible = activeFilters.has(provider);
+    layer.setStyle({
+      fillColor: visible ? (COLORS[provider] || COLORS.unknown) : 'transparent',
+      fillOpacity: visible ? 0.78 : 0,
+      weight: visible ? 0.3 : 0,
+    });
+  });
+}
+
 function legendItemHtml(key, counts) {
-  const hatchSvg = 'data:image/svg+xml,' +
-    encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="8" height="8"><rect width="8" height="8" fill="#BFBFBF"/><path d="M-1,1 l2,-2 M0,8 l8,-8 M7,9 l2,-2" stroke="#000" stroke-width="1"/></svg>');
-  const bg = key === 'unknown'
-    ? "background-image:url('" + hatchSvg + "')"
-    : `background:${COLORS[key]}`;
-  return `<i style="${bg}"></i>${LABELS[key]} (${counts[key] || 0})`;
+  const color = COLORS[key] || '#ccc';
+  const checked = 'checked';
+  const count = counts[key] || 0;
+  return `<div class="legend-item" id="li-${key}">` +
+    `<input type="checkbox" id="cb-${key}" data-provider="${key}" ${checked}>` +
+    `<i style="background:${color};width:14px;height:14px;border-radius:3px;display:inline-block;flex-shrink:0"></i>` +
+    `<label for="cb-${key}">${LABELS[key]} <span style="color:#999;font-size:11px">(${count})</span></label>` +
+    `</div>`;
 }
 
 function legendGroupHtml(label, keys, counts) {
   const heading = label
     ? `<span class="legend-group-label">${label}</span>`
     : '';
-  const items = keys.map(k => legendItemHtml(k, counts)).join('<br>');
+  const items = keys.map(k => legendItemHtml(k, counts)).join('');
   return `<div class="legend-group">${heading}${items}</div>`;
 }
 
+function bindFilterEvents() {
+  document.querySelectorAll('.legend-item input[type=checkbox]').forEach(cb => {
+    cb.addEventListener('change', function() {
+      const provider = this.dataset.provider;
+      if (this.checked) {
+        activeFilters.add(provider);
+        document.getElementById('li-' + provider).classList.remove('disabled');
+      } else {
+        activeFilters.delete(provider);
+        document.getElementById('li-' + provider).classList.add('disabled');
+      }
+      applyFilters();
+    });
+  });
+  document.getElementById('filter-all').addEventListener('click', function() {
+    document.querySelectorAll('.legend-item input[type=checkbox]').forEach(cb => {
+      cb.checked = true;
+      activeFilters.add(cb.dataset.provider);
+      document.getElementById('li-' + cb.dataset.provider).classList.remove('disabled');
+    });
+    applyFilters();
+  });
+  document.getElementById('filter-none').addEventListener('click', function() {
+    document.querySelectorAll('.legend-item input[type=checkbox]').forEach(cb => {
+      cb.checked = false;
+      activeFilters.delete(cb.dataset.provider);
+      document.getElementById('li-' + cb.dataset.provider).classList.add('disabled');
+    });
+    applyFilters();
+  });
+  document.getElementById('filter-us').addEventListener('click', function() {
+    const us = ['microsoft','google','aws'];
+    document.querySelectorAll('.legend-item input[type=checkbox]').forEach(cb => {
+      const on = us.includes(cb.dataset.provider);
+      cb.checked = on;
+      if (on) {
+        activeFilters.add(cb.dataset.provider);
+        document.getElementById('li-' + cb.dataset.provider).classList.remove('disabled');
+      } else {
+        activeFilters.delete(cb.dataset.provider);
+        document.getElementById('li-' + cb.dataset.provider).classList.add('disabled');
+      }
+    });
+    applyFilters();
+  });
+}
+
 async function loadData() {
-  const [topoRes, dataRes] = await Promise.all([
-    fetch('https://cdn.jsdelivr.net/npm/swiss-maps@4.7.0/2026/ch-combined.json'),
-    fetch('data.json')
-  ]);
-
-  const topo = await topoRes.json();
+  // 1. Charger data.json en priorité (léger) — la carte et la légende
+  //    s'initialisent immédiatement pendant que le TopoJSON charge en arrière-plan
+  const dataRes = await fetch('data.json');
   const dnsData = await dataRes.json();
+  const communes = dnsData.communes;
 
-  // Build lookup by BFS number
-  const muni = dnsData.municipalities;
+  const COMMUNE_REDIRECTS = {
+    "85224": "85146", "85027": "85146",
+    "85217": "85146", "85109": "85146",
+  };
+  function lookupCommune(insee) {
+    return communes[insee] || communes[COMMUNE_REDIRECTS[insee]] || null;
+  }
 
-  // Show dataset info
   if (dnsData.generated) {
     const date = new Date(dnsData.generated);
     document.getElementById('generated').textContent =
-      'Updated ' + date.toLocaleString('de-CH', { dateStyle: 'medium', timeStyle: 'short' });
+      'Mis à jour le ' + date.toLocaleString('fr-FR', { dateStyle: 'medium', timeStyle: 'short' });
   }
 
-  // Legend with counts
+  // 2. Légende — construite immédiatement depuis dnsData.counts
   const isMobile = window.innerWidth <= 600;
   const legend = L.control({ position: isMobile ? 'topright' : 'bottomright' });
   legend.onAdd = function () {
     const div = L.DomUtil.create('div', 'legend');
     if (isMobile) div.classList.add('legend-collapsed');
     div.innerHTML =
-      '<button class="legend-toggle" aria-label="Toggle legend" aria-expanded="' + (!isMobile) + '">' + (isMobile ? 'Legend \u25B8' : '') + '</button>' +
+      '<button class="legend-toggle" aria-label="Afficher/masquer la légende" aria-expanded="' + (!isMobile) + '">' + (isMobile ? 'Légende \u25B8' : '') + '</button>' +
       '<div class="legend-content">' +
-      '<strong>Email Provider</strong>' +
-      legendGroupHtml('US-based', ['microsoft', 'aws', 'google'], dnsData.counts) +
-      legendGroupHtml('Swiss-based', ['independent', 'swiss-isp', 'infomaniak'], dnsData.counts) +
+      '<strong style="font-size:13px">Hébergeur de messagerie</strong>' +
+      legendGroupHtml('☁️ Cloud américain (CLOUD Act)', ['microsoft', 'google', 'aws'], dnsData.counts) +
+      legendGroupHtml('🇫🇷 Hébergeurs FR / EU', ['ovh', 'gandi', 'independent'], dnsData.counts) +
+      legendGroupHtml('📡 FAI français', ['orange', 'free', 'sfr', 'bouygues', 'french-isp'], dnsData.counts) +
+      legendGroupHtml('', ['unknown'], dnsData.counts) +
+      '<div class="legend-actions">' +
+      '<button class="legend-btn" id="filter-all">Tout</button>' +
+      '<button class="legend-btn" id="filter-none">Aucun</button>' +
+      '<button class="legend-btn" id="filter-us">Cloud US seul</button>' +
+      '</div>' +
       '</div>';
     L.DomEvent.disableClickPropagation(div);
     return div;
   };
   legend.addTo(map);
   document.querySelector('.legend-toggle').addEventListener('click', toggleLegend);
+  bindFilterEvents();
 
-  // Render lakes as a distinct layer
-  if (topo.objects.lakes) {
-    const lakes = topojson.feature(topo, topo.objects.lakes);
-    L.geoJSON(lakes, {
-      interactive: false,
-      style: { fillColor: '#5B9BD5', fillOpacity: 1, weight: 0, color: 'transparent' }
-    }).addTo(map);
-  }
+  // 3. Charger le TopoJSON en arrière-plan et dessiner par lots de 2000
+  //    pour ne pas bloquer le thread principal sur mobile
+  const loading = document.getElementById('map-loading');
+  if (loading) loading.textContent = 'Chargement de la carte…';
 
-  // Extract municipalities from the topology
-  const geojson = topojson.feature(topo, topo.objects.municipalities);
+  const topoRes = await fetch('france-communes.json');
+  const topo = await topoRes.json();
+  const features = topojson.feature(topo, topo.objects.communes).features;
 
-  L.geoJSON(geojson, {
+  // Créer le layer GeoJSON vide, l'ajouter à la carte
+  geoLayer = L.geoJSON([], {
     style: function (feature) {
-      const bfs = String(feature.id);
-      const m = muni[bfs];
-      const provider = m ? m.provider : 'unknown';
+      const insee = String(feature.properties?.code || feature.id || '');
+      const c = lookupCommune(insee);
+      const provider = c ? c.provider : 'unknown';
       return {
         fillColor: COLORS[provider] || COLORS.unknown,
-        weight: 0.5,
-        color: '#666',
-        fillOpacity: 0.75
+        weight: 0.3, color: '#888', fillOpacity: 0.78,
+        _provider: provider,
       };
     },
     onEachFeature: function (feature, layer) {
-      const bfs = String(feature.id);
-      const m = muni[bfs];
-      if (!m) {
-        layer.bindPopup(`<div class="info-popup"><strong>BFS ${bfs}</strong><br>No data</div>`);
+      const insee = String(feature.properties?.code || feature.id || '');
+      const c = lookupCommune(insee);
+      if (!c) {
+        layer.bindPopup(`<div class="info-popup"><strong>INSEE ${escapeHtml(insee)}</strong><br>Aucune donnée</div>`);
         return;
       }
-      const color = COLORS[m.provider] || COLORS.unknown;
-      const textColor = ['aws', 'google', 'infomaniak', 'swiss-isp', 'unknown'].includes(m.provider) ? '#333' : '#fff';
-      const label = LABELS[m.provider] || m.provider;
-
+      const provider = c.provider || 'unknown';
+      layer.options._provider = provider;
+      const color = COLORS[provider] || COLORS.unknown;
+      const textColor = ['ovh','gandi','independent','orange','free','sfr','bouygues','french-isp','unknown'].includes(provider) ? '#1f2937' : '#fff';
+      const label = LABELS[provider] || provider;
       let mxSection = '';
-      if (m.mx && m.mx.length > 0) {
-        mxSection = `<div class="popup-section"><div class="popup-section-title">Incoming mail handled by <span class="popup-section-hint">(MX)</span></div>${renderTable(m.mx)}</div>`;
-      }
-
-      const spfDelegations = parseSpfDelegations(m.spf);
+      if (c.mx && c.mx.length > 0)
+        mxSection = `<div class="popup-section"><div class="popup-section-title">Réception du courrier <span class="popup-section-hint">(MX)</span></div>${renderTable(c.mx)}</div>`;
+      const spfDelegations = parseSpfDelegations(c.spf);
       let spfSection = '';
-      if (spfDelegations.length > 0) {
-        spfSection = `<div class="popup-section"><div class="popup-section-title">Authorized to send mail <span class="popup-section-hint">(SPF)</span></div>${renderTable(spfDelegations)}</div>`;
-      }
-
-      const eName = escapeHtml(m.name);
-      const eDomain = escapeHtml(m.domain || 'unknown');
-      const eLabel = escapeHtml(label);
+      if (spfDelegations.length > 0)
+        spfSection = `<div class="popup-section"><div class="popup-section-title">Autorisés à envoyer <span class="popup-section-hint">(SPF)</span></div>${renderTable(spfDelegations)}</div>`;
+      const meta = [c.departement, c.region].filter(Boolean).join(' · ');
       layer.bindPopup(
-        `<div class="info-popup">` +
-        `<strong>${eName}</strong><br>` +
-        `${eDomain} <span class="provider-badge" style="background:${color};color:${textColor}">${eLabel}</span>` +
-        mxSection + spfSection +
-        `</div>`,
+        `<div class="info-popup"><strong>${escapeHtml(c.name)}</strong>` +
+        (meta ? `<div class="popup-meta">${escapeHtml(meta)}</div>` : '') +
+        `<div style="margin-top:4px">${escapeHtml(c.domain||'inconnu')} <span class="provider-badge" style="background:${color};color:${textColor}">${escapeHtml(label)}</span></div>` +
+        mxSection + spfSection + `</div>`,
         { maxWidth: 450 }
       );
-      layer.on('mouseover', function () { this.setStyle({ weight: 2, color: '#333' }); });
-      layer.on('mouseout', function () { this.setStyle({ weight: 0.5, color: '#666' }); });
+      layer.on('mouseover', function () {
+        if (activeFilters.has(this.options._provider)) this.setStyle({ weight: 1.5, color: '#333' });
+      });
+      layer.on('mouseout', function () { this.setStyle({ weight: 0.3, color: '#888' }); });
     }
   }).addTo(map);
 
-  const loading = document.getElementById('map-loading');
+  // Ajouter les features par lots pour ne pas geler l'UI
+  const BATCH = 2000;
+  for (let i = 0; i < features.length; i += BATCH) {
+    geoLayer.addData({ type: 'FeatureCollection', features: features.slice(i, i + BATCH) });
+    if (loading) loading.textContent = `Chargement… ${Math.round((i + BATCH) / features.length * 100)}%`;
+    // Rendre la main au navigateur entre chaque lot
+    await new Promise(resolve => setTimeout(resolve, 0));
+  }
+
   if (loading) loading.remove();
   map.invalidateSize({ animate: false });
 }
 
 loadData().catch(err => {
-  console.error('Failed to load data:', err);
+  console.error('Échec du chargement des données :', err);
   const loading = document.getElementById('map-loading');
   if (loading) {
-    loading.textContent = 'Failed to load map data. Please try again later.';
+    loading.textContent = 'Impossible de charger les données. Veuillez réessayer.';
     loading.style.color = '#dc2626';
   }
 });
