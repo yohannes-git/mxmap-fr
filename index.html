@@ -4,25 +4,24 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <link rel="preconnect" href="https://unpkg.com" crossorigin>
-<link rel="preconnect" href="https://a.basemaps.cartocdn.com" crossorigin>
-<link rel="preconnect" href="https://b.basemaps.cartocdn.com" crossorigin>
-<link rel="preconnect" href="https://c.basemaps.cartocdn.com" crossorigin>
-<link rel="preconnect" href="https://d.basemaps.cartocdn.com" crossorigin>
-<title>MXmap — Hébergeurs de messagerie des communes françaises</title>
+<link rel="preconnect" href="https://tiles.openfreemap.org" crossorigin>
+<link rel="preconnect" href="https://api.maptiler.com" crossorigin>
+<title>MXmap - Hébergeurs de messagerie des communes françaises</title>
 <meta name="description" content="Carte interactive montrant les hébergeurs de messagerie de toutes les communes françaises, basée sur l'analyse DNS des enregistrements MX et SPF.">
-<meta name="keywords" content="France, communes, email, souveraineté numérique, CLOUD Act, MX, SPF, DNS, Microsoft 365, Google Workspace, OVH">
+<meta name="keywords" content="France, communes, email, hébergement, messagerie, MX, SPF, DNS, Microsoft 365, Google Workspace, OVH">
 <meta name="author" content="David Huser">
 <meta name="robots" content="index, follow">
 <meta property="og:type" content="website">
-<meta property="og:title" content="MXmap — Hébergeurs de messagerie des communes françaises">
+<meta property="og:title" content="MXmap - Hébergeurs de messagerie des communes françaises">
 <meta property="og:description" content="Carte interactive montrant où les communes françaises hébergent leur messagerie officielle.">
 <meta property="og:locale" content="fr_FR">
 <meta property="og:site_name" content="MXmap">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="MXmap — Hébergeurs de messagerie des communes françaises">
+<meta name="twitter:title" content="MXmap - Hébergeurs de messagerie des communes françaises">
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect x='2' y='7' width='28' height='18' rx='2' fill='%231a1a2e'/%3E%3Cpath d='M2 9l14 9 14-9' fill='none' stroke='%2316a34a' stroke-width='2'/%3E%3C/svg%3E">
 <link href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css" rel="stylesheet">
 <script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
+<script src="https://unpkg.com/pmtiles@3/dist/pmtiles.js"></script>
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; display: flex; flex-direction: column; height: 100dvh; overflow: hidden; }
@@ -95,6 +94,13 @@
     display: inline-block; padding: 2px 8px; border-radius: 3px;
     font-size: 11px; font-weight: 700; letter-spacing: 0.2px;
   }
+  .sovereignty-badge {
+    display: inline-block; padding: 2px 8px; border-radius: 3px;
+    font-size: 11px; font-weight: 600; letter-spacing: 0.2px;
+    border: 1px solid currentColor;
+  }
+  .sovereignty-badge.non_eu { color: #B45309; background: #FFFBEB; }
+  .sovereignty-badge.eu { color: #0369A1; background: #F0F9FF; }
   .popup-section { margin-top: 10px; }
   .popup-section-title {
     font-size: 10px; color: #999; text-transform: uppercase;
@@ -111,6 +117,7 @@
   .cat-badge.hyperscaler { background: #fde8e8; color: #c0392b; }
   .cat-badge.french { background: #e0f0ff; color: #1d6fbf; }
   .cat-badge.fai-fr { background: #f0fdf4; color: #166534; }
+  .cat-badge.local { background: #ede9fe; color: #5b21b6; }
   .cat-badge.foreign { background: #fef3c7; color: #b45309; }
   .cat-badge.unknown { background: #f3f4f6; color: #6b7280; }
   .popup-email { font-size: 11px; color: #6b7280; font-family: ui-monospace, monospace; margin-top: 6px; }
@@ -212,11 +219,11 @@
   <div class="info-grid">
     <div class="info-card">
       <h3>C'est quoi ?</h3>
-      <p>Une carte de toutes les communes françaises montrant quel hébergeur gère leur messagerie officielle — regroupées par département et région — à partir des enregistrements DNS publics.</p>
+      <p>Une carte de toutes les communes françaises montrant quel hébergeur gère leur messagerie officielle - regroupées par département et région - à partir des enregistrements DNS publics.</p>
     </div>
     <div class="info-card">
       <h3>Contexte</h3>
-      <p>Souveraineté numérique : les hébergeurs américains sont soumis au CLOUD Act, qui permet aux autorités américaines d'accéder aux données stockées, quel que soit le pays d'hébergement physique.</p>
+      <p>Cette carte permet de visualiser la répartition des hébergeurs de messagerie des communes françaises : grandes plateformes internationales, hébergeurs européens, FAI grand public ou solutions locales.</p>
     </div>
     <div class="info-card">
       <h3>Comment ça marche ?</h3>
@@ -226,7 +233,7 @@
     <div class="info-card">
       <h3>Open data</h3>
       <p>Données issues de l'<a href="https://lannuaire.service-public.gouv.fr/" target="_blank">annuaire service-public.fr</a> (DILA) et de l'analyse DNS publique.</p>
-      <p style="font-size:12px;color:#666;margin-top:6px;">Fork de <a href="https://mxmap.ch/" target="_blank">mxmap.ch</a> adapté pour la France — code original sur <a href="https://github.com/davidhuser/mxmap" target="_blank">GitHub</a>. Ce fork : <a href="https://github.com/yohannes-git/mxmap-fr" target="_blank">yohannes-git/mxmap-fr</a>.</p>
+      <p style="font-size:12px;color:#666;margin-top:6px;">Fork de <a href="https://mxmap.ch/" target="_blank">mxmap.ch</a> adapté pour la France - code original sur <a href="https://github.com/davidhuser/mxmap" target="_blank">GitHub</a>. Ce fork : <a href="https://github.com/yohannes-git/mxmap-fr" target="_blank">yohannes-git/mxmap-fr</a>.</p>
       <p id="generated"></p>
     </div>
   </div>
@@ -248,40 +255,52 @@
 
 <script>
 const COLORS = {
-  microsoft:     '#E8001C',
-  google:        '#FF3B00',
-  aws:           '#FF8000',
-  ovh:           '#1A6FD4',
-  gandi:         '#0070B4',
-  independent:   '#3B82F6',
-  orange:        '#86EFAC',
-  free:          '#6EE7B7',
-  sfr:           '#A7F3D0',
-  bouygues:      '#4ADE80',
-  'french-isp':  '#BBF7D0',
-  unknown:       '#E0E0E0',
+  // Grandes plateformes internationales
+  microsoft:     '#DC2626',
+  exchange:      '#B91C1C',  // Exchange On-Prem (rouge fonce)
+  google:        '#F4B400',  // jaune Google
+  aws:           '#D97706',
+  yahoo:         '#5B21B6',  // violet Yahoo
+  // Hébergeurs FR/EU - bleus
+  ovh:           '#1D4ED8',
+  gandi:         '#0369A1',
+  ionos:         '#003D8F',  // bleu foncé IONOS
+  infomaniak:    '#0E9E60',
+  bluemind:      '#0E7490',  // teal BlueMind
+  vadesecure:    '#6366F1',
+  independent:   '#0EA5E9',
+  // FAI français - tons distincts
+  orange:        '#FF6600',
+  sfr:           '#7C3AED',  // violet SFR
+  free:          '#DB2777',
+  bouygues:      '#0891B2',
+  unknown:       '#D1D5DB',
 };
 
 const LABELS = {
   microsoft:     'Microsoft 365',
+  exchange:      'Exchange On-Prem',
   google:        'Google Workspace',
   aws:           'Amazon Web Services',
+  yahoo:         'Yahoo Mail',
   ovh:           'OVHcloud',
   gandi:         'Gandi',
-  independent:   'Indépendant',
+  ionos:         'IONOS (1&1)',
+  infomaniak:    'Infomaniak',
+  bluemind:      'BlueMind',
+  independent:   'Autres',
   orange:        'Orange / Wanadoo',
-  free:          'Free / Alice / Tiscali',
   sfr:           'SFR / Neuf / Cegetel',
+  free:          'Free / Alice / Tiscali',
   bouygues:      'Bouygues Telecom',
-  'french-isp':  'Autre FAI français',
   unknown:       'Inconnu',
 };
 
 const LEGEND_GROUPS = [
-  { label: '☁️ Cloud américain (CLOUD Act)', keys: ['microsoft', 'google', 'aws'] },
-  { label: '🇫🇷 Hébergeurs FR / EU',          keys: ['ovh', 'gandi', 'independent'] },
-  { label: '📡 FAI français',                  keys: ['orange', 'free', 'sfr', 'bouygues', 'french-isp'] },
-  { label: '',                                  keys: ['unknown'] },
+  { label: '☁️ Grandes plateformes',         keys: ['microsoft', 'exchange', 'google', 'aws', 'yahoo'] },
+  { label: '🇫🇷 Hébergeurs FR / EU',         keys: ['ovh', 'gandi', 'ionos', 'infomaniak', 'bluemind', 'independent'] },
+  { label: '📡 FAI français',                keys: ['orange', 'sfr', 'free', 'bouygues'] },
+  { label: '',                                keys: ['unknown'] },
 ];
 
 const COMMUNE_REDIRECTS = {
@@ -300,19 +319,31 @@ function classifyHost(host) {
   if (['amazonaws','amazonses','awsdns'].some(k=>h.includes(k))) return {name:'AWS',cat:'hyperscaler'};
   if (['ovh.net','ovhcloud.com','ovh.com'].some(k=>h.includes(k))) return {name:'OVHcloud',cat:'french'};
   if (['gandi.net','gandimail.net'].some(k=>h.includes(k))) return {name:'Gandi',cat:'french'};
-  if (['orange.fr','wanadoo.fr','wanadoo.com'].some(k=>h.includes(k))) return {name:'Orange',cat:'fai-fr'};
-  if (['free.fr','aliceadsl.fr','tiscali.fr','proxad.net'].some(k=>h.includes(k))) return {name:'Free',cat:'fai-fr'};
-  if (['sfr.fr','sfr.com','neuf.fr','cegetel.net','numericable.fr'].some(k=>h.includes(k))) return {name:'SFR',cat:'fai-fr'};
-  if (['bbox.fr','bouyguestelecom.fr'].some(k=>h.includes(k))) return {name:'Bouygues',cat:'fai-fr'};
+  if (['ionos.fr','ionos.com','1and1.com','1and1.fr'].some(k=>h.includes(k))) return {name:'IONOS (1&1)',cat:'french'};
+  if (['infomaniak.com','infomaniak.ch','mta-gw.infomaniak.ch','ikmail.com'].some(k=>h.includes(k))) return {name:'Infomaniak',cat:'french'};
+  if (['vadesecure.com','vaderetro.com','vade-retro.com','vade.com'].some(k=>h.includes(k))) return {name:'VadeSecure',cat:'french'};
+  if (h.includes('bluemind') || h.includes('blue-mind')) return {name:'BlueMind',cat:'french'};
+  if (['yahoo.fr','yahoo.com','yahoodns.net','ymail.com','laposte.net'].some(k=>h.includes(k))) return {name:'Yahoo',cat:'foreign'};
+  if (['orange.fr','orange.com','wanadoo.fr','wanadoo.com','francetelecom.fr','francetelecom.com','voila.fr'].some(k=>h.includes(k))) return {name:'Orange / Wanadoo',cat:'fai-fr'};
+  if (['free.fr','freebox.fr','aliceadsl.fr','alice.fr','tiscali.fr','infonie.fr','proxad.net','iliad.fr','online.net'].some(k=>h.includes(k))) return {name:'Free / Alice',cat:'fai-fr'};
+  if (['sfr.fr','sfr.com','sfr.net','neuf.fr','cegetel.net','numericable.fr','noos.fr','9online.fr','9business.fr','cario.fr','guideo.fr','mageos.com','fnac.net','waika9.com','akeonet.com','evc.net','club.fr'].some(k=>h.includes(k))) return {name:'SFR / Neuf',cat:'fai-fr'};
+  if (['bbox.fr','bouyguestelecom.fr','bouygtel.com','dartybox.com'].some(k=>h.includes(k))) return {name:'Bouygues Telecom',cat:'fai-fr'};
   if (['sendgrid','mailjet','mailgun','mandrillapp','brevo','sendinblue'].some(k=>h.includes(k))) return {name:h.split('.').slice(-2).join('.'),cat:'foreign'};
-  if (h.endsWith('.fr')) return {name:h.split('.').slice(-2).join('.'),cat:'french'};
+  const LOCAL_TLDS = ['.fr','.bzh','.alsace','.paris','.corsica'];
+  if (LOCAL_TLDS.some(t=>h.endsWith(t))) return {name:h.split('.').slice(-2).join('.'),cat:'local'};
   return {name:h.split('.').slice(-2).join('.'),cat:'unknown'};
 }
+
+const CAT_LABELS = {
+  hyperscaler: 'cloud US', french: 'FR/EU', 'fai-fr': 'FAI FR',
+  local: 'local', foreign: 'tiers', unknown: '?'
+};
 
 function renderTable(hosts) {
   return '<table class="dns-table">' + hosts.map(host => {
     const c = classifyHost(host);
-    return `<tr><td class="dn">${escapeHtml(c.name)}</td><td><span class="cat-badge ${c.cat}">${c.cat}</span></td><td class="host">${escapeHtml(host)}</td></tr>`;
+    const catLabel = CAT_LABELS[c.cat] || c.cat;
+    return `<tr><td class="dn">${escapeHtml(c.name)}</td><td style="padding:0 6px"><span class="cat-badge ${c.cat}">${escapeHtml(catLabel)}</span></td><td class="host">${escapeHtml(host)}</td></tr>`;
   }).join('') + '</table>';
 }
 
@@ -323,15 +354,20 @@ function parseSpfIncludes(spf) {
 }
 
 function buildPopupHtml(c) {
-  const color = COLORS[c.provider] || COLORS.unknown;
-  const darkText = ['ovh','gandi','independent','orange','free','sfr','bouygues','french-isp','unknown'].includes(c.provider);
+  const provider = ['local','french-isp'].includes(c.provider) ? 'independent' : c.provider;
+  const color = COLORS[provider] || COLORS.unknown;
+  const darkText = ['google','ovh','gandi','ionos','infomaniak','independent','orange','free','sfr','bouygues','unknown'].includes(provider);
   const textColor = darkText ? '#1f2937' : '#fff';
-  const label = LABELS[c.provider] || c.provider;
+  const label = LABELS[provider] || provider;
 
   let html = `<div class="popup-name">${escapeHtml(c.name)}</div>`;
   if (c.departement || c.region)
     html += `<div class="popup-meta">${escapeHtml([c.departement,c.region].filter(Boolean).join(' · '))}</div>`;
   html += `<div class="popup-domain"><span>${escapeHtml(c.domain||'inconnu')}</span><span class="provider-badge" style="background:${color};color:${textColor}">${escapeHtml(label)}</span></div>`;
+  if (c.sovereignty) {
+    const sovLabel = c.sovereignty === 'non_eu' ? '☁️ Cloud non-EU' : '🇪🇺 Europe';
+    html += `<div class="popup-domain"><span class="sovereignty-badge ${escapeHtml(c.sovereignty)}">${sovLabel}</span></div>`;
+  }
 
   if (c.mx?.length)
     html += `<div class="popup-section"><div class="popup-section-title">Réception MX</div>${renderTable(c.mx)}</div>`;
@@ -340,6 +376,18 @@ function buildPopupHtml(c) {
     html += `<div class="popup-section"><div class="popup-section-title">SPF</div>${renderTable(spf)}</div>`;
   if (c.contact_email)
     html += `<div class="popup-email">✉ ${escapeHtml(c.contact_email)}</div>`;
+  if (c.webmail) {
+    const WEBMAIL_LABELS = {
+      owa: 'OWA — Office 365', 'owa-onprem': 'OWA — Exchange On-Premise', zimbra: 'Zimbra', bluemind: 'BlueMind',
+      roundcube: 'Roundcube', sogo: 'SoGo', rainloop: 'Rainloop / Snappymail',
+      horde: 'Horde', afterlogic: 'Afterlogic', 'open-xchange': 'Open-Xchange',
+      kerio: 'Kerio Connect', icewarp: 'IceWarp', mailo: 'Mailo',
+    };
+    const wlabel = WEBMAIL_LABELS[c.webmail] || c.webmail;
+    html += `<div class="popup-section"><div class="popup-section-title">Interface webmail</div><span style="font-size:12px;background:#f0f9ff;color:#0369a1;padding:2px 8px;border-radius:3px;font-weight:600">${escapeHtml(wlabel)}</span></div>`;
+  }
+  if (c._dila_email_error)
+    html += `<div style="margin-top:8px;padding:5px 8px;background:#fef3c7;border-left:3px solid #f59e0b;border-radius:3px;font-size:11px;color:#92400e">⚠ L'adresse email dans l'annuaire DILA ne possède pas d'enregistrement MX valide. La classification est basée sur le site web officiel.</div>`;
 
   return html;
 }
@@ -375,38 +423,50 @@ if (window.innerWidth <= 600) {
 }
 
 // ── MapLibre ─────────────────────────────────────────────────────────────────
+// Tuiles vectorielles PMTiles pour les communes : chargement paresseux par
+// viewport au lieu d'un GeoJSON complet (35 000 communes) chargé d'un coup.
+// Voir CLAUDE.md "Rendu cartographique" pour les mesures mémoire.
+const pmtilesProtocol = new pmtiles.Protocol();
+
+// Limite les requêtes PMTiles simultanées : au premier chargement (vue nationale),
+// MapLibre peut demander plusieurs dizaines de tuiles d'un coup, ce qui déclenche le
+// rate-limiting anti-abus de l'hébergement mutualisé OVH (429) - seule une partie de
+// la France s'affichait alors. En zoomant les requêtes s'étalent dans le temps, d'où
+// le rendu correct après coup. File d'attente ici pour rester sous le seuil.
+const MAX_CONCURRENT_TILE_REQUESTS = 6;
+let activeTileRequests = 0;
+const tileRequestQueue = [];
+
+function throttledPmtilesTile(params, abortController) {
+  return new Promise((resolve, reject) => {
+    const tryRun = () => {
+      if (abortController.signal.aborted) {
+        reject(new Error('aborted'));
+        return;
+      }
+      activeTileRequests++;
+      pmtilesProtocol.tilev4(params, abortController)
+        .then(resolve, reject)
+        .finally(() => {
+          activeTileRequests--;
+          const next = tileRequestQueue.shift();
+          if (next) next();
+        });
+    };
+    if (activeTileRequests < MAX_CONCURRENT_TILE_REQUESTS) {
+      tryRun();
+    } else {
+      tileRequestQueue.push(tryRun);
+    }
+  });
+}
+
+maplibregl.addProtocol('pmtiles', throttledPmtilesTile);
+
+// Basemap vecteur OpenFreeMap (gratuit, sans clé API, rendu crisp à tout zoom)
 const map = new maplibregl.Map({
   container: 'map',
-  style: {
-    version: 8,
-    sources: {
-      'carto-light': {
-        type: 'raster',
-        tiles: [
-          'https://a.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}.png',
-          'https://b.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}.png',
-          'https://c.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}.png',
-          'https://d.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}.png',
-        ],
-        tileSize: 256,
-        attribution: '© <a href="https://www.openstreetmap.org/copyright">OSM</a> © <a href="https://carto.com/">CARTO</a>',
-      },
-      'carto-labels': {
-        type: 'raster',
-        tiles: [
-          'https://a.basemaps.cartocdn.com/light_only_labels/{z}/{x}/{y}.png',
-          'https://b.basemaps.cartocdn.com/light_only_labels/{z}/{x}/{y}.png',
-          'https://c.basemaps.cartocdn.com/light_only_labels/{z}/{x}/{y}.png',
-          'https://d.basemaps.cartocdn.com/light_only_labels/{z}/{x}/{y}.png',
-        ],
-        tileSize: 256,
-      },
-    },
-    layers: [
-      { id: 'background', type: 'background', paint: { 'background-color': '#f8f8f6' } },
-      { id: 'carto-light',  type: 'raster', source: 'carto-light' },
-    ],
-  },
+  style: 'https://tiles.openfreemap.org/styles/positron',
   center: [2.3, 46.6],
   zoom: 5.5,
   minZoom: 4,
@@ -450,7 +510,7 @@ function buildLegend(counts) {
   html += `<div class="legend-actions">
     <button class="legend-btn" id="btn-all">Tout</button>
     <button class="legend-btn" id="btn-none">Aucun</button>
-    <button class="legend-btn" id="btn-us">Cloud US</button>
+    <button class="legend-btn" id="btn-us">Cloud non-EU</button>
   </div>`;
   content.innerHTML = html;
 
@@ -467,8 +527,10 @@ function buildLegend(counts) {
   document.getElementById('btn-all').addEventListener('click', () => setAllFilters(true));
   document.getElementById('btn-none').addEventListener('click', () => setAllFilters(false));
   document.getElementById('btn-us').addEventListener('click', () => {
-    const us = new Set(['microsoft','google','aws']);
-    Object.keys(COLORS).forEach(k => setFilter(k, us.has(k)));
+    // Miroir de NON_EU_CLOUD_PROVIDERS côté backend (constants.py) : exchange
+    // est exclu car c'est un serveur on-prem hébergé localement, pas du cloud.
+    const nonEu = new Set(['microsoft','google','aws','yahoo']);
+    Object.keys(COLORS).forEach(k => setFilter(k, nonEu.has(k)));
     applyFilters();
   });
 }
@@ -488,15 +550,23 @@ function setFilter(k, on) {
 
 function applyFilters() {
   if (!map.getLayer('communes-fill')) return;
-  // Construire l'expression MapLibre pour le filtre et la couleur
-  const colorExpr = ['match', ['get', 'provider']];
+  // local, french-isp, zimbra sont déjà résolus vers 'independent' au moment du
+  // setFeatureState (voir applyFeatureStates) : pas besoin de remap ici.
+  const colorExpr = ['match', ['feature-state', 'provider']];
   Object.entries(COLORS).forEach(([k, v]) => {
     colorExpr.push(k, activeFilters.has(k) ? v : 'transparent');
   });
   colorExpr.push('transparent');
   map.setPaintProperty('communes-fill', 'fill-color', colorExpr);
-  const opacityExpr = ['case',
-    ['in', ['get','provider'], ['literal', [...activeFilters]]], 0.78, 0
+  // Opacité : zoom-adaptative pour les communes visibles, 0 pour les filtrées.
+  // "zoom" ne peut être utilisé qu'en entrée directe d'un "interpolate" top-level
+  // (pas imbriqué dans un "case") : le filtre doit donc être à l'intérieur de
+  // chaque palier plutôt qu'autour de l'expression interpolate entière.
+  const filterCond = ['in', ['feature-state','provider'], ['literal', [...activeFilters]]];
+  const opacityExpr = ['interpolate', ['linear'], ['zoom'],
+    5,  ['case', filterCond, 0.65, 0],
+    8,  ['case', filterCond, 0.75, 0],
+    12, ['case', filterCond, 0.82, 0],
   ];
   map.setPaintProperty('communes-fill', 'fill-opacity', opacityExpr);
 }
@@ -512,7 +582,7 @@ const popup = new maplibregl.Popup({
 
 map.on('click', 'communes-fill', e => {
   const props = e.features[0].properties;
-  const insee = props._insee || props.code || props.insee || String(e.features[0].id || '');
+  const insee = props.code || props.insee || String(e.features[0].id || '');
   const c = lookupCommune(insee);
   if (!c) {
     // Afficher quand même le code INSEE si pas de données
@@ -528,68 +598,111 @@ map.on('mouseenter', 'communes-fill', () => { map.getCanvas().style.cursor = 'po
 map.on('mouseleave', 'communes-fill', () => { map.getCanvas().style.cursor = ''; });
 
 // ── Helpers MapLibre ─────────────────────────────────────────────────────────
-function addCommunesLayers(geojson) {
-  // Source GeoJSON
-  if (map.getSource('communes')) map.removeSource('communes');
-  map.addSource('communes', { type: 'geojson', data: geojson, generateId: true });
+// local, french-isp, zimbra sont fusionnés visuellement avec independent (voir
+// CLAUDE.md "Catégories internes") - résolu une fois ici plutôt que dans
+// l'expression de couleur, contrairement à l'ancienne version GeoJSON.
+const PROVIDER_REMAP = {'local': 'independent', 'french-isp': 'independent', 'zimbra': 'independent'};
 
-  // Expression couleur
-  const colorExpr = ['match', ['get', 'provider']];
-  Object.entries(COLORS).forEach(([k, v]) => colorExpr.push(k, v));
-  colorExpr.push(COLORS.unknown);
-
-  // Layer fill
-  map.addLayer({
-    id: 'communes-fill',
-    type: 'fill',
-    source: 'communes',
-    paint: { 'fill-color': colorExpr, 'fill-opacity': 0.78 },
-  });
-
-  // Layer contours
-  map.addLayer({
-    id: 'communes-border',
-    type: 'line',
-    source: 'communes',
-    paint: {
-      'line-color': '#888',
-      'line-width': ['interpolate', ['linear'], ['zoom'], 6, 0.2, 10, 0.6, 14, 1],
-      'line-opacity': 0.5,
-    },
-  });
-
-  // Labels CartoDB par-dessus
-  if (!map.getSource('carto-labels-src')) {
-    map.addSource('carto-labels-src', {
-      type: 'raster',
-      tiles: [
-        'https://a.basemaps.cartocdn.com/light_only_labels/{z}/{x}/{y}.png',
-        'https://b.basemaps.cartocdn.com/light_only_labels/{z}/{x}/{y}.png',
-        'https://c.basemaps.cartocdn.com/light_only_labels/{z}/{x}/{y}.png',
-        'https://d.basemaps.cartocdn.com/light_only_labels/{z}/{x}/{y}.png',
-      ],
-      tileSize: 256,
+function addCommunesLayers(deptGeojson) {
+  // ── Source communes : tuiles vectorielles PMTiles, chargées par viewport ───
+  // (au lieu d'un GeoJSON complet des 35 000 communes chargé d'un coup - voir
+  // CLAUDE.md "Rendu cartographique" pour les mesures mémoire qui ont motivé
+  // cette architecture). promoteId permet de joindre le provider via
+  // map.setFeatureState() sans que la géométrie n'ait besoin d'être régénérée
+  // à chaque mise à jour de data.json.
+  if (!map.getSource('communes')) {
+    map.addSource('communes', {
+      type: 'vector',
+      url: 'pmtiles://communes.pmtiles',
+      promoteId: 'code',
     });
   }
-  if (!map.getLayer('carto-labels'))
-    map.addLayer({ id: 'carto-labels', type: 'raster', source: 'carto-labels-src' });
+
+  // ── Source départements (petit GeoJSON pré-calculé côté serveur) ───────────
+  if (deptGeojson && !map.getSource('departements')) {
+    map.addSource('departements', { type: 'geojson', data: deptGeojson });
+  }
+
+  // Trouver le premier layer de labels du style vecteur pour insérer nos couches en dessous
+  const labelLayer = map.getStyle().layers.find(l =>
+    l.type === 'symbol' && (l.id.includes('label') || l.id.includes('place') || l.id.includes('name'))
+  );
+  const beforeId = labelLayer?.id;
+
+  // ── Layer fill communes ──────────────────────────────────────────────────────
+  // Couleur/opacité réelles posées par applyFilters() une fois les feature-state en place.
+  if (!map.getLayer('communes-fill')) {
+    map.addLayer({
+      id: 'communes-fill',
+      type: 'fill',
+      source: 'communes',
+      'source-layer': 'communes',
+      paint: {
+        'fill-color': COLORS.unknown,
+        'fill-opacity': ['interpolate', ['linear'], ['zoom'], 5, 0.65, 8, 0.75, 12, 0.82],
+      },
+    }, beforeId);
+  }
+
+  // ── Layer contours communes : fins, fondus au dézoom ────────────────────────
+  if (!map.getLayer('communes-border')) {
+    map.addLayer({
+      id: 'communes-border',
+      type: 'line',
+      source: 'communes',
+      'source-layer': 'communes',
+      paint: {
+        'line-color': 'rgba(60,60,60,0.35)',
+        // Invisible en vue nationale, progressivement plus visible en zoomant
+        'line-width': ['interpolate', ['linear'], ['zoom'], 7, 0.0, 9, 0.25, 12, 0.7, 15, 1.2],
+        'line-opacity': ['interpolate', ['linear'], ['zoom'], 7, 0, 9, 0.5, 13, 0.8],
+        'line-blur': ['interpolate', ['linear'], ['zoom'], 9, 0.8, 13, 0],
+      },
+    }, beforeId);
+  }
+
+  // ── Layer contours départements : subtils, sans trait noir épais ───────────
+  if (deptGeojson && !map.getLayer('departements-border')) {
+    map.addLayer({
+      id: 'departements-border',
+      type: 'line',
+      source: 'departements',
+      paint: {
+        'line-color': 'rgba(80,80,100,0.28)',
+        'line-width': ['interpolate', ['linear'], ['zoom'], 5, 0.6, 8, 0.9, 12, 1.2],
+        'line-blur': ['interpolate', ['linear'], ['zoom'], 5, 0.5, 10, 0],
+      },
+    }, beforeId);
+  }
+}
+
+// Joint le provider de data.json à chaque feature de tuile via feature-state.
+// Peut être appelé avant même que les tuiles soient chargées : MapLibre applique
+// les états en cache dès qu'une tuile contenant la feature arrive.
+function applyFeatureStates() {
+  if (!dnsData) return;
+  for (const insee in dnsData.communes) {
+    const c = dnsData.communes[insee];
+    const provider = PROVIDER_REMAP[c.provider] || c.provider || 'unknown';
+    map.setFeatureState({ source: 'communes', sourceLayer: 'communes', id: insee }, { provider });
+  }
 }
 
 // ── Chargement principal ─────────────────────────────────────────────────────
 async function loadData() {
   try {
-    setProgress(10, 'Chargement des données DNS…');
+    setProgress(10, 'Chargement des données…');
 
-    // Charger les deux fichiers en parallèle
-    const [dataRes, topoRes] = await Promise.all([
+    // data.json (classification DNS) + departements.geojson (petit fichier,
+    // contours communaux servis en tuiles PMTiles séparément)
+    const [dataRes, deptRes] = await Promise.all([
       fetch('data.json'),
-      fetch('france-communes.json'),
+      fetch('departements.geojson'),
     ]);
 
-    setProgress(40, 'Traitement des données…');
+    setProgress(50, 'Traitement des données…');
     dnsData = await dataRes.json();
-    const topo = await topoRes.json();
-    setProgress(65, 'Construction du GeoJSON…');
+    const deptGeojson = deptRes.ok ? await deptRes.json() : null;
 
     if (dnsData.generated) {
       const d = new Date(dnsData.generated);
@@ -599,21 +712,14 @@ async function loadData() {
 
     buildLegend(dnsData.counts);
 
-    // TopoJSON → GeoJSON + injection du provider dans chaque feature
-    const geojson = topojson.feature(topo, topo.objects.communes);
-    geojson.features.forEach(f => {
-      const insee = String(f.properties?.code || f.id || '');
-      const c = lookupCommune(insee);
-      f.properties.provider = c ? c.provider : 'unknown';
-      f.properties._insee = insee;
-    });
+    setProgress(80, 'Rendu WebGL…');
 
-    setProgress(85, 'Rendu WebGL…');
-
-    // Attendre que la carte soit prête — MapLibre peut être dans différents états
+    // Attendre que la carte soit prête - MapLibre peut être dans différents états
     const onMapReady = () => {
       try {
-        addCommunesLayers(geojson);
+        addCommunesLayers(deptGeojson);
+        applyFeatureStates();
+        applyFilters();
         setProgress(100, 'Prêt');
         setTimeout(() => {
           const el = document.getElementById('map-loading');
@@ -651,25 +757,13 @@ async function loadData() {
     const el = document.getElementById('map-loading');
     if (el) {
       document.getElementById('loading-text').textContent =
-        'Erreur : ' + err.message + ' — Vérifiez que data.json et france-communes.json sont présents.';
+        'Erreur : ' + err.message + ' - Vérifiez que data.json, communes.pmtiles et departements.geojson sont présents.';
       document.getElementById('loading-text').style.color = '#dc2626';
     }
   }
 }
 
-// Démarrage : charger topojson-client si nécessaire puis lancer
-(async () => {
-  if (typeof topojson === 'undefined') {
-    await new Promise((resolve, reject) => {
-      const s = document.createElement('script');
-      s.src = 'https://unpkg.com/topojson-client@3/dist/topojson-client.min.js';
-      s.onload = resolve;
-      s.onerror = reject;
-      document.head.appendChild(s);
-    });
-  }
-  loadData();
-})();
+loadData();
 </script>
 </body>
 </html>

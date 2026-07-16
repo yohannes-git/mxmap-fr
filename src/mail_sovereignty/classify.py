@@ -1,19 +1,33 @@
 from mail_sovereignty.constants import (
     AWS_KEYWORDS,
+    BLUEMIND_KEYWORDS,
     BOUYGUES_KEYWORDS,
     FOREIGN_SENDER_KEYWORDS,
     FREE_KEYWORDS,
     FRENCH_ISP_ASNS,
     GATEWAY_KEYWORDS,
-    GOOGLE_KEYWORDS,
     GANDI_KEYWORDS,
+    GOOGLE_KEYWORDS,
+    IONOS_KEYWORDS,
+    INFOMANIAK_KEYWORDS,
+    LOCAL_TLD_SUFFIXES,
     MICROSOFT_KEYWORDS,
+    NON_EU_CLOUD_PROVIDERS,
     ORANGE_KEYWORDS,
     OVH_KEYWORDS,
     PROVIDER_KEYWORDS,
     SFR_KEYWORDS,
     SMTP_BANNER_KEYWORDS,
+    VADESECURE_KEYWORDS,
+    YAHOO_KEYWORDS,
+    ZIMBRA_KEYWORDS,
+    FRENCH_REGIONAL_HOSTERS,
 )
+
+
+def classify_sovereignty(provider: str) -> str:
+    """Classify data-sovereignty of a provider: "non_eu" (cloud hors UE) ou "eu"."""
+    return "non_eu" if provider in NON_EU_CLOUD_PROVIDERS else "eu"
 
 
 def classify_from_smtp_banner(banner: str, ehlo: str = "") -> str | None:
@@ -73,6 +87,18 @@ def classify(
     """
     mx_blob = " ".join(mx_records).lower()
 
+    # --- Priorité absolue : MX auto-hébergé (même domaine racine) ---
+    # Si tous les MX ont le même domaine racine = auto-hébergé, peu importe l'ASN
+    # Ex: relaismail.talmontsainthilaire.fr → root = talmontsainthilaire.fr
+    # Cette règle doit passer AVANT les checks ASN/keywords
+    # Note: classify() ne connaît pas le domaine source, la règle "local" finale
+    # dans preprocess.py (_root check) reste le mécanisme principal.
+    # Ici on détecte le cas où le MX contient "zimbra" ou "bluemind" explicitement.
+    if any(k in mx_blob for k in BLUEMIND_KEYWORDS):
+        return "bluemind"
+    if any(k in mx_blob for k in ZIMBRA_KEYWORDS):
+        return "zimbra"
+
     # --- Check MX directly ---
     if any(k in mx_blob for k in MICROSOFT_KEYWORDS):
         return "microsoft"
@@ -80,8 +106,16 @@ def classify(
         return "google"
     if any(k in mx_blob for k in OVH_KEYWORDS):
         return "ovh"
+    if any(k in mx_blob for k in INFOMANIAK_KEYWORDS):
+        return "infomaniak"
+    if any(k in mx_blob for k in YAHOO_KEYWORDS):
+        return "yahoo"
+    if any(k in mx_blob for k in ZIMBRA_KEYWORDS):
+        return "zimbra"
     if any(k in mx_blob for k in GANDI_KEYWORDS):
         return "gandi"
+    if any(k in mx_blob for k in IONOS_KEYWORDS):
+        return "ionos"
     if any(k in mx_blob for k in AWS_KEYWORDS):
         return "aws"
     if any(k in mx_blob for k in ORANGE_KEYWORDS):
@@ -96,14 +130,22 @@ def classify(
     # --- Check CNAME targets of MX hosts ---
     if mx_records and mx_cnames:
         cname_blob = " ".join(mx_cnames.values()).lower()
+        if any(k in cname_blob for k in BLUEMIND_KEYWORDS):
+            return "bluemind"
         if any(k in cname_blob for k in MICROSOFT_KEYWORDS):
             return "microsoft"
         if any(k in cname_blob for k in GOOGLE_KEYWORDS):
             return "google"
         if any(k in cname_blob for k in OVH_KEYWORDS):
             return "ovh"
+        if any(k in cname_blob for k in INFOMANIAK_KEYWORDS):
+            return "infomaniak"
+        if any(k in cname_blob for k in YAHOO_KEYWORDS):
+            return "yahoo"
         if any(k in cname_blob for k in GANDI_KEYWORDS):
             return "gandi"
+        if any(k in cname_blob for k in IONOS_KEYWORDS):
+            return "ionos"
         if any(k in cname_blob for k in AWS_KEYWORDS):
             return "aws"
         if any(k in cname_blob for k in ORANGE_KEYWORDS):
@@ -117,25 +159,50 @@ def classify(
 
     # --- MX points to a known security gateway: look behind it via SPF/autodiscover ---
     if mx_records and detect_gateway(mx_records):
+        gw = detect_gateway(mx_records)
         spf_blob = (spf_record or "").lower()
-        provider = _check_spf_for_provider(spf_blob)
-        if not provider and resolved_spf:
-            provider = _check_spf_for_provider(resolved_spf.lower())
+        resolved_blob = (resolved_spf or "").lower()
+
+        # BlueMind/Zimbra en priorité : gateway devant BlueMind/Zimbra = self-hosted
+        if any(k in spf_blob or k in resolved_blob for k in BLUEMIND_KEYWORDS):
+            return "bluemind"
+        if any(k in spf_blob or k in resolved_blob for k in ZIMBRA_KEYWORDS):
+            return "zimbra"
+
+        # Chercher le provider réel dans le SPF, en excluant le gateway lui-même
+        # Ex: VadeSecure dans le SPF ne doit pas être retourné comme provider final
+        GATEWAY_DOMAINS = {k for keywords in GATEWAY_KEYWORDS.values() for k in keywords}
+        def _check_spf_exclude_gateway(blob: str) -> str | None:
+            for provider, keywords in PROVIDER_KEYWORDS.items():
+                for k in keywords:
+                    if k in blob and k not in GATEWAY_DOMAINS:
+                        return provider
+            return None
+
+        provider = _check_spf_exclude_gateway(spf_blob)
+        if not provider:
+            provider = _check_spf_exclude_gateway(resolved_blob)
         if provider:
             return provider
+
         ad_provider = classify_from_autodiscover(autodiscover)
         if ad_provider:
             return ad_provider
+
+        # Domaine .fr = hébergement local derrière le gateway
+        if spf_blob and any(s in spf_blob for s in LOCAL_TLD_SUFFIXES):
+            return "local"
+
+        # Gateway connu mais provider final non identifiable → retourner le gateway
+        return gw
         # Gateway relays to independent, fall through
 
     # --- MX exists but no known provider matched ---
     if mx_records:
         if mx_asns and mx_asns & FRENCH_ISP_ASNS.keys():
-            # Check autodiscover for a provider hidden behind a French ISP relay
             ad_provider = classify_from_autodiscover(autodiscover)
             if ad_provider:
                 return ad_provider
-            # Identifier le FAI par son ASN
             asn_match = mx_asns & FRENCH_ISP_ASNS.keys()
             asn = next(iter(asn_match))
             isp_name = FRENCH_ISP_ASNS[asn].lower()
@@ -151,9 +218,13 @@ def classify(
         ad_provider = classify_from_autodiscover(autodiscover)
         if ad_provider:
             return ad_provider
+        # Hébergeur régional français identifié = independent (prestataire local connu)
+        if any(h in " ".join(mx_records).lower() for h in FRENCH_REGIONAL_HOSTERS):
+            return "independent"
         return "independent"
 
     # --- No MX: fall back to SPF ---
+    # Note: "local" est attribué dans preprocess via classify_from_mx sur le domaine email
     spf_blob = (spf_record or "").lower()
     provider = _check_spf_for_provider(spf_blob)
     if not provider and resolved_spf:
@@ -172,6 +243,8 @@ def classify_from_mx(mx_records: list[str]) -> str | None:
     for provider, keywords in PROVIDER_KEYWORDS.items():
         if any(k in blob for k in keywords):
             return provider
+    # Un domaine .fr non reconnu reste "independent" ici -
+    # la catégorie "local" est attribuée par classify() après lookup MX
     return "independent"
 
 

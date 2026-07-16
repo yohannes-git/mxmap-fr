@@ -1,43 +1,49 @@
-# MXmap France — Hébergeurs de messagerie des communes françaises
+# MXmap France - Hébergeurs de messagerie des communes françaises
 
-Fork du projet [mxmap.ch](https://mxmap.ch) ([GitHub](https://github.com/davidhuser/mxmap)), adapté pour les ~35 000 communes françaises.
+Fork du projet [mxmap.ch](https://mxmap.ch) ([GitHub](https://github.com/davidhuser/mxmap)), adapté pour les communes françaises.
 
-Une carte interactive montrant quel hébergeur gère la messagerie officielle de chaque commune française — cloud américain (CLOUD Act), hébergeurs français/européens, ou FAI grand public — à partir de l'analyse publique des enregistrements DNS.
+Une carte interactive montrant quel hébergeur gère la messagerie officielle de chaque commune française, à partir de l'analyse publique des enregistrements DNS (MX et SPF).
+
+Code source de ce fork : [github.com/yohannes-git/mxmap-fr](https://github.com/yohannes-git/mxmap-fr)
 
 ## Comment ça marche
 
 Le pipeline de données se déroule en trois étapes :
 
-1. **Preprocess** — Télécharge l'archive DILA ([annuaire service-public.fr](https://lannuaire.service-public.gouv.fr/)) contenant toutes les mairies françaises avec leur domaine officiel. Effectue les lookups MX et SPF sur chaque domaine, résout les inclusions SPF, suit les chaînes CNAME, et classifie le provider email de chaque commune. Génère également le TopoJSON des contours communaux depuis l'API IGN si absent ou expiré.
-2. **Postprocess** — Applique les overrides manuels, relance les lookups DNS pour les communes non résolues (en exploitant aussi l'email de contact DILA), vérifie les banners SMTP des MX indépendants, puis scrape les sites web des communes encore inconnues pour extraire des adresses email.
-3. **Validate** — Croise les enregistrements MX et SPF, attribue un score de confiance (0–100) à chaque entrée, et génère un rapport de validation.
+1. **Preprocess** - Télécharge l'archive DILA ([annuaire service-public.fr](https://lannuaire.service-public.gouv.fr/)) contenant les mairies françaises avec leur domaine et email de contact. Effectue les lookups MX et SPF sur chaque domaine, résout les inclusions SPF, suit les chaînes CNAME, détecte les gateways de filtrage, et classifie le provider email de chaque commune. Génère également les tuiles vectorielles des contours communaux (`communes.pmtiles`) depuis l'API IGN si absentes ou expirées.
+2. **Postprocess** - Applique les overrides manuels pour les communes absentes de la DILA, relance les lookups DNS, vérifie les banners SMTP, tente une détection via autodiscover et SPF, scrape les sites web pour extraire des adresses email, et déduplique les mairies déléguées/associées déjà représentées par leur commune de rattachement (table COG INSEE).
+3. **Validate** - Croise les enregistrements MX et SPF, attribue un score de confiance (0–100) à chaque entrée, et génère un rapport de validation.
 
 ```mermaid
 flowchart TD
-    trigger["Déclenchement nightly"] --> dila
+    trigger["Déclenchement"] --> dila
 
     subgraph pre ["1 · Preprocess"]
         dila[/"Archive DILA\nservice-public.fr"/] --> fetch["Chargement ~35 000 mairies"]
-        ign[/"API IGN\ngeo.api.gouv.fr"/] --> topojson["Génération TopoJSON\ncontours communaux"]
-        fetch --> domains["Extraction domaines +\nemail de contact DILA"]
+        ign[/"API IGN\ngeo.api.gouv.fr"/] --> topojson["Simplification + tuilage\ncommunes.pmtiles"]
+        fetch --> domains["Extraction domaines +\nemail de contact"]
         domains --> dns["Lookups MX + SPF\n(3 résolveurs)"]
         dns --> spf_resolve["Résolution SPF includes\n& redirects"]
         spf_resolve --> cname["Suivi chaînes CNAME"]
         cname --> asn["Lookups ASN\n(Team Cymru)"]
         asn --> autodiscover["Autodiscover DNS\n(CNAME + SRV)"]
-        autodiscover --> gateway["Détection gateways\n(Barracuda, Proofpoint,\nMimecast, Vade Retro …)"]
+        autodiscover --> gateway["Détection gateways\n(Barracuda, Proofpoint,\nMimecast, VadeSecure, Cisco…)"]
         gateway --> classify["Classification providers\nMX → CNAME → SPF → Autodiscover → SMTP"]
     end
 
     classify --> overrides
 
     subgraph post ["2 · Postprocess"]
-        overrides["Overrides manuels"] --> retry["Retry DNS\n(+ domaine email contact)"]
+        overrides["Overrides manuels"] --> signals["Signaux autodiscover/SPF\npour communes sans MX"]
+        signals --> retry["Retry DNS\n(+ domaine email contact)"]
         retry --> smtp["Vérification banner SMTP\n(EHLO port 25)"]
-        smtp --> scrape_urls["Scraping sites mairies\n(/contact, /mairie, /mentions-legales …)"]
-        scrape_urls --> extract["Extraction emails\n+ déchiffrement TYPO3"]
+        smtp --> webmail["Détection webmail HTTP\n(/owa, /zimbra, /roundcube…)"]
+        webmail --> scrape_urls["Scraping sites mairies"]
+        scrape_urls --> extract["Extraction emails"]
         extract --> scrape_dns["Lookup DNS sur\ndomaines email extraits"]
-        scrape_dns --> reclassify["Reclassification\nentrées résolues"]
+        scrape_dns --> delegues["Dédup. mairies déléguées\n(table COG INSEE)"]
+        delegues --> masquage["Masquage adresses email\n[omis]@domain.fr"]
+        masquage --> reclassify["Reclassification finale"]
     end
 
     reclassify --> data[("data.json")]
@@ -45,11 +51,11 @@ flowchart TD
 
     subgraph val ["3 · Validate"]
         score["Score de confiance · 0–100"] --> gwarn["Détection gateways\nnon référencés"]
-        gwarn --> gate{"Quality gate\nmoy ≥ 70 · haute-conf ≥ 80%"}
+        gwarn --> gate{"Quality gate\nmoy ≥ 55 · haute-conf ≥ 45%"}
     end
 
-    gate -- "OK" --> deploy["Commit & déploiement Pages"]
-    gate -- "Échec" --> issue["Ouverture issue GitHub"]
+    gate -- "OK" --> deploy["Déploiement"]
+    gate -- "Échec" --> issue["Rapport d'erreur"]
 
     style trigger fill:#e8f4fd,stroke:#4a90d9,color:#1a5276
     style dila fill:#e8f4fd,stroke:#4a90d9,color:#1a5276
@@ -64,30 +70,33 @@ flowchart TD
 
 | Catégorie | Providers |
 |---|---|
-| ☁️ Cloud américain (CLOUD Act) | Microsoft 365, Google Workspace, Amazon AWS |
-| 🇫🇷 Hébergeurs FR / EU | OVHcloud, Gandi, Indépendant |
-| 📡 FAI français | Orange / Wanadoo, Free / Alice, SFR / Neuf, Bouygues Telecom, autres FAI |
+| ☁️ Grandes plateformes | Microsoft 365, Google Workspace, Amazon AWS, Yahoo Mail |
+| 🇫🇷 Hébergeurs FR / EU | OVHcloud, Gandi, Infomaniak, Zimbra, VadeSecure, IONOS (1&1), Indépendant |
+| 🏛️ Hébergement local | Domaine propre à la mairie (auto-hébergé) |
+| 📡 FAI français | Orange / Wanadoo, Free / Alice / Tiscali, SFR / Neuf / Cegetel, Bouygues Telecom, autres FAI |
 
 ## Démarrage rapide
 
 ```bash
 # Prérequis
-npm install -g mapshaper  # pour la génération du TopoJSON
+npm install -g mapshaper      # simplification géométrie + dissolution départements
+sudo apt install tippecanoe   # tuilage vectoriel (génère communes.pmtiles)
 
 uv sync
 
 # Pipeline complet
-uv run preprocess   # ~30-60 min (téléchargement DILA + scan DNS de 35 000 communes)
-                    # génère aussi france-communes.json si absent
-uv run postprocess  # ~20-30 min
-uv run validate
+uv run preprocess   # génère communes.pmtiles si absent, puis scan DNS (~30–60 min)
+uv run postprocess  # ~20–30 min
+uv run validate     # doit afficher PASSED
 
-# Serveur local
-python3 -m http.server
-# → http://localhost:8000
+# Serveur local - ⚠️ doit supporter les requêtes HTTP Range (byte serving) pour
+# communes.pmtiles ; `python3 -m http.server` n'en est PAS capable (renvoie le
+# fichier entier au lieu de 206 Partial Content, la carte reste vide)
+npx serve
+# → http://localhost:3000
 ```
 
-Le premier `uv run preprocess` télécharge l'archive DILA (~350 Mo) et la met en cache localement pendant 23h (`.dila_cache.tar.bz2`). Le TopoJSON des contours communaux (`france-communes.json`) est régénéré automatiquement si absent ou plus vieux que 30 jours.
+Le premier `uv run preprocess` télécharge l'archive DILA (~350 Mo) et la met en cache localement pendant 23h (`.dila_cache.tar.bz2`). Les tuiles vectorielles des contours communaux (`communes.pmtiles`) et le GeoJSON des départements (`departements.geojson`) sont régénérés automatiquement si absents ou plus vieux que 30 jours.
 
 ## Développement
 
@@ -104,8 +113,8 @@ uv run ruff format src tests
 
 ## Sources de données
 
-- **Mairies et domaines** : [Annuaire service-public.fr](https://lannuaire.service-public.gouv.fr/) — DILA (Direction de l'information légale et administrative), licence ouverte v2.0
-- **Contours communaux** : [API Géo](https://geo.api.gouv.fr/) — IGN / DINUM
+- **Mairies et domaines** : [Annuaire service-public.fr](https://lannuaire.service-public.gouv.fr/) - DILA, licence ouverte v2.0
+- **Contours communaux** : [API Géo](https://geo.api.gouv.fr/) - IGN / DINUM
 - **Classification** : analyse DNS publique des enregistrements MX et SPF
 
 ## Corrections manuelles
@@ -114,6 +123,4 @@ Pour signaler une mauvaise classification, les corrections peuvent être ajouté
 
 ## Projet original
 
-Ce projet est un fork de [mxmap.ch](https://mxmap.ch) de [David Huser](https://github.com/davidhuser/mxmap), adapté pour la France. L'architecture du pipeline, la logique de classification DNS et la structure du code sont issues du projet original.
-
-Le code source de ce fork est disponible sur [github.com/yohannes-git/mxmap-fr](https://github.com/yohannes-git/mxmap-fr).
+Ce projet est un fork de [mxmap.ch](https://mxmap.ch) de [David Huser](https://github.com/davidhuser/mxmap). L'architecture du pipeline, la logique de classification DNS et la structure du code sont issues du projet original, distribué sous licence MIT.

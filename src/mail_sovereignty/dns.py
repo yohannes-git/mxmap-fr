@@ -20,8 +20,8 @@ def make_resolvers() -> list[dns.asyncresolver.Resolver]:
         r = dns.asyncresolver.Resolver()
         if nameservers:
             r.nameservers = nameservers
-        r.timeout = 10
-        r.lifetime = 15
+        r.timeout = 5
+        r.lifetime = 5
         resolvers.append(r)
     return resolvers
 

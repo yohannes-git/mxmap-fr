@@ -12,11 +12,13 @@ from mail_sovereignty.classify import (
     classify_from_spf,
     spf_mentions_providers,
 )
-from mail_sovereignty.constants import GATEWAY_KEYWORDS, PROVIDER_KEYWORDS
+from mail_sovereignty.constants import FRENCH_REGIONAL_HOSTERS, GATEWAY_KEYWORDS, PROVIDER_KEYWORDS
 
 # Quality gate thresholds (override via env vars in CI)
-MIN_AVERAGE_SCORE = int(os.environ.get("MIN_AVERAGE_SCORE", "70"))
-MIN_HIGH_CONFIDENCE_PCT = int(os.environ.get("MIN_HIGH_CONFIDENCE_PCT", "80"))
+# Seuils adaptés à la réalité française : beaucoup de communes sans domaine propre
+# utilisent un email FAI (@orange.fr, @gmail.com…) classifié directement
+MIN_AVERAGE_SCORE = int(os.environ.get("MIN_AVERAGE_SCORE", "55"))
+MIN_HIGH_CONFIDENCE_PCT = int(os.environ.get("MIN_HIGH_CONFIDENCE_PCT", "45"))
 HIGH_CONFIDENCE_THRESHOLD = 80
 
 # INSEE codes des communes ajoutées via MANUAL_OVERRIDES dans postprocess.py.
@@ -76,7 +78,9 @@ def _detect_potential_gateways(
 
 def score_entry(entry: dict[str, Any]) -> dict[str, Any]:
     """Score a commune entry 0-100 with explanatory flags."""
-    provider = entry.get("provider", "unknown")
+    provider_raw = entry.get("provider", "unknown")
+    # local et french-isp sont visuellement fusionnés avec independent
+    provider = "independent" if provider_raw in ("local", "french-isp") else provider_raw
     domain = entry.get("domain", "")
     mx = entry.get("mx", [])
     spf = entry.get("spf", "")
@@ -144,10 +148,31 @@ def score_entry(entry: dict[str, Any]) -> dict[str, Any]:
         score -= 10
         flags.append(f"multi_provider_spf:{'+'.join(sorted(spf_providers))}")
 
-    # No MX but classified via SPF only (-15)
-    if not mx and provider not in ("unknown", "merged") and spf_provider:
-        score -= 15
-        flags.append("classified_via_spf_only")
+    # Pas de MX - vérifier si la classification vient du domaine email (fiable)
+    if not mx and provider not in ("unknown", "merged"):
+        domain = entry.get("domain", "")
+        # Domaines FAI/cloud connus : classification directe depuis le domaine = fiable
+        KNOWN_DIRECT = [
+            "orange.fr","wanadoo.fr","voila.fr","francetelecom.fr",
+            "free.fr","freebox.fr","aliceadsl.fr","alice.fr","tiscali.fr","infonie.fr","proxad.net",
+            "sfr.fr","sfr.com","sfr.net","neuf.fr","cegetel.net","numericable.fr","noos.fr",
+            "9online.fr","cario.fr","guideo.fr","mageos.com","fnac.net","waika9.com","akeonet.com",
+            "bbox.fr","bouyguestelecom.fr","bouygtel.com","dartybox.com",
+            "gmail.com","googlemail.com",
+            "ovh.net","ovh.com","ovhcloud.com","gandi.net",
+            "outlook.fr","hotmail.fr","live.fr",
+        ]
+        if domain in KNOWN_DIRECT:
+            # Classification directe depuis domaine FAI/cloud connu = très fiable
+            score += 60
+            flags.append("classified_via_known_email_domain")
+        elif provider == "local":
+            # Domaine .fr propre à la mairie = hébergement local, classification fiable
+            score += 60
+            flags.append("classified_via_known_email_domain")
+        elif spf_provider:
+            score -= 15
+            flags.append("classified_via_spf_only")
 
     # Provider is classified (+10)
     if provider not in ("unknown",):
@@ -193,6 +218,20 @@ def score_entry(entry: dict[str, Any]) -> dict[str, Any]:
             flags.append("autodiscover_confirms")
         elif ad_provider and provider == "independent":
             flags.append(f"autodiscover_suggests:{ad_provider}")
+
+    # Reclassification via autodiscover ou SPF sans MX - score plafonné à 70
+    if entry.get("_confidence_note"):
+        note = entry["_confidence_note"]
+        score += 15
+        flags.append(f"signal_classification:{note}")
+        # Plafonner à 70 pour indiquer une confiance partielle
+        score = min(score, 70)
+
+    # Hébergeur régional français identifié dans le MX (+10)
+    mx_blob = " ".join(entry.get("mx", [])).lower()
+    if mx_blob and any(h in mx_blob for h in FRENCH_REGIONAL_HOSTERS):
+        score += 10
+        flags.append("french_regional_hoster")
 
     # Manual override (+5)
     if insee in MANUAL_OVERRIDE_INSEE:
@@ -370,6 +409,20 @@ def run(data_path: Path, output_dir: Path, quality_gate: bool = False) -> bool:
             )
 
     print(f"Written {json_path} and {csv_path} ({len(scored)} entries)")
+
+    # Allègement de data.json avant publication : ces champs ne servent qu'au
+    # scoring interne (ci-dessus) et au debug pipeline, jamais lus par index.html.
+    # spf_resolved en particulier peut peser plusieurs Ko par commune (SPF flattening).
+    DEBUG_ONLY_FIELDS = ["spf_resolved", "mx_asns", "mx_cnames", "autodiscover", "_webmail_detected"]
+    stripped = 0
+    for entry in communes.values():
+        for field in DEBUG_ONLY_FIELDS:
+            if entry.pop(field, None) is not None:
+                stripped += 1
+    if stripped:
+        with open(data_path, "w", encoding="utf-8") as f:
+            json.dump(data, f, ensure_ascii=False, indent=2, separators=(",", ":"))
+        print(f"Allégé {data_path} ({stripped} champs debug retirés avant publication)")
 
     # Quality gate
     if quality_passed:

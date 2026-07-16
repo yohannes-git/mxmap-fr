@@ -13,8 +13,14 @@ from urllib.parse import urlparse
 
 import httpx
 
+import warnings
+warnings.filterwarnings("ignore", message="Unverified HTTPS")
+
 from mail_sovereignty.classify import classify, classify_from_mx, detect_gateway
-from mail_sovereignty.constants import CONCURRENCY, SPARQL_URL, SPARQL_QUERY
+from mail_sovereignty.constants import (
+    CONCURRENCY, SPARQL_URL, SPARQL_QUERY,
+    SHARED_EMAIL_DOMAINS, WEBMAIL_APPS, WEBMAIL_PROBES,
+)
 from mail_sovereignty.dns import (
     lookup_autodiscover,
     lookup_mx,
@@ -34,10 +40,18 @@ DILA_LOCAL_JSON_SUFFIX = "data.gouv_local.json"
 DILA_CACHE_PATH = Path(".dila_cache.tar.bz2")
 DILA_CACHE_MAX_AGE_HOURS = 23
 
-# TopoJSON des communes françaises
-TOPOJSON_PATH = Path("france-communes.json")
-TOPOJSON_MAX_AGE_DAYS = 30  # les contours ne changent pas souvent
+# Contours des communes françaises : tuiles vectorielles (chargement paresseux par
+# viewport côté navigateur, au lieu d'un GeoJSON complet chargé d'un coup - voir
+# CLAUDE.md "Rendu cartographique" pour le détail de la migration et les mesures RAM)
+PMTILES_PATH = Path("communes.pmtiles")
+DEPARTEMENTS_GEOJSON_PATH = Path("departements.geojson")
+# Liste plate des codes INSEE couverts par communes.pmtiles - permet de vérifier
+# la complétude de data.json sans dépendre d'un outil capable de lire les PMTiles
+# (voir CLAUDE.md "Communes sans données")
+COMMUNES_INDEX_PATH = Path("communes-index.json")
+MAP_DATA_MAX_AGE_DAYS = 30  # les contours ne changent pas souvent
 GEOJSON_TMP_PATH = Path("communes-tmp.geojson")
+GEOJSON_SIMPLIFIED_TMP_PATH = Path("communes-simplified-tmp.geojson")
 
 # Departements pour le téléchargement IGN
 ALL_DEPT_CODES = [
@@ -164,6 +178,15 @@ def guess_domains(name: str) -> list[str]:
     return sorted(candidates)
 
 
+# Codes INSEE des arrondissements de Paris, Lyon et Marseille
+# Ces entités n'ont pas d'infrastructure email indépendante
+# Paris : 75101-75120, Lyon : 69381-69389, Marseille : 13201-13216
+_SKIP_INSEE = set()
+_SKIP_INSEE.update(f"751{i:02d}" for i in range(1, 21))   # Paris
+_SKIP_INSEE.update(f"6938{i}" for i in range(1, 10))       # Lyon
+_SKIP_INSEE.update(f"132{i:02d}" for i in range(1, 17))    # Marseille
+
+
 def parse_service(svc: dict) -> tuple[str, dict[str, str]] | None:
     """
     Convertit un enregistrement service DILA en entree commune.
@@ -179,17 +202,35 @@ def parse_service(svc: dict) -> tuple[str, dict[str, str]] | None:
             break
     if not insee:
         return None
+    # Ignorer les arrondissements (Paris, Lyon, Marseille)
+    if insee in _SKIP_INSEE:
+        return None
 
     name = (svc.get("nom") or f"INSEE-{insee}").strip()
 
-    # adresse_courriel est une liste de chaines
+    # site_internet : liste de dicts {"libelle": "", "valeur": "https://..."}
+    sites = svc.get("site_internet") or []
+    website = sites[0].get("valeur", "").strip() if sites else ""
+
+    # adresse_courriel : liste de chaînes
     emails = svc.get("adresse_courriel") or []
     email = emails[0].strip() if emails else ""
+
+    # formulaire_contact : URL de contact - on en extrait le domaine si pas de site web
+    # Peut être une chaîne ou une liste selon les enregistrements DILA
+    formulaire_raw = svc.get("formulaire_contact") or ""
+    if isinstance(formulaire_raw, list):
+        formulaire = formulaire_raw[0].strip() if formulaire_raw else ""
+    else:
+        formulaire = str(formulaire_raw).strip()
+    if not website and formulaire:
+        website = formulaire  # url_to_domain() extraira le domaine
 
     dept_code = dept_from_insee(insee)
     return insee, {
         "insee": insee,
         "name": name,
+        "website": website,
         "departement": DEPT_NAMES.get(dept_code, ""),
         "region": DEPT_TO_REGION.get(dept_code, ""),
         "contact_email": email,
@@ -205,36 +246,66 @@ def _check_mapshaper() -> bool:
         return False
 
 
-async def fetch_topojson(topojson_path: Path = TOPOJSON_PATH) -> None:
-    """
-    Genere le TopoJSON des communes françaises si absent ou trop ancien.
+def _check_tippecanoe() -> bool:
+    """Verifie que tippecanoe est installe (apt install tippecanoe)."""
+    try:
+        subprocess.run(["tippecanoe", "--version"], capture_output=True, check=True)
+        return True
+    except (subprocess.CalledProcessError, FileNotFoundError):
+        return False
 
-    Etapes :
-      1. Telecharge les contours commune par commune depuis l'API geo.api.gouv.fr
-      2. Fusionne en un seul GeoJSON
-      3. Convertit en TopoJSON simplifié avec mapshaper
+
+# URL Admin Express COG IGN - données officielles, géométrie précise, libre d'accès
+ADMINEXPRESS_URL = (
+    "https://data.geopf.fr/telechargement/resource/ADMINEXPRESS-COG"
+    "/ADMINEXPRESS-COG/latest?format=GPKG&projection=EPSG:4326"
+)
+ADMINEXPRESS_GPKG_CACHE = Path(".adminexpress_cache.gpkg")
+
+
+async def fetch_map_data(
+    pmtiles_path: Path = PMTILES_PATH,
+    departements_path: Path = DEPARTEMENTS_GEOJSON_PATH,
+) -> None:
     """
-    if topojson_path.exists():
-        age_days = (time.time() - topojson_path.stat().st_mtime) / 86400
-        if age_days < TOPOJSON_MAX_AGE_DAYS:
+    Genere les contours cartographiques si absents ou trop anciens :
+      - communes.pmtiles : tuiles vectorielles, chargees paresseusement par le
+        navigateur en fonction du viewport (au lieu d'un GeoJSON complet de
+        35 000 communes charge d'un coup - voir CLAUDE.md "Rendu cartographique"
+        pour les mesures memoire qui ont motive cette architecture)
+      - departements.geojson : petit fichier (101 features), pas besoin de tuilage
+
+    Stratégie :
+      1. Télécharger les contours IGN via geo.api.gouv.fr par département
+      2. Simplifier (mapshaper) puis tuiler (tippecanoe) -> communes.pmtiles
+      3. Dissoudre les communes par département (mapshaper) -> departements.geojson
+    """
+    if pmtiles_path.exists() and departements_path.exists():
+        age_days = (time.time() - pmtiles_path.stat().st_mtime) / 86400
+        if age_days < MAP_DATA_MAX_AGE_DAYS:
             print(
-                f"TopoJSON valide ({age_days:.0f}j < {TOPOJSON_MAX_AGE_DAYS}j) : "
-                f"{topojson_path} ({topojson_path.stat().st_size / 1024:.0f} Ko)"
+                f"Contours valides ({age_days:.0f}j < {MAP_DATA_MAX_AGE_DAYS}j) : "
+                f"{pmtiles_path} ({pmtiles_path.stat().st_size / 1024 / 1024:.1f} Mo)"
             )
             return
-        print(f"TopoJSON expire ({age_days:.0f}j), regeneration...")
+        print(f"Contours expires ({age_days:.0f}j), regeneration...")
     else:
-        print(f"TopoJSON absent, generation de {topojson_path}...")
+        print("Contours absents, generation...")
 
     if not _check_mapshaper():
         print("  ATTENTION : mapshaper non trouve. Installez-le avec : npm install -g mapshaper")
-        print("  Le TopoJSON ne sera pas genere — la carte ne s'affichera pas correctement.")
+        print("  Les contours ne seront pas generes - la carte ne s'affichera pas correctement.")
+        return
+    if not _check_tippecanoe():
+        print("  ATTENTION : tippecanoe non trouve. Installez-le avec : apt install tippecanoe")
+        print("  Les contours ne seront pas generes - la carte ne s'affichera pas correctement.")
         return
 
-    # Etape 1 : téléchargement GeoJSON par département (API IGN)
-    print(f"  Telechargement des contours communes depuis geo.api.gouv.fr...")
+    # API geo.api.gouv.fr département par département (géométries IGN)
+    print("  Telechargement des contours communes depuis geo.api.gouv.fr (géom. IGN)...")
     all_features = []
     total_depts = len(ALL_DEPT_CODES)
+    errors = []
     for i, dept in enumerate(ALL_DEPT_CODES):
         url = (
             f"https://geo.api.gouv.fr/communes"
@@ -245,7 +316,8 @@ async def fetch_topojson(topojson_path: Path = TOPOJSON_PATH) -> None:
                 g = json.loads(r.read())
                 all_features.extend(g["features"])
         except Exception as e:
-            print(f"  ERREUR dept {dept}: {e}")
+            errors.append(dept)
+            print(f"\n  ERREUR dept {dept}: {e}")
         print(
             f"  [{i+1:3d}/{total_depts}] dept {dept:>3} "
             f"| {len(all_features)} communes",
@@ -253,31 +325,80 @@ async def fetch_topojson(topojson_path: Path = TOPOJSON_PATH) -> None:
         )
         time.sleep(0.05)
 
-    print(f"\n  {len(all_features)} communes téléchargées")
+    if errors:
+        print(f"\n  {len(errors)} dept(s) en erreur : {errors}")
 
-    # Etape 2 : écriture du GeoJSON temporaire
+    print(f"\n  {len(all_features)} communes téléchargées")
     geojson = {"type": "FeatureCollection", "features": all_features}
     with open(GEOJSON_TMP_PATH, "w", encoding="utf-8") as f:
         json.dump(geojson, f)
 
-    # Etape 3 : conversion en TopoJSON avec mapshaper
-    print(f"  Conversion en TopoJSON avec mapshaper...")
-    cmd = [
-        "mapshaper", str(GEOJSON_TMP_PATH),
-        "-rename-layers", "communes",
-        "-each", "this.id = this.properties.code",
-        "-simplify", "5%", "weighted", "keep-shapes",
-        "-o", "format=topojson", "quantization=1e4", str(topojson_path),
-    ]
-    result = subprocess.run(cmd, capture_output=True, text=True)
-    if result.returncode != 0:
-        print(f"  ERREUR mapshaper : {result.stderr}")
-    else:
-        size_kb = topojson_path.stat().st_size / 1024
-        print(f"  TopoJSON genere : {topojson_path} ({size_kb:.0f} Ko)")
+    codes = sorted(f["properties"]["code"] for f in all_features)
+    with open(COMMUNES_INDEX_PATH, "w", encoding="utf-8") as f:
+        json.dump(codes, f)
 
-    # Nettoyage du fichier temporaire
+    # Simplification (mapshaper) puis tuilage vectoriel (tippecanoe) -> PMTiles.
+    # "code" (INSEE) est promu comme id de feature côté frontend (promoteId) pour
+    # joindre le provider via map.setFeatureState() sans reconstruire les tuiles
+    # à chaque mise à jour de data.json (géométrie et classification DNS évoluent
+    # à des rythmes très différents).
+    print("  Simplification (mapshaper)...")
+    simplify_cmd = [
+        "mapshaper", str(GEOJSON_TMP_PATH),
+        "-simplify", "8%", "weighted", "keep-shapes",
+        "-o", "format=geojson", str(GEOJSON_SIMPLIFIED_TMP_PATH),
+    ]
+    result = subprocess.run(simplify_cmd, capture_output=True, text=True)
+    if result.returncode != 0:
+        print(f"  ERREUR mapshaper (simplify) : {result.stderr}")
+        GEOJSON_TMP_PATH.unlink(missing_ok=True)
+        return
+
+    print("  Tuilage vectoriel (tippecanoe)...")
+    tippecanoe_cmd = [
+        "tippecanoe", "-o", str(pmtiles_path), "--force",
+        "-l", "communes",
+        "-Z4", "-z14",
+        "--extend-zooms-if-still-dropping",
+        # Sans ça, tippecanoe sur-simplifie/droppe des features pour respecter la
+        # limite par defaut de 500 Ko/tuile. A bas zoom, une tuile qui couvre une
+        # region dense (ex: tout sauf l'ouest, ~19 000 communes) se retrouvait
+        # degradee a des polygones a 4 points (triangles/rectangles visibles a
+        # l'oeil nu) pour tenir dans cette limite. On privilegie la fidelite
+        # geometrique : le fichier est plus gros mais reste charge par tuile/viewport.
+        "--no-tile-size-limit",
+        "--no-feature-limit",
+        str(GEOJSON_SIMPLIFIED_TMP_PATH),
+    ]
+    result = subprocess.run(tippecanoe_cmd, capture_output=True, text=True)
+    if result.returncode != 0:
+        print(f"  ERREUR tippecanoe : {result.stderr}")
+    else:
+        size_mb = pmtiles_path.stat().st_size / 1024 / 1024
+        print(f"  PMTiles genere : {pmtiles_path} ({size_mb:.1f} Mo)")
+
+    # Départements : dissolution des communes par préfixe INSEE. Petit fichier
+    # (101 features), pas besoin de tuilage, chargé tel quel par le frontend.
+    print("  Dissolution departements (mapshaper)...")
+    dissolve_cmd = [
+        "mapshaper", str(GEOJSON_TMP_PATH),
+        "-each",
+        "this.properties.dept = (this.properties.code.startsWith('97') || "
+        "this.properties.code.startsWith('98')) ? this.properties.code.slice(0,3) "
+        ": this.properties.code.slice(0,2)",
+        "-dissolve", "dept",
+        "-simplify", "10%", "weighted", "keep-shapes",
+        "-o", "format=geojson", str(departements_path),
+    ]
+    result = subprocess.run(dissolve_cmd, capture_output=True, text=True)
+    if result.returncode != 0:
+        print(f"  ERREUR mapshaper (dissolve departements) : {result.stderr}")
+    else:
+        size_kb = departements_path.stat().st_size / 1024
+        print(f"  Departements generes : {departements_path} ({size_kb:.0f} Ko)")
+
     GEOJSON_TMP_PATH.unlink(missing_ok=True)
+    GEOJSON_SIMPLIFIED_TMP_PATH.unlink(missing_ok=True)
 
 
 async def fetch_dila() -> dict[str, dict[str, str]]:
@@ -353,6 +474,96 @@ async def fetch_dila() -> dict[str, dict[str, str]]:
     return communes
 
 
+DILA_API_URL = (
+    "https://api-lannuaire.service-public.gouv.fr/api/explore/v2.1"
+    "/catalog/datasets/api-lannuaire-administration/records"
+)
+
+
+async def enrich_missing_websites(
+    communes: dict[str, dict],
+    concurrency: int = 20,
+) -> int:
+    """
+    Pour les communes sans site web ni email, interroge l'API DILA live
+    par code INSEE pour récupérer site_internet et formulaire_contact.
+    Retourne le nombre de communes enrichies.
+    """
+    missing = [
+        m for m in communes.values()
+        if not m.get("website") and not m.get("contact_email")
+    ]
+    if not missing:
+        return 0
+
+    print(f"\nEnrichissement DILA API pour {len(missing)} communes sans site/email...")
+    enriched = 0
+    semaphore = asyncio.Semaphore(concurrency)
+
+    async def _fetch_one(client: httpx.AsyncClient, m: dict) -> None:
+        nonlocal enriched
+        insee = m["insee"]
+        url = (
+            f"{DILA_API_URL}?where=pivot%20like%20%27mairie%27"
+            f"%20AND%20code_insee_commune%3D%27{insee}%27"
+            f"&select=site_internet,adresse_courriel,formulaire_contact&limit=1"
+        )
+        async with semaphore:
+            try:
+                r = await client.get(url, timeout=10)
+                data = r.json()
+                results = data.get("results", [])
+                if not results:
+                    return
+                rec = results[0]
+
+                # Site web
+                sites = rec.get("site_internet") or []
+                if isinstance(sites, list) and sites:
+                    website = sites[0].get("valeur", "").strip()
+                elif isinstance(sites, str):
+                    website = sites.strip()
+                else:
+                    website = ""
+
+                # Email
+                emails = rec.get("adresse_courriel") or []
+                if isinstance(emails, list) and emails:
+                    email = emails[0].strip()
+                elif isinstance(emails, str):
+                    email = emails.strip()
+                else:
+                    email = ""
+
+                # Formulaire contact comme fallback site
+                formulaire_raw = rec.get("formulaire_contact") or ""
+                formulaire = (
+                    formulaire_raw[0].strip() if isinstance(formulaire_raw, list) and formulaire_raw
+                    else str(formulaire_raw).strip()
+                )
+
+                if not website and formulaire:
+                    website = formulaire
+
+                if website or email:
+                    if website:
+                        m["website"] = website
+                    if email:
+                        m["contact_email"] = email
+                    enriched += 1
+            except Exception:
+                pass
+
+    async with httpx.AsyncClient(
+        headers={"User-Agent": "mxmap.fr/1.0"},
+        follow_redirects=True,
+    ) as client:
+        await asyncio.gather(*[_fetch_one(client, m) for m in missing])
+
+    print(f"  {enriched} communes enrichies via API DILA live")
+    return enriched
+
+
 async def fetch_wikidata() -> dict[str, dict[str, str]]:
     """Fallback Wikidata pour les communes absentes de l'archive DILA."""
     if not SPARQL_QUERY:
@@ -402,11 +613,76 @@ def _build_entry(m: dict, domain: str, mx: list, spf: str, provider: str, gatewa
         entry["contact_email"] = m["contact_email"]
     if gateway:
         entry["gateway"] = gateway
+    if m.get("_dila_email_error"):
+        entry["_dila_email_error"] = True
     return entry
 
 
 
-async def scan_commune(m: dict[str, str], semaphore: asyncio.Semaphore) -> dict[str, Any]:
+def _detect_webmail_app(check: str) -> str | None:
+    for app, sigs in WEBMAIL_APPS.items():
+        if any(s.lower() in check for s in sigs):
+            return app
+    return None
+
+
+async def _probe_webmail_domain(
+    client: httpx.AsyncClient,
+    domain: str,
+) -> dict[str, str] | None:
+    """Probe mail./webmail. et chemins connus pour détecter le logiciel webmail.
+    Retourne dict(provider, webmail?, _webmail_detected) ou None.
+    OWA retourne provider='microsoft' — la distinction on-prem/cloud se fait ensuite via MX.
+    Appelé depuis l'intérieur du semaphore de scan_commune — pas de semaphore propre.
+    """
+    urls: list[tuple[str, str | None]] = []
+    for scheme in ("https", "http"):
+        urls.append((f"{scheme}://mail.{domain}", None))
+        urls.append((f"{scheme}://webmail.{domain}", None))
+        urls.append((f"{scheme}://owa.{domain}", None))
+        for path, hint in WEBMAIL_PROBES:
+            urls.append((f"{scheme}://{domain}{path}", hint))
+
+    for url, hint in urls:
+            try:
+                r = await client.get(url, timeout=3)
+                if r.status_code not in (200, 401, 403):
+                    continue
+                body = r.text.lower()[:4000]
+                final_url = str(r.url).lower()
+                check = body + " " + final_url
+                app = _detect_webmail_app(check)
+
+                if hint == "microsoft":
+                    if not (app == "owa" or "/owa" in final_url or "x-owa-version" in check
+                            or "owaauth" in check or "fba," in check):
+                        continue
+                    return {"provider": "microsoft", "webmail": "owa", "_webmail_detected": url}
+                elif hint in ("bluemind", "zimbra"):
+                    return {"provider": hint, "webmail": hint, "_webmail_detected": url}
+                elif hint == "local":
+                    return {"provider": "independent", "webmail": "roundcube", "_webmail_detected": url}
+                elif hint:
+                    return {"provider": hint, "_webmail_detected": url}
+
+                if app:
+                    if app == "owa":
+                        return {"provider": "microsoft", "webmail": "owa", "_webmail_detected": url}
+                    elif app in ("zimbra", "bluemind"):
+                        return {"provider": app, "webmail": app, "_webmail_detected": url}
+                    elif app in ("roundcube", "sogo", "horde", "rainloop", "afterlogic",
+                                 "open-xchange", "kerio", "icewarp", "mailo"):
+                        return {"provider": "independent", "webmail": app, "_webmail_detected": url}
+            except Exception:
+                continue
+    return None
+
+
+async def scan_commune(
+    m: dict[str, str],
+    semaphore: asyncio.Semaphore,
+    http_client: httpx.AsyncClient,
+) -> dict[str, Any]:
     async with semaphore:
         site_domain = url_to_domain(m.get("website", ""))
         contact_email = m.get("contact_email", "")
@@ -416,51 +692,96 @@ async def scan_commune(m: dict[str, str], semaphore: asyncio.Semaphore) -> dict[
             else ""
         )
 
-        # --- Résolution en cascade, du plus précis au plus générique ---
-        #
-        # Principe : on évite tout lookup DNS inutile.
-        # Si le domaine (email ou site) est reconnu directement par ses keywords,
-        # on retourne immédiatement sans aucune requête réseau.
-        # On ne fait un lookup MX que si le domaine est inconnu ET qu'on
-        # n'a pas encore de résultat.
+        def _normalize(d: str) -> str:
+            return d.replace("-", "").lower() if d else ""
 
+        def _root(d: str) -> str:
+            parts = d.rstrip(".").split(".")
+            return ".".join(parts[-2:]) if len(parts) >= 2 else d
+
+        # Étape 1 : providers identifiables par domaine (0 réseau)
+        # @orange.fr, @sfr.fr, @gmail.com, @ovh.net… — pas de probe HTTP, 0 lookup DNS
+        if email_domain:
+            direct = classify_from_mx([email_domain])
+            if direct and direct not in ("independent", "local"):
+                return _build_entry(m, email_domain, [], "", direct, None)
+
+        # Étape 2 [PRIORITÉ #1] : probe HTTP mail./webmail./etc. — signal le plus fiable
+        # Détecte le logiciel réel avant tout lookup DNS, évite les faux positifs de gateway.
+        # Email domain d'abord, site domain si rien trouvé. Domaines FAI/mutualisés exclus.
+        probe_domain = ""
+        probe_info: dict | None = None
+        for candidate in [d for d in [email_domain, site_domain] if d and d not in SHARED_EMAIL_DOMAINS]:
+            result = await _probe_webmail_domain(http_client, candidate)
+            if result:
+                probe_domain = candidate
+                probe_info = result
+                break
+
+        # Résultat non-OWA : vérité terrain, retour immédiat sans DNS
+        if probe_info and probe_info["provider"] not in ("microsoft", "exchange"):
+            entry = _build_entry(m, probe_domain, [], "", probe_info["provider"], None)
+            if probe_info.get("webmail"):
+                entry["webmail"] = probe_info["webmail"]
+            if probe_info.get("_webmail_detected"):
+                entry["_webmail_detected"] = probe_info["_webmail_detected"]
+            return entry
+
+        # OWA détecté : faire quand même le MX pour distinguer on-prem vs cloud, puis retour
+        if probe_info:
+            mx = await lookup_mx(probe_domain)
+            spf = await lookup_spf(probe_domain) if mx else ""
+            spf_resolved = await resolve_spf_includes(spf) if spf else ""
+            mx_cnames = await resolve_mx_cnames(mx) if mx else {}
+            mx_asns = await resolve_mx_asns(mx) if mx else set()
+            autodiscover = await lookup_autodiscover(probe_domain)
+            is_onprem = bool(mx) and all(_root(h) == _root(probe_domain) for h in mx)
+            webmail = "owa-onprem" if is_onprem else "owa"
+            provider = "exchange" if is_onprem else "microsoft"
+            entry = _build_entry(m, probe_domain, mx, spf, provider, detect_gateway(mx) if mx else None)
+            entry["webmail"] = webmail
+            entry["_webmail_detected"] = probe_info.get("_webmail_detected", "")
+            if spf_resolved and spf_resolved != spf:
+                entry["spf_resolved"] = spf_resolved
+            if mx_cnames:
+                entry["mx_cnames"] = mx_cnames
+            if mx_asns:
+                entry["mx_asns"] = sorted(mx_asns)
+            if autodiscover:
+                entry["autodiscover"] = autodiscover
+            return entry
+
+        # Étape 3+ : cascade DNS (probe HTTP n'a rien trouvé)
         domain = ""
         mx: list[str] = []
         spf = ""
 
-        # Étape 1 : classifier le domaine de l'email de contact directement
         if email_domain:
-            direct = classify_from_mx([email_domain])
-            if direct and direct != "independent":
-                # @orange.fr, @gmail.com, @ovh.net… — provider connu, 0 lookup
-                return _build_entry(m, email_domain, [], "", direct, None)
-            # Domaine inconnu (@mairie-truc.fr) — lookup MX seulement maintenant
             mx = await lookup_mx(email_domain)
             if mx:
                 domain = email_domain
                 spf = await lookup_spf(email_domain)
 
-        # Normalisation pour comparaison : retirer les tirets pour éviter
-        # les faux "domaines différents" (vigneux-de-bretagne.fr vs vigneuxdebretagne.fr)
-        def _normalize(d):
-            return d.replace("-", "").lower() if d else ""
+        email_domain_had_no_mx = bool(email_domain and not mx)
 
-        # Étape 2 : site web — seulement si l'email n'a rien donné
-        # On considère les domaines comme identiques s'ils se normalisent pareil
         if not mx and site_domain and _normalize(site_domain) != _normalize(email_domain):
             direct = classify_from_mx([site_domain])
-            if direct and direct != "independent":
-                return _build_entry(m, site_domain, [], "", direct, None)
+            if direct and direct not in ("independent", "local"):
+                entry = _build_entry(m, site_domain, [], "", direct, None)
+                if email_domain_had_no_mx:
+                    entry["_dila_email_error"] = True
+                return entry
             mx = await lookup_mx(site_domain)
             if mx:
                 domain = site_domain
                 spf = await lookup_spf(site_domain)
+                if email_domain_had_no_mx:
+                    m["_dila_email_error"] = True
 
-        # Étape 3 : variantes devinées — dernier recours
         if not mx:
-            tried = {_normalize(d) for d in (email_domain, site_domain) if d}
+            already_tried = {email_domain, site_domain} - {""}
             for guess in guess_domains(m["name"]):
-                if _normalize(guess) in tried:
+                if guess in already_tried:
                     continue
                 mx = await lookup_mx(guess)
                 if mx:
@@ -468,15 +789,23 @@ async def scan_commune(m: dict[str, str], semaphore: asyncio.Semaphore) -> dict[
                     spf = await lookup_spf(guess)
                     break
 
-        # Lookups complémentaires uniquement si on a un MX
         spf_resolved = await resolve_spf_includes(spf) if spf else ""
         mx_cnames = await resolve_mx_cnames(mx) if mx else {}
         mx_asns = await resolve_mx_asns(mx) if mx else set()
         autodiscover = await lookup_autodiscover(domain) if domain else {}
+
         provider = classify(
             mx, spf, mx_cnames=mx_cnames, mx_asns=mx_asns or None,
             resolved_spf=spf_resolved or None, autodiscover=autodiscover or None,
         )
+        if domain:
+            domain_root = _root(domain)
+            if mx and all(_root(h) == domain_root for h in mx):
+                spf_check = (spf + " " + (spf_resolved or "")).lower()
+                if any(k in spf_check for k in ["zimbra", "alpi40.fr", "zcs."]):
+                    provider = "zimbra"
+                else:
+                    provider = "local"
         gateway = detect_gateway(mx) if mx else None
         entry = _build_entry(m, domain, mx, spf, provider, gateway)
         if spf_resolved and spf_resolved != spf:
@@ -491,10 +820,13 @@ async def scan_commune(m: dict[str, str], semaphore: asyncio.Semaphore) -> dict[
 
 
 async def run(output_path: Path) -> None:
-    # Générer le TopoJSON si nécessaire (contours des communes pour la carte)
-    await fetch_topojson()
+    # Générer les contours cartographiques si nécessaire (PMTiles communes + GeoJSON départements)
+    await fetch_map_data()
 
     communes = await fetch_dila()
+
+    # Enrichir les communes sans site web ni email via l'API DILA live
+    await enrich_missing_websites(communes)
 
     wikidata = await fetch_wikidata()
     added_from_wikidata = 0
@@ -507,29 +839,34 @@ async def run(output_path: Path) -> None:
         print(f"  {added_from_wikidata} communes ajoutees depuis Wikidata (fallback)")
 
     total = len(communes)
-    print(f"\nScan MX/SPF de {total} communes...")
-    print("(Quelques minutes avec les lookups asynchrones)\n")
-    semaphore = asyncio.Semaphore(CONCURRENCY)
-    tasks = [scan_commune(m, semaphore) for m in communes.values()]
+    print(f"\nScan MX/SPF/webmail de {total} communes...")
+    print("(Quelques minutes avec les lookups asynchrones + probes HTTP)\n")
     results: dict[str, Any] = {}
     done = 0
-    for coro in asyncio.as_completed(tasks):
-        result = await coro
-        results[result["insee"]] = result
-        done += 1
-        if done % 50 == 0 or done == total:
-            counts: dict[str, int] = {}
-            for r in results.values():
-                counts[r["provider"]] = counts.get(r["provider"], 0) + 1
-            print(
-                f"  [{done:5d}/{total}]  "
-                f"MS={counts.get('microsoft', 0)}  "
-                f"Google={counts.get('google', 0)}  "
-                f"OVH={counts.get('ovh', 0)}  "
-                f"AWS={counts.get('aws', 0)}  "
-                f"Indep={counts.get('independent', 0)}  "
-                f"?={counts.get('unknown', 0)}"
-            )
+    semaphore = asyncio.Semaphore(CONCURRENCY)
+    async with httpx.AsyncClient(
+        headers={"User-Agent": "mxmap.fr/1.0 (https://github.com/yohannes-git/mxmap-fr)"},
+        follow_redirects=True,
+        verify=False,
+    ) as http_client:
+        tasks = [scan_commune(m, semaphore, http_client) for m in communes.values()]
+        for coro in asyncio.as_completed(tasks):
+            result = await coro
+            results[result["insee"]] = result
+            done += 1
+            if done % 50 == 0 or done == total:
+                counts: dict[str, int] = {}
+                for r in results.values():
+                    counts[r["provider"]] = counts.get(r["provider"], 0) + 1
+                print(
+                    f"  [{done:5d}/{total}]  "
+                    f"MS={counts.get('microsoft', 0)}  "
+                    f"Google={counts.get('google', 0)}  "
+                    f"OVH={counts.get('ovh', 0)}  "
+                    f"AWS={counts.get('aws', 0)}  "
+                    f"Indep={counts.get('independent', 0)}  "
+                    f"?={counts.get('unknown', 0)}"
+                )
     counts = {}
     for r in results.values():
         counts[r["provider"]] = counts.get(r["provider"], 0) + 1

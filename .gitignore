@@ -208,6 +208,9 @@ __marimo__/
 
 # cache data
 .dila_cache.tar.bz2
-france-communes.json
+.cog_cache.csv
+communes.pmtiles
+departements.geojson
+communes-index.json
 node_modules/
 
