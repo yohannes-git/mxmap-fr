@@ -70,10 +70,12 @@ flowchart TD
 
 | Catégorie | Providers |
 |---|---|
-| ☁️ Grandes plateformes | Microsoft 365, Google Workspace, Amazon AWS, Yahoo Mail |
-| 🇫🇷 Hébergeurs FR / EU | OVHcloud, Gandi, Infomaniak, Zimbra, VadeSecure, IONOS (1&1), Indépendant |
+| ☁️ Grandes plateformes | Microsoft 365, Exchange On-Prem, Google Workspace, Amazon AWS, Yahoo Mail |
+| 🇫🇷 Hébergeurs FR / EU | OVHcloud, Gandi, IONOS (1&1), Infomaniak, BlueMind, Indépendant |
 | 🏛️ Hébergement local | Domaine propre à la mairie (auto-hébergé) |
-| 📡 FAI français | Orange / Wanadoo, Free / Alice / Tiscali, SFR / Neuf / Cegetel, Bouygues Telecom, autres FAI |
+| 📡 FAI français | Orange / Wanadoo, Free / Alice / Tiscali, SFR / Neuf / Cegetel, Bouygues Telecom |
+
+Les gateways de filtrage entrant (VadeSecure, Mimecast, Hornetsecurity, Barracuda, Proofpoint, Cisco…) sont détectés séparément et ne sont jamais retenus comme hébergeur final - le vrai hébergeur est retrouvé via le SPF derrière le gateway.
 
 ## Démarrage rapide
 
@@ -85,9 +87,9 @@ sudo apt install tippecanoe   # tuilage vectoriel (génère communes.pmtiles)
 uv sync
 
 # Pipeline complet
-uv run preprocess   # génère communes.pmtiles si absent, puis scan DNS (~30–60 min)
-uv run postprocess  # ~20–30 min
-uv run validate     # doit afficher PASSED
+uv run preprocess   # génère communes.pmtiles si absent, puis scan DNS (~60–90 min)
+uv run postprocess  # ~10–15 min
+uv run validate     # ~1 min, doit afficher PASSED
 
 # Serveur local - ⚠️ doit supporter les requêtes HTTP Range (byte serving) pour
 # communes.pmtiles ; `python3 -m http.server` n'en est PAS capable (renvoie le
@@ -115,6 +117,7 @@ uv run ruff format src tests
 
 - **Mairies et domaines** : [Annuaire service-public.fr](https://lannuaire.service-public.gouv.fr/) - DILA, licence ouverte v2.0
 - **Contours communaux** : [API Géo](https://geo.api.gouv.fr/) - IGN / DINUM
+- **Communes déléguées/associées** : [Code Officiel Géographique](https://www.insee.fr/fr/information/2560452) - INSEE, pour dédupliquer les anciennes mairies fusionnées dans une commune nouvelle
 - **Classification** : analyse DNS publique des enregistrements MX et SPF
 
 ## Corrections manuelles
