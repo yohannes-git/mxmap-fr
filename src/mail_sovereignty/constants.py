@@ -180,6 +180,21 @@ LOCAL_TLD_SUFFIXES = [".fr", ".bzh", ".alsace", ".paris", ".corsica"]
 # même si le logiciel est édité par Microsoft.
 NON_EU_CLOUD_PROVIDERS = {"microsoft", "google", "aws", "yahoo"}
 
+# Gateways de GATEWAY_KEYWORDS dont la société éditrice est hors UE (siège et/ou
+# filiale soumise au CLOUD Act US, ou UK post-Brexit). Le gateway voit passer le
+# contenu des emails (filtrage anti-spam/anti-virus) : sa juridiction compte pour
+# la souveraineté même quand le provider final derrière lui est "unknown" (cf.
+# classify.py - un gateway sans hébergeur identifiable derrière retombe sur
+# provider="unknown", donc classify_sovereignty() doit aussi regarder `gateway`).
+# barracuda (US, Californie), proofpoint (US, Californie), cisco (US, Californie),
+# fortinet (US, Californie), sophos (UK, hors UE), trendmicro (Japon), mimecast
+# (UK + filiale US) : non_eu. vadesecure/altospam/mailinblack/layer (France) et
+# hornetsecurity (Allemagne) restent EU. "mailcontrol" : origine incertaine, pas
+# inclus faute de confiance suffisante sur la juridiction.
+NON_EU_GATEWAYS = {
+    "barracuda", "proofpoint", "cisco", "fortinet", "sophos", "trendmicro", "mimecast",
+}
+
 FOREIGN_SENDER_KEYWORDS = {
     "mailchimp": ["mandrillapp.com", "mandrill", "mcsv.net"],
     "sendgrid": ["sendgrid"],

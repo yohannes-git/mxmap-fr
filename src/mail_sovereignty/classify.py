@@ -13,6 +13,7 @@ from mail_sovereignty.constants import (
     LOCAL_TLD_SUFFIXES,
     MICROSOFT_KEYWORDS,
     NON_EU_CLOUD_PROVIDERS,
+    NON_EU_GATEWAYS,
     ORANGE_KEYWORDS,
     OVH_KEYWORDS,
     PROVIDER_KEYWORDS,
@@ -25,9 +26,19 @@ from mail_sovereignty.constants import (
 )
 
 
-def classify_sovereignty(provider: str) -> str:
-    """Classify data-sovereignty of a provider: "non_eu" (cloud hors UE) ou "eu"."""
-    return "non_eu" if provider in NON_EU_CLOUD_PROVIDERS else "eu"
+def classify_sovereignty(provider: str, gateway: str | None = None) -> str:
+    """Classify data-sovereignty: "non_eu" (cloud/gateway hors UE) ou "eu".
+
+    Le gateway (filtrage anti-spam en amont) voit passer le contenu des emails,
+    donc sa juridiction compte même quand le provider final derrière lui est
+    "unknown" (cf. classify.py: un gateway sans hébergeur identifiable derrière
+    retombe sur provider="unknown").
+    """
+    if provider in NON_EU_CLOUD_PROVIDERS:
+        return "non_eu"
+    if gateway and gateway in NON_EU_GATEWAYS:
+        return "non_eu"
+    return "eu"
 
 
 def classify_from_smtp_banner(banner: str, ehlo: str = "") -> str | None:
@@ -159,7 +170,6 @@ def classify(
 
     # --- MX points to a known security gateway: look behind it via SPF/autodiscover ---
     if mx_records and detect_gateway(mx_records):
-        gw = detect_gateway(mx_records)
         spf_blob = (spf_record or "").lower()
         resolved_blob = (resolved_spf or "").lower()
 
@@ -193,9 +203,13 @@ def classify(
         if spf_blob and any(s in spf_blob for s in LOCAL_TLD_SUFFIXES):
             return "local"
 
-        # Gateway connu mais provider final non identifiable → retourner le gateway
-        return gw
-        # Gateway relays to independent, fall through
+        # Gateway connu mais provider final non identifiable derrière : un gateway
+        # n'est jamais un provider final (cf. règle VadeSecure) - le nom du gateway
+        # comme "provider" ne correspond à aucune clé COLORS/LEGEND_GROUPS côté
+        # frontend et rendait la commune invisible (transparente) sur la carte au
+        # lieu de grise "Inconnu". Le champ `gateway` reste renseigné séparément
+        # (voir detect_gateway), rien n'est perdu.
+        return "unknown"
 
     # --- MX exists but no known provider matched ---
     if mx_records:

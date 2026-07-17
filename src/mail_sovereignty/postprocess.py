@@ -21,6 +21,7 @@ from mail_sovereignty.constants import (
     CONCURRENCY_POSTPROCESS,
     CONCURRENCY_SMTP,
     EMAIL_RE,
+    GATEWAY_KEYWORDS,
     SKIP_DOMAINS,
     SHARED_EMAIL_DOMAINS,
     SUBPAGES,
@@ -686,6 +687,21 @@ async def run(data_path: Path) -> None:
             dropped += 1
     print(f"  {dropped} mairies déléguées/associées retirées")
 
+    # Etape : un gateway n'est jamais un provider final (cf. règle VadeSecure).
+    # classify.py retourne désormais "unknown" quand aucun hébergeur n'est
+    # identifiable derrière un gateway, mais les communes déjà classées lors
+    # d'un run preprocess antérieur (avant ce fix) peuvent encore porter le nom
+    # du gateway comme provider - valeur absente de COLORS/LEGEND_GROUPS côté
+    # frontend, qui rendait la commune invisible (transparente) sur la carte
+    # au lieu de grise "Inconnu". Le champ `gateway` reste renseigné séparément.
+    gateway_as_provider = 0
+    for m in communes.values():
+        if m["provider"] in GATEWAY_KEYWORDS:
+            m["provider"] = "unknown"
+            gateway_as_provider += 1
+    if gateway_as_provider:
+        print(f"\n  {gateway_as_provider} communes avec gateway comme provider -> reclassifiees unknown")
+
     # Etape finale : masquer la partie locale des emails avant publication
     # mairie-xxx@orange.fr -> [omis]@orange.fr
     email_masked = 0
@@ -697,9 +713,10 @@ async def run(data_path: Path) -> None:
             email_masked += 1
     print(f"  {email_masked} adresses email masquees")
 
-    # Souveraineté : cloud non-EU (microsoft/google/aws/yahoo) vs EU
+    # Souveraineté : cloud non-EU (microsoft/google/aws/yahoo) ou gateway non-EU
+    # (barracuda/proofpoint/cisco/fortinet/sophos/trendmicro/mimecast) vs EU
     for m in communes.values():
-        m["sovereignty"] = classify_sovereignty(m["provider"])
+        m["sovereignty"] = classify_sovereignty(m["provider"], m.get("gateway"))
 
     # Recompute counts
     counts: dict[str, int] = {}
