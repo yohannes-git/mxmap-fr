@@ -323,7 +323,8 @@ function classifyHost(host) {
   if (['infomaniak.com','infomaniak.ch','mta-gw.infomaniak.ch','ikmail.com'].some(k=>h.includes(k))) return {name:'Infomaniak',cat:'french'};
   if (['vadesecure.com','vaderetro.com','vade-retro.com','vade.com'].some(k=>h.includes(k))) return {name:'VadeSecure',cat:'french'};
   if (h.includes('bluemind') || h.includes('blue-mind')) return {name:'BlueMind',cat:'french'};
-  if (['yahoo.fr','yahoo.com','yahoodns.net','ymail.com','laposte.net'].some(k=>h.includes(k))) return {name:'Yahoo',cat:'foreign'};
+  if (['yahoo.fr','yahoo.com','yahoodns.net','ymail.com'].some(k=>h.includes(k))) return {name:'Yahoo',cat:'foreign'};
+  if (h.includes('laposte.net')) return {name:'La Poste',cat:'french'};
   if (['orange.fr','orange.com','wanadoo.fr','wanadoo.com','francetelecom.fr','francetelecom.com','voila.fr'].some(k=>h.includes(k))) return {name:'Orange / Wanadoo',cat:'fai-fr'};
   if (['free.fr','freebox.fr','aliceadsl.fr','alice.fr','tiscali.fr','infonie.fr','proxad.net','iliad.fr','online.net'].some(k=>h.includes(k))) return {name:'Free / Alice',cat:'fai-fr'};
   if (['sfr.fr','sfr.com','sfr.net','neuf.fr','cegetel.net','numericable.fr','noos.fr','9online.fr','9business.fr','cario.fr','guideo.fr','mageos.com','fnac.net','waika9.com','akeonet.com','evc.net','club.fr'].some(k=>h.includes(k))) return {name:'SFR / Neuf',cat:'fai-fr'};

@@ -702,6 +702,20 @@ async def run(data_path: Path) -> None:
     if gateway_as_provider:
         print(f"\n  {gateway_as_provider} communes avec gateway comme provider -> reclassifiees unknown")
 
+    # Etape : domaines mutualisés mal classés "local" par un run preprocess
+    # antérieur (avant fix). Ex: laposte.net (La Poste Pro, email mutualisé pour
+    # collectivités) - la racine du MX matche la racine du domaine testé, ce qui
+    # déclenchait la règle d'auto-hébergement "local", alors que des centaines de
+    # communes différentes partagent ce même domaine (cf. SHARED_EMAIL_DOMAINS,
+    # "jamais de l'auto-hébergement communal").
+    shared_domain_as_local = 0
+    for m in communes.values():
+        if m["provider"] == "local" and m.get("domain", "") in SHARED_EMAIL_DOMAINS:
+            m["provider"] = "independent"
+            shared_domain_as_local += 1
+    if shared_domain_as_local:
+        print(f"  {shared_domain_as_local} communes sur domaine mutualisé mal classées local -> reclassifiees independent")
+
     # Etape finale : masquer la partie locale des emails avant publication
     # mairie-xxx@orange.fr -> [omis]@orange.fr
     email_masked = 0

@@ -800,7 +800,12 @@ async def scan_commune(
         )
         if domain:
             domain_root = _root(domain)
-            if mx and all(_root(h) == domain_root for h in mx):
+            # domain_root in SHARED_EMAIL_DOMAINS : ex. laposte.net (La Poste Pro,
+            # email mutualisé pour collectivités) - la racine MX matche la racine du
+            # domaine, mais des centaines de communes différentes l'utilisent, donc
+            # ce n'est pas de l'auto-hébergement communal (cf. commentaire sur
+            # SHARED_EMAIL_DOMAINS : "jamais de l'auto-hébergement communal").
+            if mx and domain_root not in SHARED_EMAIL_DOMAINS and all(_root(h) == domain_root for h in mx):
                 spf_check = (spf + " " + (spf_resolved or "")).lower()
                 if any(k in spf_check for k in ["zimbra", "alpi40.fr", "zcs."]):
                     provider = "zimbra"

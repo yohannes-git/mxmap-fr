@@ -6929,6 +6929,7 @@ insee,name,provider,domain,confidence,flags
 64359,Mairie - Lucq-de-Béarn,microsoft,lucqdebearn.com,80,spf_strict; independent_mx_with_cloud_spf; provider_classified; provider_via_gateway_spf
 46182,Mairie - Luzech,microsoft,ville-luzech.fr,80,spf_strict; mx_spf_match; multi_provider_spf:microsoft+ovh; provider_classified
 38215,Mairie - Luzinay,microsoft,mairie-luzinay.fr,80,spf_strict; mx_spf_match; multi_provider_spf:microsoft+ovh; provider_classified
+51663,Mairie - Magenta,microsoft,urbam.fr,80,spf_strict; mx_spf_match; multi_provider_spf:google+microsoft; provider_classified; provider_via_gateway_spf
 78354,Mairie - Magnanville,microsoft,mairie-magnanville.fr,80,spf_strict; mx_spf_match; multi_provider_spf:aws+microsoft; provider_classified
 68198,Mairie - Magstatt-le-Haut,microsoft,magstatt-le-haut.fr,80,spf_strict; mx_spf_match; multi_provider_spf:microsoft+ovh; provider_classified
 85133,Mairie - Maillezais,microsoft,maillezais.fr,80,spf_strict; independent_mx_with_cloud_spf; provider_classified; provider_via_gateway_spf
@@ -17267,7 +17268,6 @@ insee,name,provider,domain,confidence,flags
 63202,Mairie - Madriat,orange,orange.fr,85,no_mx; no_spf; classified_via_known_email_domain; provider_classified
 53142,Mairie - Madré,orange,wanadoo.fr,85,no_mx; no_spf; classified_via_known_email_domain; provider_classified
 67279,Mairie - Maennolsheim,orange,wanadoo.fr,85,no_mx; no_spf; classified_via_known_email_domain; provider_classified
-51663,Mairie - Magenta,microsoft,urbam.fr,85,spf_strict; mx_spf_match; multi_provider_spf:google+microsoft; provider_classified; provider_via_gateway_spf; autodiscover_confirms
 40168,Mairie - Magescq,zimbra,mairie-magescq.fr,85,multiple_mx; spf_strict; independent_mx_with_cloud_spf; provider_classified; provider_via_gateway_spf
 87088,Mairie - Magnac-Bourg,orange,wanadoo.fr,85,no_mx; no_spf; classified_via_known_email_domain; provider_classified
 16198,Mairie - Magnac-lès-Gardes,orange,wanadoo.fr,85,no_mx; no_spf; classified_via_known_email_domain; provider_classified
@@ -21522,6 +21522,7 @@ insee,name,provider,domain,confidence,flags
 77403,Mairie - Saint-Brice,orange,orange.fr,85,no_mx; no_spf; classified_via_known_email_domain; provider_classified
 50452,Mairie - Saint-Brice-de-Landelles,orange,wanadoo.fr,85,no_mx; no_spf; classified_via_known_email_domain; provider_classified
 61370,Mairie - Saint-Brice-en-Passais,orange,wanadoo.fr,85,no_mx; no_spf; classified_via_known_email_domain; provider_classified
+95539,Mairie - Saint-Brice-sous-Forêt,microsoft,agglo-plainevallee.fr,85,multiple_mx; spf_strict; independent_mx_with_cloud_spf; provider_classified; provider_via_gateway_spf
 61371,Mairie - Saint-Brice-sous-Rânes,orange,wanadoo.fr,85,no_mx; no_spf; classified_via_known_email_domain; provider_classified
 22278,Mairie - Saint-Brieuc,microsoft,saint-brieuc.fr,85,multiple_mx; spf_strict; independent_mx_with_cloud_spf; provider_classified; provider_via_gateway_spf
 56208,Mairie - Saint-Brieuc-de-Mauron,orange,orange.fr,85,no_mx; no_spf; classified_via_known_email_domain; provider_classified
@@ -27429,6 +27430,7 @@ insee,name,provider,domain,confidence,flags
 44187,Mairie - Saint-Père-en-Retz,microsoft,saintpereenretz.fr,88,spf_softfail; mx_spf_match; provider_classified
 45297,Mairie - Saint-Père-sur-Loire,microsoft,saintpere45.fr,88,spf_softfail; mx_spf_match; provider_classified
 22323,Mairie - Saint-Pôtan,microsoft,saint-potan.fr,88,spf_softfail; mx_spf_match; provider_classified
+30295,Mairie - Saint-Quentin-la-Poterie,microsoft,hotmail.fr,88,spf_softfail; mx_spf_match; provider_classified; provider_via_gateway_spf
 26325,Mairie - Saint-Rambert-d'Albon,ovh,ville-st-rambert.fr,88,spf_softfail; mx_spf_match; provider_classified
 88435,Mairie - Saint-Remy,local,saint-remy-vosges.fr,88,spf_softfail; mx_spf_match; provider_classified
 22326,Mairie - Saint-Rieul,local,saint-rieul.fr,88,spf_softfail; mx_spf_match; provider_classified
@@ -29886,6 +29888,7 @@ insee,name,provider,domain,confidence,flags
 60463,Mairie - Nogent-sur-Oise,microsoft,nogentsuroise.fr,90,spf_strict; mx_spf_match; provider_classified
 60464,Mairie - Nointel,local,nointel60.fr,90,spf_strict; mx_spf_match; provider_classified; provider_via_gateway_spf
 21458,Mairie - Noiron-sous-Gevrey,microsoft,noiron-sous-gevrey.fr,90,spf_strict; mx_spf_match; provider_classified
+16246,Mairie - Nonac,microsoft,ikoula.com,90,spf_strict; mx_spf_match; provider_classified; provider_via_gateway_spf
 67335,Mairie - Nordheim,microsoft,mairie-nordheim.com,90,spf_strict; mx_spf_match; provider_classified
 67336,Mairie - Nordhouse,microsoft,nordhouse.fr,90,spf_strict; mx_spf_match; provider_classified
 54402,Mairie - Norroy-le-Sec,microsoft,mairie-norroylesec.fr,90,spf_strict; mx_spf_match; provider_classified
@@ -30342,7 +30345,6 @@ insee,name,provider,domain,confidence,flags
 42206,Mairie - Saint-Bonnet-les-Oules,microsoft,saint-bonnet-les-oules.fr,90,spf_strict; mx_spf_match; provider_classified
 63327,Mairie - Saint-Bonnet-près-Riom,microsoft,saint-bonnet-pres-riom.fr,90,spf_strict; mx_spf_match; provider_classified
 35256,Mairie - Saint-Briac-sur-Mer,microsoft,saintbriac.fr,90,spf_strict; mx_spf_match; provider_classified
-95539,Mairie - Saint-Brice-sous-Forêt,microsoft,agglo-plainevallee.fr,90,multiple_mx; spf_strict; independent_mx_with_cloud_spf; provider_classified; provider_via_gateway_spf; autodiscover_confirms
 31471,Mairie - Saint-Béat-Lez,local,st-beat-lez.fr,90,spf_strict; mx_spf_match; provider_classified
 13091,Mairie - Saint-Cannat,microsoft,ville-saint-cannat.fr,90,spf_strict; mx_spf_match; provider_classified
 18201,Mairie - Saint-Caprais,microsoft,saintcaprais18.fr,90,spf_strict; mx_spf_match; provider_classified
@@ -30872,6 +30874,7 @@ insee,name,provider,domain,confidence,flags
 32428,Mairie - Sémézies-Cachan,microsoft,semezies-cachan.fr,90,spf_strict; mx_spf_match; provider_classified
 13105,Mairie - Sénas,infomaniak,senas.fr,90,spf_strict; mx_spf_match; provider_classified
 12268,Mairie - Sénergues,microsoft,senergues.fr,90,spf_strict; mx_spf_match; provider_classified
+34299,Mairie - Sérignan,microsoft,ville-serignan.fr,90,spf_strict; mx_spf_match; provider_classified; provider_via_gateway_spf
 50592,Mairie - TESSY-BOCAGE,ionos,tessybocage.fr,90,multiple_mx; mx_spf_match; provider_classified
 51562,Mairie - Taissy,microsoft,taissy.fr,90,spf_strict; mx_spf_match; provider_classified
 01415,Mairie - Talissieu,microsoft,mairiedetalissieu.fr,90,spf_strict; mx_spf_match; provider_classified
@@ -32920,7 +32923,6 @@ insee,name,provider,domain,confidence,flags
 69290,Mairie - Saint-Priest,microsoft,mairie-saint-priest.fr,93,multiple_mx; spf_softfail; mx_spf_match; provider_classified; provider_via_gateway_spf
 87178,Mairie - Saint-Priest-Taurion,ovh,saintpriesttaurion.fr,93,multiple_mx; spf_softfail; mx_spf_match; provider_classified
 33467,Mairie - Saint-Quentin-de-Caplong,ovh,st-quentin-de-caplong.fr,93,multiple_mx; spf_softfail; mx_spf_match; provider_classified
-30295,Mairie - Saint-Quentin-la-Poterie,microsoft,hotmail.fr,93,spf_softfail; mx_spf_match; provider_classified; provider_via_gateway_spf; autodiscover_confirms
 63390,Mairie - Saint-Quintin-sur-Sioule,ovh,saint-quintin-sur-sioule.fr,93,multiple_mx; spf_softfail; mx_spf_match; provider_classified
 01384,Mairie - Saint-Rambert-en-Bugey,ovh,saintrambertenbugey.fr,93,multiple_mx; spf_softfail; mx_spf_match; provider_classified
 76646,Mairie - Saint-Riquier-ès-Plains,microsoft,st-riquier-es-plains.fr,93,multiple_mx; spf_softfail; mx_spf_match; provider_classified
@@ -33792,7 +33794,6 @@ insee,name,provider,domain,confidence,flags
 02553,Mairie - Nizy-le-Comte,microsoft,nizylecomte.fr,95,multiple_mx; spf_strict; mx_spf_match; provider_classified
 85163,Mairie - Noirmoutier-en-l'Île,microsoft,ville-noirmoutier.fr,95,multiple_mx; spf_strict; mx_spf_match; provider_classified; provider_via_gateway_spf
 93051,Mairie - Noisy-le-Grand,microsoft,ville-noisylegrand.fr,95,multiple_mx; spf_strict; mx_spf_match; provider_classified; provider_via_gateway_spf
-16246,Mairie - Nonac,microsoft,ikoula.com,95,spf_strict; mx_spf_match; provider_classified; provider_via_gateway_spf; autodiscover_confirms
 86180,Mairie - Nouaillé-Maupertuis,microsoft,nouaille.com,95,multiple_mx; spf_strict; mx_spf_match; provider_classified; provider_via_gateway_spf
 14658,Mairie - Noues de Sienne,microsoft,nouesdesienne.fr,95,multiple_mx; spf_strict; mx_spf_match; provider_classified
 56151,Mairie - Noyal-Pontivy,local,noyal-pontivy.fr,95,multiple_mx; spf_strict; mx_spf_match; provider_classified; provider_via_gateway_spf
@@ -33984,7 +33985,6 @@ insee,name,provider,domain,confidence,flags
 67482,Mairie - Strasbourg,exchange,strasbourg.eu,95,multiple_mx; spf_strict; mx_spf_match; provider_classified
 30316,Mairie - Sénéchas,microsoft,senechas.org,95,multiple_mx; spf_strict; mx_spf_match; provider_classified
 56244,Mairie - Sérent,bluemind,serent.bzh,95,multiple_mx; spf_strict; mx_spf_match; provider_classified
-34299,Mairie - Sérignan,microsoft,ville-serignan.fr,95,spf_strict; mx_spf_match; provider_classified; provider_via_gateway_spf; autodiscover_confirms
 17435,Mairie - Taillant,microsoft,taillant.fr,95,multiple_mx; spf_strict; mx_spf_match; provider_classified
 17437,Mairie - Talmont-sur-Gironde,ovh,talmont-sur-gironde.fr,95,multiple_mx; spf_strict; mx_spf_match; provider_classified
 74276,Mairie - Taninges,microsoft,taninges.fr,95,multiple_mx; spf_strict; independent_mx_with_cloud_spf; provider_classified; french_regional_hoster
@@ -33999,6 +33999,7 @@ insee,name,provider,domain,confidence,flags
 17445,Mairie - Thézac,ovh,thezac17.fr,95,multiple_mx; spf_strict; mx_spf_match; provider_classified
 50599,Mairie - Tollevast,ovh,tollevast.fr,95,multiple_mx; spf_strict; mx_spf_match; provider_classified
 17448,Mairie - Tonnay-Boutonne,ovh,mairie-tonnayboutonne.fr,95,multiple_mx; spf_strict; mx_spf_match; provider_classified
+16382,Mairie - Torsac,microsoft,laposte.fr,95,multiple_mx; spf_strict; mx_spf_match; provider_classified; provider_via_gateway_spf
 31557,Mairie - Tournefeuille,microsoft,mairie-tournefeuille.fr,95,multiple_mx; spf_strict; mx_spf_match; provider_classified; provider_via_gateway_spf
 73297,Mairie - Tournon,ovh,tournon-savoie.com,95,multiple_mx; spf_strict; mx_spf_match; provider_classified
 35340,Mairie - Treffendel,microsoft,treffendel.fr,95,multiple_mx; spf_strict; mx_spf_match; provider_classified; provider_via_gateway_spf
@@ -34252,113 +34253,113 @@ insee,name,provider,domain,confidence,flags
 03107,Mairie - Ébreuil,independent,ville-ebreuil.fr,98,spf_softfail; mx_spf_match; provider_classified; french_regional_hoster
 14237,Mairie - Émiéville,independent,emieville.fr,98,spf_softfail; mx_spf_match; provider_classified; french_regional_hoster
 56144,Mairie - Évellys,microsoft,evellys.bzh,98,spf_softfail; mx_spf_match; provider_classified; french_regional_hoster
-88002,Mairie - Ahéville,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
-80014,Mairie - Aizecourt-le-Bas,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+88002,Mairie - Ahéville,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+80014,Mairie - Aizecourt-le-Bas,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 19004,Mairie - Albussac,independent,albussac.fr,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 04004,Mairie - Allemagne-en-Provence,independent,allemagne04.com,100,multiple_mx; spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 57013,Mairie - Alsting,independent,fibragglo.fr,100,spf_strict; mx_spf_match; provider_classified; provider_via_gateway_spf; french_regional_hoster
 67005,Mairie - Alteckendorf,microsoft,payszorn.com,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
-70013,Mairie - Ambiévillers,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
-25017,Mairie - Amondans,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+70013,Mairie - Ambiévillers,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+25017,Mairie - Amondans,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 27010,Mairie - Amécourt,microsoft,pole-secretariat.fr,100,multiple_mx; spf_softfail; mx_spf_match; provider_classified; french_regional_hoster
 98711,Mairie - Anaa,independent,communedeanaa.pf,100,multiple_mx; spf_strict; mx_spf_match; provider_classified; french_regional_hoster
-80026,Mairie - Arguel,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+80026,Mairie - Arguel,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 19011,Mairie - Arnac-Pompadour,independent,ville-pompadour.fr,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
-65028,Mairie - Arné,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+65028,Mairie - Arné,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 91021,Mairie - Arpajon,independent,arpajon91.fr,100,multiple_mx; spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 76026,Mairie - Arques-la-Bataille,independent,ville-arques-la-bataille.fr,100,multiple_mx; spf_softfail; mx_spf_match; provider_classified; french_regional_hoster
 98712,Mairie - Arue,independent,arue.pf,100,multiple_mx; spf_softfail; mx_spf_match; provider_classified; french_regional_hoster
-80031,Mairie - Arvillers,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
-80032,Mairie - Assainvillers,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+80031,Mairie - Arvillers,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+80032,Mairie - Assainvillers,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 24014,Mairie - Aubas,independent,aubas.fr,100,multiple_mx; spf_softfail; mx_spf_match; provider_classified; french_regional_hoster
 07019,Mairie - Aubenas,microsoft,mairie-aubenas.fr,100,multiple_mx; spf_softfail; mx_spf_match; provider_classified; french_regional_hoster
 93001,Mairie - Aubervilliers,independent,aubervilliers.fr,100,multiple_mx; spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 59027,Mairie - Aubry-du-Hainaut,independent,aubryduhainaut.fr,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 32013,Mairie - Auch,microsoft,mairie-auch.fr,100,multiple_mx; spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 65045,Mairie - Aucun,independent,aucun-pyrenees.fr,100,multiple_mx; spf_softfail; mx_spf_match; provider_classified; french_regional_hoster
-30024,Mairie - Aulas,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
-80044,Mairie - Authieule,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
-10021,Mairie - Avant-lès-Ramerupt,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
-80048,Mairie - Avesnes-Chaussoy,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+30024,Mairie - Aulas,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+80044,Mairie - Authieule,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+10021,Mairie - Avant-lès-Ramerupt,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+80048,Mairie - Avesnes-Chaussoy,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 59036,Mairie - Avesnes-sur-Helpe,ovh,avesnes-sur-helpe.fr,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
-80049,Mairie - Ayencourt-le-Monchel,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
-27035,Mairie - Bailleul-la-Vallée,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
-52034,Mairie - Bailly aux Forges,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
-77019,Mairie - Balloy,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+80049,Mairie - Ayencourt-le-Monchel,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+27035,Mairie - Bailleul-la-Vallée,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+52034,Mairie - Bailly aux Forges,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+77019,Mairie - Balloy,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 54044,Mairie - Barbas,independent,mairiebarbas.fr,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
-71020,Mairie - Barnay,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
-15019,Mairie - Bassignac,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
-64099,Mairie - Bastanès,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
-25045,Mairie - Battenans-les-Mines,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+71020,Mairie - Barnay,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+15019,Mairie - Bassignac,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+64099,Mairie - Bastanès,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+25045,Mairie - Battenans-les-Mines,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 43021,Mairie - Beaulieu,independent,beaulieu43.fr,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 51044,Mairie - Beaumont-sur-Vesle,independent,beaumontsurvesle.fr,100,multiple_mx; spf_softfail; mx_spf_match; provider_classified; french_regional_hoster
-80074,Mairie - Becquigny,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+80074,Mairie - Becquigny,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 18025,Mairie - Beffes,independent,beffes.fr,100,multiple_mx; spf_softfail; mx_spf_match; provider_classified; french_regional_hoster
-80080,Mairie - Belloy-en-Santerre,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+80080,Mairie - Belloy-en-Santerre,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 62115,Mairie - Berneville,microsoft,berneville.fr,100,multiple_mx; spf_strict; mx_spf_match; provider_classified; french_regional_hoster
-80090,Mairie - Berny-en-Santerre,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
-80085,Mairie - Bernâtre,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
-02075,Mairie - Berthenicourt,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+80090,Mairie - Berny-en-Santerre,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+80085,Mairie - Bernâtre,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+02075,Mairie - Berthenicourt,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 02076,Mairie - Bertricourt,ovh,bertricourt.fr,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 07032,Mairie - Berzème,independent,inforoutes-ardeche.fr,100,multiple_mx; spf_softfail; mx_spf_match; provider_classified; french_regional_hoster
 19023,Mairie - Beynat,microsoft,beynat.fr,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
-80102,Mairie - Biaches,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
-60071,Mairie - Biermont,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
-21075,Mairie - Billy-les-Chanceaux,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
-80108,Mairie - Boisbergues,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+80102,Mairie - Biaches,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+60071,Mairie - Biermont,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+21075,Mairie - Billy-les-Chanceaux,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+80108,Mairie - Boisbergues,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 02097,Mairie - Boncourt,ovh,boncourt.fr,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 73047,Mairie - Bonneval-sur-Arc,independent,mairie-de-bonnevalsurarc.fr,100,multiple_mx; spf_softfail; mx_spf_match; provider_classified; french_regional_hoster
 67058,Mairie - Bossendorf,microsoft,payszorn.com,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 45043,Mairie - Bou,independent,mairiedebou.fr,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
-80122,Mairie - Bouquemaison,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+80122,Mairie - Bouquemaison,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 22013,Mairie - Bourbriac,microsoft,bourbriac.bzh,100,multiple_mx; spf_softfail; mx_spf_match; provider_classified; french_regional_hoster
 41024,Mairie - Boursay,independent,mairiedeboursay.fr,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
-21095,Mairie - Bousselange,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
-80125,Mairie - Boussicourt,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
-80128,Mairie - Bouvincourt-en-Vermandois,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+21095,Mairie - Bousselange,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+80125,Mairie - Boussicourt,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+80128,Mairie - Bouvincourt-en-Vermandois,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 42019,Mairie - Boën-sur-Lignon,independent,boen.fr,100,multiple_mx; spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 71054,Mairie - Bragny-sur-Saône,independent,bragny-sur-saone.fr,100,multiple_mx; spf_softfail; mx_spf_match; provider_classified; french_regional_hoster
 19029,Mairie - Branceilles,independent,branceilles.fr,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
-80134,Mairie - Brassy,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+80134,Mairie - Brassy,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 62173,Mairie - Brebières,independent,brebieres.fr,100,multiple_mx; spf_softfail; mx_spf_match; provider_classified; french_regional_hoster
 48030,Mairie - Brenoux,independent,brenoux.fr,100,multiple_mx; spf_softfail; mx_spf_match; provider_classified; french_regional_hoster
-80138,Mairie - Bresle,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
-80141,Mairie - Brie,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
-19030,Mairie - Brignac-la-Plaine,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+80138,Mairie - Bresle,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+80141,Mairie - Brie,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+19030,Mairie - Brignac-la-Plaine,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 18037,Mairie - Brinon-sur-Sauldre,microsoft,ville-brinon.fr,100,multiple_mx; spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 43040,Mairie - Brioude,independent,ville-brioude.fr,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
-80145,Mairie - Brucamps,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+80145,Mairie - Brucamps,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 59114,Mairie - Bruille-Saint-Amand,microsoft,bruillesaintamand.fr,100,multiple_mx; spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 95116,Mairie - Bruyères-sur-Oise,ovh,bruyeres-sur-oise.fr,100,multiple_mx; spf_softfail; mx_spf_match; provider_classified; french_regional_hoster
 37038,Mairie - Bréhémont,independent,brehemont.fr,100,multiple_mx; spf_softfail; mx_spf_match; provider_classified; french_regional_hoster
-80140,Mairie - Brévillers,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
-21114,Mairie - Buffon,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
-80147,Mairie - Buigny L'Abbé,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
-80152,Mairie - Bus-la-Mésière,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+80140,Mairie - Brévillers,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+21114,Mairie - Buffon,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+80147,Mairie - Buigny L'Abbé,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+80152,Mairie - Bus-la-Mésière,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 64156,Mairie - Buziet,independent,buziet.fr,100,multiple_mx; spf_softfail; mx_spf_match; provider_classified; french_regional_hoster
 01170,Mairie - Béard-Géovreissiat,independent,beard-geovreissiat.fr,100,multiple_mx; spf_softfail; mx_spf_match; provider_classified; french_regional_hoster
 01037,Mairie - Bénonces,microsoft,benonces.com,100,multiple_mx; spf_softfail; mx_spf_match; provider_classified; french_regional_hoster
-80097,Mairie - Béthencourt-sur-Somme,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+80097,Mairie - Béthencourt-sur-Somme,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 62199,Mairie - Camblain-l'Abbé,microsoft,camblainlabbe.fr,100,multiple_mx; spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 14126,Mairie - Cambremer,independent,cambremer.fr,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
-80165,Mairie - Camps en Amiénois,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+80165,Mairie - Camps en Amiénois,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 19034,Mairie - Camps-Saint-Mathurin-Léobazel,microsoft,camps.correze.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 11065,Mairie - Camps-sur-l Agly,independent,camps-sur-l-agly.fr,100,multiple_mx; spf_softfail; mx_spf_match; provider_classified; french_regional_hoster
-80170,Mairie - Cantigny,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+80170,Mairie - Cantigny,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 59126,Mairie - Cantin,ovh,ville-cantin.fr,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 34052,Mairie - Capestang,microsoft,ville-capestang.fr,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 59134,Mairie - Cartignies,ovh,cartignies.fr,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
-80177,Mairie - Cartigny,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+80177,Mairie - Cartigny,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 81063,Mairie - Castelnau-de-Lévis,independent,mairie-castelnaudelevis.com,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
-80179,Mairie - Caulières,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+80179,Mairie - Caulières,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 65138,Mairie - Cauterets,microsoft,ville-cauterets.fr,100,multiple_mx; spf_strict; mx_spf_match; provider_classified; french_regional_hoster
-80181,Mairie - Cayeux-en-Santerre,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+80181,Mairie - Cayeux-en-Santerre,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 34066,Mairie - Cazevieille,independent,mairie-cazevieille.fr,100,multiple_mx; spf_softfail; mx_spf_match; provider_classified; french_regional_hoster
 63072,Mairie - Chabreloche,independent,chabreloche.fr,100,multiple_mx; spf_softfail; mx_spf_match; provider_classified; french_regional_hoster
 41032,Mairie - Chailles,independent,chailles41.fr,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 43049,Mairie - Chamalières-sur-Loire,independent,chamalieres-sur-loire.fr,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 49064,Mairie - Chambellay,independent,chambellay.fr,100,multiple_mx; spf_strict; mx_spf_match; provider_classified; french_regional_hoster
-23043,Mairie - Chamberaud,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+23043,Mairie - Chamberaud,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 19037,Mairie - Chamboulive,independent,mairie-chamboulive.com,100,multiple_mx; spf_softfail; mx_spf_match; provider_classified; french_regional_hoster
 42041,Mairie - Chambéon,independent,chambeon.fr,100,multiple_mx; spf_softfail; mx_spf_match; provider_classified; french_regional_hoster
 70120,Mairie - Champagney,independent,champagney.fr,100,multiple_mx; spf_strict; mx_spf_match; provider_classified; french_regional_hoster
@@ -34367,240 +34368,240 @@ insee,name,provider,domain,confidence,flags
 94018,Mairie - Charenton-le-Pont,microsoft,charenton.fr,100,multiple_mx; spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 37060,Mairie - Chargé,independent,charge37.fr,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 31138,Mairie - Charlas,microsoft,commune-charlas.fr,100,multiple_mx; spf_strict; mx_spf_match; provider_classified; french_regional_hoster
-55103,Mairie - Charpentry,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
-71107,Mairie - Charrecey,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+55103,Mairie - Charpentry,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+71107,Mairie - Charrecey,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 95142,Mairie - Chars,independent,mairie-chars.fr,100,multiple_mx; spf_softfail; mx_spf_match; provider_classified; french_regional_hoster
-21156,Mairie - Chaudenay-le-Château,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+21156,Mairie - Chaudenay-le-Château,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 68065,Mairie - Chavannes-sur-l'Étang,independent,chavannes-etang.fr,100,multiple_mx; spf_softfail; mx_spf_match; provider_classified; french_regional_hoster
-02175,Mairie - Chavigny,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
-58070,Mairie - Chazeuil,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+02175,Mairie - Chavigny,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+58070,Mairie - Chazeuil,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 37067,Mairie - Cheillé,independent,cheille.fr,100,multiple_mx; spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 19054,Mairie - Chenailler-Mascheix,independent,mairie19.fr,100,multiple_mx; mx_spf_match; provider_classified; french_regional_hoster
 54125,Mairie - Chenevières,independent,mairiechenevieres.fr,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 49067,Mairie - Chenillé-Champteussé,independent,chenille-champteusse.fr,100,multiple_mx; spf_strict; mx_spf_match; provider_classified; french_regional_hoster
-77110,Mairie - Chenou,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+77110,Mairie - Chenou,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 10098,Mairie - Chesley,independent,chesley.fr,100,multiple_mx; spf_softfail; mx_spf_match; provider_classified; french_regional_hoster
 84038,Mairie - Cheval-Blanc,independent,ville-chevalblanc.fr,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
-58071,Mairie - Chevannes-Changy,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+58071,Mairie - Chevannes-Changy,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 18065,Mairie - Chezal-Benoît,independent,chezal-benoit.fr,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
-80195,Mairie - Chuignolles,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+80195,Mairie - Chuignolles,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 63099,Mairie - Châteaugay,independent,chateaugay.fr,100,multiple_mx; spf_softfail; mx_spf_match; provider_classified; french_regional_hoster
 87040,Mairie - Châteauneuf-la-Forêt,independent,chateauneuf-la-foret.fr,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 63102,Mairie - Châteldon,microsoft,chateldon.com,100,multiple_mx; spf_softfail; mx_spf_match; provider_classified; french_regional_hoster
 41043,Mairie - Châtillon-sur-Cher,independent,chatillon-sur-cher.fr,100,multiple_mx; spf_softfail; mx_spf_match; provider_classified; french_regional_hoster
 18066,Mairie - Civray,independent,civray-cher.fr,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
-80197,Mairie - Cizancourt,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
-58078,Mairie - Cizely,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+80197,Mairie - Cizancourt,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+58078,Mairie - Cizely,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 24124,Mairie - Clermont-d Excideuil,microsoft,clermontdexcideuil.fr,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 07067,Mairie - Colombier-le-Cardinal,independent,inforoutes-ardeche.fr,100,multiple_mx; spf_softfail; mx_spf_match; provider_classified; french_regional_hoster
 01113,Mairie - Condeissiat,microsoft,condeissiat.fr,100,multiple_mx; spf_softfail; mx_spf_match; provider_classified; french_regional_hoster
-80206,Mairie - Contalmaison,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
-80208,Mairie - Conteville,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+80206,Mairie - Contalmaison,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+80208,Mairie - Conteville,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 69273,Mairie - Corbas,independent,ville-corbas.fr,100,multiple_mx; spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 26105,Mairie - Cornillon-sur-l'Oule,independent,cornillonsurloule.fr,100,multiple_mx; mx_spf_match; provider_classified; french_regional_hoster
 53077,Mairie - Cossé-le-Vivien,independent,cosse-le-vivien.fr,100,multiple_mx; spf_strict; mx_spf_match; provider_classified; french_regional_hoster
-80214,Mairie - Coullemelle,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+80214,Mairie - Coullemelle,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 62244,Mairie - Coulogne,independent,mairie-coulogne.fr,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 77133,Mairie - Courcelles-en-Bassée,independent,gmx.fr,100,multiple_mx; mx_spf_match; provider_classified; french_regional_hoster
-10105,Mairie - Courcelles-sur-Voire,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
-77134,Mairie - Courchamp,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+10105,Mairie - Courcelles-sur-Voire,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+77134,Mairie - Courchamp,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 50146,Mairie - Courtils,independent,mairiecourtils.fr,100,multiple_mx; mx_spf_match; provider_classified; french_regional_hoster
-51191,Mairie - Courtémont,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+51191,Mairie - Courtémont,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 18077,Mairie - Couy,independent,mairie-couy.fr,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 59160,Mairie - Crespin,independent,crespin.fr,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 78189,Mairie - Crespières,independent,crespieres.fr,100,multiple_mx; spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 46083,Mairie - Cressensac-Sarrazac,independent,cressensac-sarrazac.fr,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
-80225,Mairie - Creuse,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
-80223,Mairie - Crémery,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+80225,Mairie - Creuse,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+80223,Mairie - Crémery,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 63132,Mairie - Cunlhat,independent,cunlhat.fr,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
-80230,Mairie - Curchy,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+80230,Mairie - Curchy,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 59166,Mairie - Curgies,independent,curgies.fr,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 46069,Mairie - Cézac,independent,cezac.fr,100,multiple_mx; spf_softfail; mx_spf_match; provider_classified; french_regional_hoster
-51206,Mairie - Dampierre-le-Château,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+51206,Mairie - Dampierre-le-Château,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 70198,Mairie - Dampierre-sur-Salon,independent,dampierresursalon.fr,100,multiple_mx; spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 19068,Mairie - Dampniat,microsoft,dampniat.com,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 88124,Mairie - Darney,independent,darney.fr,100,multiple_mx; spf_softfail; mx_spf_match; provider_classified; french_regional_hoster
-80238,Mairie - Dernancourt,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+80238,Mairie - Dernancourt,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 95197,Mairie - Deuil-la-Barre,microsoft,deuillabarre.fr,100,multiple_mx; spf_softfail; mx_spf_match; provider_classified; french_regional_hoster
-80239,Mairie - Devise,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
-77157,Mairie - Dhuisy,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+80239,Mairie - Devise,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+77157,Mairie - Dhuisy,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 71175,Mairie - Diconne,independent,gmx.fr,100,multiple_mx; mx_spf_match; provider_classified; french_regional_hoster
 55154,Mairie - Dieue-sur-Meuse,microsoft,dieue-sur-meuse.fr,100,multiple_mx; mx_spf_match; provider_classified; french_regional_hoster
 67098,Mairie - Dinsheim-sur-Bruche,independent,dinsheim-sur-bruche.fr,100,multiple_mx; spf_softfail; mx_spf_match; provider_classified; french_regional_hoster
-80243,Mairie - Domesmont,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
-80245,Mairie - Domléger-Longvillers,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+80243,Mairie - Domesmont,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+80245,Mairie - Domléger-Longvillers,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 59177,Mairie - Dompierre-sur-Helpe,ovh,dompierresurhelpe.fr,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 81080,Mairie - Donnazac,independent,donnazac.fr,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 26116,Mairie - Donzère,microsoft,donzere.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
-77161,Mairie - Dormelles,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+77161,Mairie - Dormelles,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 67107,Mairie - Duntzenheim,microsoft,payszorn.com,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 81079,Mairie - Dénat,microsoft,mairie-denat.fr,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 63143,Mairie - Effiat,ovh,effiat.fr,100,multiple_mx; spf_softfail; mx_spf_match; provider_classified; french_regional_hoster
 54176,Mairie - Einville-au-Jard,independent,einville-au-jard.fr,100,multiple_mx; spf_softfail; mx_spf_match; provider_classified; french_regional_hoster
 31167,Mairie - Encausse-les-Thermes,microsoft,encausselesthermes.fr,100,multiple_mx; spf_strict; mx_spf_match; provider_classified; french_regional_hoster
-58110,Mairie - Epiry,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
-80278,Mairie - Erches,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+58110,Mairie - Epiry,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+80278,Mairie - Erches,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 49367,Mairie - Erdre-en-Anjou,independent,erdre-en-anjou.fr,100,multiple_mx; spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 67127,Mairie - Ergersheim,independent,ergersheim.fr,100,multiple_mx; spf_softfail; mx_spf_match; provider_classified; french_regional_hoster
 60218,Mairie - Esches,independent,esches.fr,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 70219,Mairie - Esprels,independent,mairie-esprels.fr,100,multiple_mx; spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 59211,Mairie - Esquerchin,ovh,esquerchin.fr,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
-80294,Mairie - Eterpigny,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+80294,Mairie - Eterpigny,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 67135,Mairie - Ettendorf,microsoft,payszorn.com,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 68086,Mairie - Falkwiller,microsoft,falkwiller.fr,100,multiple_mx; spf_softfail; mx_spf_match; provider_classified; french_regional_hoster
 59221,Mairie - Famars,independent,famars.fr,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 59222,Mairie - Faumont,independent,faumont.fr,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
-80306,Mairie - Fescamps,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
-80566,Mairie - Fieffes-Montrelet,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
-80310,Mairie - Fienvillers,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
-80311,Mairie - Fignières,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+80306,Mairie - Fescamps,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+80566,Mairie - Fieffes-Montrelet,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+80310,Mairie - Fienvillers,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+80311,Mairie - Fignières,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 59236,Mairie - Flesquières,ovh,flesquieres.fr,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
-80317,Mairie - Fleury,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
-58114,Mairie - Fléty,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
-80325,Mairie - Fontaine-lès-Cappy,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
-80326,Mairie - Fontaine-sous-Montdidier,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+80317,Mairie - Fleury,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+58114,Mairie - Fléty,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+80325,Mairie - Fontaine-lès-Cappy,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+80326,Mairie - Fontaine-sous-Montdidier,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 31188,Mairie - Fontenilles,independent,ville-fontenilles.fr,100,multiple_mx; mx_spf_match; provider_classified; french_regional_hoster
 88176,Mairie - Fontenoy-le-Château,independent,fontenoy-le-chateau.com,100,multiple_mx; spf_softfail; mx_spf_match; provider_classified; french_regional_hoster
-80330,Mairie - Forceville-en-Vimeu,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
-80335,Mairie - Foucaucourt-en-Santerre,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
-58118,Mairie - Fours,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+80330,Mairie - Forceville-en-Vimeu,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+80335,Mairie - Foucaucourt-en-Santerre,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+58118,Mairie - Fours,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 90049,Mairie - Foussemagne,independent,foussemagne.com,100,multiple_mx; spf_softfail; mx_spf_match; provider_classified; french_regional_hoster
 54209,Mairie - Franconville,independent,franconville54.fr,100,multiple_mx; spf_strict; mx_spf_match; provider_classified; french_regional_hoster
-80346,Mairie - Franqueville,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+80346,Mairie - Franqueville,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 10161,Mairie - Fresnay,independent,fresnay.fr,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
-80356,Mairie - Fresnoy-Andainville,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
-80359,Mairie - Fresnoy-lès-Roye,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+80356,Mairie - Fresnoy-Andainville,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+80359,Mairie - Fresnoy-lès-Roye,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 59255,Mairie - Fressies,ovh,fressies.fr,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
-80366,Mairie - Fricourt,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
-80369,Mairie - Frohen-sur-Authie,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+80366,Mairie - Fricourt,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+80369,Mairie - Frohen-sur-Authie,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 59257,Mairie - Fromelles,independent,fromelles.fr,100,multiple_mx; spf_strict; mx_spf_match; provider_classified; french_regional_hoster
-77198,Mairie - Fromont,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+77198,Mairie - Fromont,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 81097,Mairie - Fréjairolles,microsoft,mairie-frejairolles.fr,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 62363,Mairie - Frévin-Capelle,microsoft,frevincapelle.fr,100,multiple_mx; spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 59228,Mairie - Férin,ovh,ferin.fr,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 74127,Mairie - Féternes,microsoft,feternes.fr,100,multiple_mx; spf_strict; mx_spf_match; provider_classified; french_regional_hoster
-30120,Mairie - Gagnières,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+30120,Mairie - Gagnières,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 67153,Mairie - Geiswiller-Zoebersdorf,microsoft,payszorn.com,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
-21291,Mairie - Genay,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+21291,Mairie - Genay,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 54222,Mairie - Gerbéviller,independent,gerbeviller.fr,100,multiple_mx; spf_softfail; mx_spf_match; provider_classified; french_regional_hoster
-77204,Mairie - Germigny-sous-Coulombs,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
-71217,Mairie - Germolles-sur-Grosne,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
-02345,Mairie - Gibercourt,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+77204,Mairie - Germigny-sous-Coulombs,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+71217,Mairie - Germolles-sur-Grosne,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+02345,Mairie - Gibercourt,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 46118,Mairie - Gignac,independent,gignac46.fr,100,multiple_mx; spf_softfail; mx_spf_match; provider_classified; french_regional_hoster
 68105,Mairie - Gildwiller,independent,gildwiller.fr,100,multiple_mx; spf_softfail; mx_spf_match; provider_classified; french_regional_hoster
 59263,Mairie - Goeulzin,independent,mairie-goeulzin.fr,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 59266,Mairie - Gondecourt,microsoft,gondecourt.fr,100,multiple_mx; spf_strict; mx_spf_match; provider_classified; french_regional_hoster
-80381,Mairie - Gorges,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+80381,Mairie - Gorges,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 29063,Mairie - Goulien,independent,goulien.fr,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
-11166,Mairie - Gourvieille,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
-80383,Mairie - Goyencourt,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+11166,Mairie - Gourvieille,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+80383,Mairie - Goyencourt,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 67166,Mairie - Grassendorf,microsoft,payszorn.com,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
-80386,Mairie - Gratibus,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
-77212,Mairie - Gravon,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
-25298,Mairie - Grosbois,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+80386,Mairie - Gratibus,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+77212,Mairie - Gravon,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+25298,Mairie - Grosbois,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 22067,Mairie - Grâces,microsoft,mairiegraces.fr,100,multiple_mx; spf_softfail; mx_spf_match; provider_classified; french_regional_hoster
-80395,Mairie - Guerbigny,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
-80397,Mairie - Gueudecourt,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+80395,Mairie - Guerbigny,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+80397,Mairie - Gueudecourt,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 29069,Mairie - Guilers,microsoft,mairie-guilers.fr,100,multiple_mx; spf_softfail; mx_spf_match; provider_classified; french_regional_hoster
 29072,Mairie - Guilvinec,independent,leguilvinec.com,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 68119,Mairie - Hagenbach,independent,hagenbach.fr,100,multiple_mx; spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 68120,Mairie - Hagenthal-le-Bas,microsoft,hagenthal-le-bas.com,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
-80408,Mairie - Halloy-lès-Pernois,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
-54247,Mairie - Hammeville,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
-80413,Mairie - Hancourt,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
-80414,Mairie - Hangard,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+80408,Mairie - Halloy-lès-Pernois,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+54247,Mairie - Hammeville,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+80413,Mairie - Hancourt,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+80414,Mairie - Hangard,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 98720,Mairie - Hao,microsoft,sivmtg.pf,100,multiple_mx; spf_strict; mx_spf_match; provider_classified; french_regional_hoster
-80421,Mairie - Hattencourt,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
-77224,Mairie - Hautefeuille,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
-80422,Mairie - Hautvillers-Ouville,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+80421,Mairie - Hattencourt,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+77224,Mairie - Hautefeuille,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+80422,Mairie - Hautvillers-Ouville,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 64258,Mairie - Haux,microsoft,haux.fr,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
-80423,Mairie - Havernas,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+80423,Mairie - Havernas,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 68125,Mairie - Hecken,independent,hecken.fr,100,multiple_mx; spf_softfail; mx_spf_match; provider_classified; french_regional_hoster
 67188,Mairie - Heiligenberg,independent,heiligenberg.fr,100,multiple_mx; spf_softfail; mx_spf_match; provider_classified; french_regional_hoster
-80427,Mairie - Hem-Hardinval,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+80427,Mairie - Hem-Hardinval,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 54259,Mairie - Herbéviller,independent,herbeviller.fr,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 59301,Mairie - Hergnies,ovh,hergnies.fr,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
-80433,Mairie - Herly,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
-80434,Mairie - Hervilly-Montigny,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+80433,Mairie - Herly,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+80434,Mairie - Hervilly-Montigny,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 62447,Mairie - Hesdin-la-Forêt,independent,hesdinlaforet.fr,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
-80439,Mairie - Heuzecourt,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
-80440,Mairie - Hiermont,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+80439,Mairie - Heuzecourt,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+80440,Mairie - Hiermont,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 98721,Mairie - Hikueru,microsoft,sivmtg.pf,100,multiple_mx; spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 67209,Mairie - Hohfrankenheim,microsoft,payszorn.com,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
-57337,Mairie - Hoste,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
-14335,Mairie - Hotot-en-Auge,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+57337,Mairie - Hoste,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+14335,Mairie - Hotot-en-Auge,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 98724,Mairie - Huahine,microsoft,ville-huahine.pf,100,multiple_mx; spf_softfail; mx_spf_match; provider_classified; french_regional_hoster
 27324,Mairie - Hébécourt,microsoft,pole-secretariat.fr,100,multiple_mx; spf_softfail; mx_spf_match; provider_classified; french_regional_hoster
 57314,Mairie - Héming,microsoft,heming.fr,100,multiple_mx; spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 59302,Mairie - Hérin,microsoft,ville-herin.fr,100,multiple_mx; mx_spf_match; provider_classified; french_regional_hoster
-80449,Mairie - Ignaucourt,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+80449,Mairie - Ignaucourt,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 66088,Mairie - Ille-sur-Têt,independent,ille-sur-tet.com,100,multiple_mx; spf_softfail; mx_spf_match; provider_classified; french_regional_hoster
 68155,Mairie - Ingersheim,microsoft,ville-ingersheim.fr,100,multiple_mx; spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 67225,Mairie - Issenhausen,microsoft,payszorn.com,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 43105,Mairie - Javaugues,independent,javaugues.fr,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 07110,Mairie - Joyeuse,microsoft,mairiedejoyeuse.fr,100,multiple_mx; spf_softfail; mx_spf_match; provider_classified; french_regional_hoster
-31242,Mairie - Jurvielle,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+31242,Mairie - Jurvielle,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 68167,Mairie - Kirchberg,independent,kirchberg.fr,100,multiple_mx; spf_softfail; mx_spf_match; provider_classified; french_regional_hoster
 01002,Mairie - L'Abergement-de-Varey,independent,abergement-de-varey.fr,100,multiple_mx; spf_softfail; mx_spf_match; provider_classified; french_regional_hoster
-51126,Mairie - La Chapelle-Felcourt,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
-77093,Mairie - La Chapelle-Moutils,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+51126,Mairie - La Chapelle-Felcourt,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+77093,Mairie - La Chapelle-Moutils,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 24153,Mairie - La Dornac,independent,ladornac.fr,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 24179,Mairie - La Feuillade,independent,mairie.la-feuillade.com,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
-28175,Mairie - La Gaudaine,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
-18107,Mairie - La Groutte,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+28175,Mairie - La Gaudaine,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+18107,Mairie - La Groutte,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 49161,Mairie - La Jaille-Yvon,independent,lajailleyvon.fr,100,multiple_mx; spf_strict; mx_spf_match; provider_classified; french_regional_hoster
-70326,Mairie - La Malachère,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+70326,Mairie - La Malachère,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 73179,Mairie - La Motte-Servolex,independent,mairie-lamotteservolex.fr,100,multiple_mx; spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 60459,Mairie - La Neuville-sur-Ressons,independent,lansr.fr,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
-27475,Mairie - La Poterie-Mathieu,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
-70450,Mairie - La Rochelle,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+27475,Mairie - La Poterie-Mathieu,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+70450,Mairie - La Rochelle,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 33352,Mairie - La Réole,independent,lareole.fr,100,multiple_mx; spf_softfail; mx_spf_match; provider_classified; french_regional_hoster
 53258,Mairie - La Selle-Craonnaise,independent,lasellecraonnaise.fr,100,multiple_mx; spf_strict; mx_spf_match; provider_classified; french_regional_hoster
-80453,Mairie - Laboissière-en-Santerre,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+80453,Mairie - Laboissière-en-Santerre,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 19098,Mairie - Lagarde-Marc-la-Tour,independent,lagarde-enval.fr,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
-80459,Mairie - Laleu,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+80459,Mairie - Laleu,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 19102,Mairie - Lamazière-Basse,independent,lamazierebasse.fr,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 43110,Mairie - Lamothe,independent,lamothe43.fr,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 31270,Mairie - Landorthe,microsoft,landorthe.com,100,multiple_mx; spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 29108,Mairie - Landudec,independent,landudec.bzh,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
-65256,Mairie - Lanespède,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+65256,Mairie - Lanespède,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 43112,Mairie - Langeac,independent,ville-langeac.com,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
-57383,Mairie - Languimberg,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+57383,Mairie - Languimberg,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 22115,Mairie - Lanrivain,independent,lanrivain.fr,100,multiple_mx; spf_softfail; mx_spf_match; provider_classified; french_regional_hoster
-31272,Mairie - Lapeyrère,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+31272,Mairie - Lapeyrère,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 19106,Mairie - Lapleau,microsoft,mairiedelapleau-correze.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 02409,Mairie - Lappion,ovh,lappion.fr,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 19110,Mairie - Latronche,independent,latronche19.fr,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 60355,Mairie - Laversines,microsoft,laversines.fr,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 43119,Mairie - Lavoûte-sur-Loire,independent,lavoutesurloire.fr,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
-80174,Mairie - Le Cardonnois,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+80174,Mairie - Le Cardonnois,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 63108,Mairie - Le Cheix-sur-Morge,ovh,lecheixsurmorge.fr,100,multiple_mx; spf_softfail; mx_spf_match; provider_classified; french_regional_hoster
 28148,Mairie - Le Favril,independent,le-favril-28.fr,100,multiple_mx; spf_softfail; mx_spf_match; provider_classified; french_regional_hoster
-08182,Mairie - Le Fréty,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
-81101,Mairie - Le Garric,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+08182,Mairie - Le Fréty,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+81101,Mairie - Le Garric,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 31234,Mairie - Le Grès,independent,legres.fr,100,multiple_mx; spf_softfail; mx_spf_match; provider_classified; french_regional_hoster
 49176,Mairie - Le Lion-d'Angers,independent,leliondangers.fr,100,multiple_mx; spf_strict; mx_spf_match; provider_classified; french_regional_hoster
-80526,Mairie - Le Meillard,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+80526,Mairie - Le Meillard,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 94058,Mairie - Le Perreux-sur-Marne,independent,leperreux94.fr,100,multiple_mx; spf_softfail; mx_spf_match; provider_classified; french_regional_hoster
-25474,Mairie - Le Puy,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
-63292,Mairie - Le Puy-Saint-Gulmier,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
-80652,Mairie - Le Quesnel,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+25474,Mairie - Le Puy,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+63292,Mairie - Le Puy-Saint-Gulmier,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+80652,Mairie - Le Quesnel,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 18255,Mairie - Le Subdray,microsoft,le-subdray.fr,100,multiple_mx; spf_softfail; mx_spf_match; provider_classified; french_regional_hoster
 50591,Mairie - Le Teilleul,microsoft,leteilleul.fr,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 19009,Mairie - Les Angles-sur-Corrèze,independent,mairie19.fr,100,multiple_mx; mx_spf_match; provider_classified; french_regional_hoster
 69097,Mairie - Les Haies,independent,leshaies.fr,100,multiple_mx; spf_softfail; mx_spf_match; provider_classified; french_regional_hoster
-51428,Mairie - Les Petites-Loges,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+51428,Mairie - Les Petites-Loges,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 34135,Mairie - Lespignan,independent,lespignan.fr,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
-77250,Mairie - Leudon-en-Brie,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
-80478,Mairie - Lignières,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+77250,Mairie - Leudon-en-Brie,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+80478,Mairie - Lignières,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 19116,Mairie - Liourdres,independent,mairie19.fr,100,multiple_mx; mx_spf_match; provider_classified; french_regional_hoster
 53135,Mairie - Livré-la-Touche,independent,livrelatouche.fr,100,multiple_mx; spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 67270,Mairie - Lixhausen,microsoft,payszorn.com,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
-25338,Mairie - Lizine,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
-80491,Mairie - Longuevillette,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+25338,Mairie - Lizine,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+80491,Mairie - Longuevillette,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 19120,Mairie - Louignac,independent,mairie19.fr,100,multiple_mx; mx_spf_match; provider_classified; french_regional_hoster
-80495,Mairie - Lucheux,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
-58150,Mairie - Lys,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+80495,Mairie - Lucheux,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+58150,Mairie - Lys,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 59336,Mairie - Lécluse,ovh,mairie-lecluse.fr,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 44087,Mairie - Machecoul-Saint-Même,microsoft,machecoul.fr,100,multiple_mx; spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 34147,Mairie - Magalas,independent,ville-magalas.fr,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
@@ -34611,61 +34612,61 @@ insee,name,provider,domain,confidence,flags
 62544,Mairie - Manin,microsoft,manin.fr,100,multiple_mx; spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 16206,Mairie - Mansle-les-Fontaines,independent,manslelesfontaines.fr,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 68200,Mairie - Manspach,independent,manspach.fr,100,multiple_mx; spf_softfail; mx_spf_match; provider_classified; french_regional_hoster
-80508,Mairie - Marché-Allouarde,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
-80509,Mairie - Marchélepot-Misery,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+80508,Mairie - Marché-Allouarde,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+80509,Mairie - Marchélepot-Misery,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 62548,Mairie - Marck,independent,ville-marck.fr,100,multiple_mx; spf_softfail; mx_spf_match; provider_classified; french_regional_hoster
-08274,Mairie - Marcq,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
-80511,Mairie - Maresmontiers,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
-80517,Mairie - Marquivillers,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+08274,Mairie - Marcq,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+80511,Mairie - Maresmontiers,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+80517,Mairie - Marquivillers,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 81156,Mairie - Marssac-sur-Tarn,microsoft,marssac-sur-tarn.fr,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 27392,Mairie - Martagny,microsoft,pole-secretariat.fr,100,multiple_mx; spf_softfail; mx_spf_match; provider_classified; french_regional_hoster
 31323,Mairie - Martres-de-Rivière,microsoft,martresderiviere.fr,100,multiple_mx; spf_strict; mx_spf_match; provider_classified; french_regional_hoster
-08280,Mairie - Marvaux-Vieux,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+08280,Mairie - Marvaux-Vieux,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 01240,Mairie - Matafelon-Granges,independent,matafelongranges.fr,100,multiple_mx; spf_softfail; mx_spf_match; provider_classified; french_regional_hoster
 66106,Mairie - Maureillas-las-Illas,microsoft,maureillaslasillas.fr,100,multiple_mx; spf_softfail; mx_spf_match; provider_classified; french_regional_hoster
-30163,Mairie - Mauressargues,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+30163,Mairie - Mauressargues,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 22146,Mairie - Mellionnec,independent,mellionnec.bzh,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 67287,Mairie - Melsheim,microsoft,payszorn.com,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
-80537,Mairie - Mesnil-Domqueur,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
-27541,Mairie - Mesnil-Saint-Jean,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
-80538,Mairie - Mesnil-en-Arrouaise,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+80537,Mairie - Mesnil-Domqueur,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+27541,Mairie - Mesnil-Saint-Jean,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+80538,Mairie - Mesnil-en-Arrouaise,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 92048,Mairie - Meudon,microsoft,meudon.fr,100,multiple_mx; spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 67293,Mairie - Minversheim,microsoft,payszorn.com,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 02486,Mairie - Missy les Pierrepont,independent,missylespierrepont.fr,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
-58170,Mairie - Monceaux-le-Comte,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+58170,Mairie - Monceaux-le-Comte,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 19140,Mairie - Monceaux-sur-Dordogne,microsoft,monceaux.correze.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
-61281,Mairie - Moncy,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+61281,Mairie - Moncy,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 62583,Mairie - Mondicourt,microsoft,mondicourt.fr,100,multiple_mx; spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 28257,Mairie - Mondonville-Saint-Jean,independent,mondonvillesaintjean28.fr,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 38249,Mairie - Montbonnot-Saint-Martin,microsoft,montbonnot.fr,100,multiple_mx; spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 46205,Mairie - Montgesty,independent,montgesty.fr,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 02506,Mairie - Montgobert,independent,montgobert.com,100,multiple_mx; spf_softfail; mx_spf_match; provider_classified; french_regional_hoster
-30180,Mairie - Montignargues,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
-77310,Mairie - Montigny-le-Guesdier,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+30180,Mairie - Montignargues,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+77310,Mairie - Montigny-le-Guesdier,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 91425,Mairie - Montlhéry,microsoft,ville-montlhery.fr,100,multiple_mx; spf_softfail; mx_spf_match; provider_classified; french_regional_hoster
 45215,Mairie - Montliard,ovh,montliard.fr,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 76448,Mairie - Montmain,microsoft,montmain.fr,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 26205,Mairie - Montmaur-en-Diois,independent,montmaurdiois.fr,100,multiple_mx; spf_softfail; mx_spf_match; provider_classified; french_regional_hoster
-80565,Mairie - Montonvillers,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+80565,Mairie - Montonvillers,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 49214,Mairie - Montreuil-Juigné,independent,ville-montreuil-juigne.fr,100,multiple_mx; spf_softfail; mx_spf_match; provider_classified; french_regional_hoster
 49217,Mairie - Montreuil-sur-Maine,independent,montreuilsurmaine.fr,100,multiple_mx; spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 97313,Mairie - Montsinéry-Tonnégrande,microsoft,montsinery-tonnegrande.fr,100,multiple_mx; spf_strict; mx_spf_match; provider_classified; french_regional_hoster
-80568,Mairie - Morchain,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+80568,Mairie - Morchain,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 77316,Mairie - Moret-Loing-et-Orvanne,independent,moretloingetorvanne.fr,100,multiple_mx; spf_softfail; mx_spf_match; provider_classified; french_regional_hoster
-50357,Mairie - Morigny,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+50357,Mairie - Morigny,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 97116,Mairie - Morne-à-L'Eau,independent,mornealeau.fr,100,multiple_mx; spf_strict; mx_spf_match; provider_classified; french_regional_hoster
-77319,Mairie - Mortery,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+77319,Mairie - Mortery,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 90072,Mairie - Morvillars,independent,morvillars.fr,100,multiple_mx; spf_softfail; mx_spf_match; provider_classified; french_regional_hoster
-58183,Mairie - Mouron-sur-Yonne,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+58183,Mairie - Mouron-sur-Yonne,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 67312,Mairie - Mutzenhouse,microsoft,payszorn.com,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
-80524,Mairie - Méharicourt,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+80524,Mairie - Méharicourt,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 23131,Mairie - Mérinchal,independent,merinchal.fr,100,multiple_mx; spf_softfail; mx_spf_match; provider_classified; french_regional_hoster
 43134,Mairie - Mézères,independent,mezeres.fr,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 98730,Mairie - Napuka,microsoft,sivmtg.pf,100,multiple_mx; spf_strict; mx_spf_match; provider_classified; french_regional_hoster
-80587,Mairie - Neslette,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+80587,Mairie - Neslette,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 19147,Mairie - Nespouls,microsoft,nespouls.fr,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 19148,Mairie - Neuvic,independent,neuvic19.fr,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
-80591,Mairie - Neuville-au-Bois,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+80591,Mairie - Neuville-au-Bois,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 53165,Mairie - Niafles,independent,niafles.fr,100,multiple_mx; spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 19150,Mairie - Noailhac,independent,noailhac19.fr,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 19151,Mairie - Noailles,microsoft,noailles19.fr,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
@@ -34675,35 +34676,35 @@ insee,name,provider,domain,confidence,flags
 07166,Mairie - Nozières,independent,inforoutes-ardeche.fr,100,multiple_mx; spf_softfail; mx_spf_match; provider_classified; french_regional_hoster
 98732,Mairie - Nukutavake,independent,mail.pf,100,multiple_mx; mx_spf_match; provider_classified; french_regional_hoster
 66121,Mairie - Néfiach,microsoft,nefiach.com,100,multiple_mx; spf_softfail; mx_spf_match; provider_classified; french_regional_hoster
-50384,Mairie - Octeville-l'Avenel,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+50384,Mairie - Octeville-l'Avenel,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 59444,Mairie - Odomez,independent,odomez.fr,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
-80604,Mairie - Offignies,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
-80605,Mairie - Offoy,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
-21466,Mairie - Oigny,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
-80607,Mairie - Oissy,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+80604,Mairie - Offignies,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+80605,Mairie - Offoy,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+21466,Mairie - Oigny,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+80607,Mairie - Oissy,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 06089,Mairie - Opio,microsoft,mairie-opio.fr,100,multiple_mx; spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 02572,Mairie - Orainville,ovh,orainville.fr,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 32301,Mairie - Ordan-Larroque,independent,ordan-larroque.fr,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 19154,Mairie - Orgnac-sur-Vézère,independent,orgnac.fr,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
-52367,Mairie - Ormoy-lès-Sexfontaines,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+52367,Mairie - Ormoy-lès-Sexfontaines,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 45237,Mairie - Orville,independent,gmx.fr,100,multiple_mx; mx_spf_match; provider_classified; french_regional_hoster
 71339,Mairie - Ozolles,independent,ozolles.fr,100,multiple_mx; spf_softfail; mx_spf_match; provider_classified; french_regional_hoster
 22161,Mairie - Pabu,independent,pabu.bzh,100,multiple_mx; spf_softfail; mx_spf_match; provider_classified; french_regional_hoster
 19156,Mairie - Palazinges,independent,palazinges.fr,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 63267,Mairie - Palladuc,independent,commune-palladuc.fr,100,multiple_mx; spf_softfail; mx_spf_match; provider_classified; french_regional_hoster
-80616,Mairie - Pargny,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+80616,Mairie - Pargny,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 63271,Mairie - Paslières,independent,paslieres.fr,100,multiple_mx; spf_softfail; mx_spf_match; provider_classified; french_regional_hoster
 43147,Mairie - Paulhac,independent,paulhac43.fr,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 43148,Mairie - Paulhaguet,independent,paulhaguet.fr,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
-80619,Mairie - Pernois,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+80619,Mairie - Pernois,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 19162,Mairie - Perpezac-le-Noir,independent,perpezaclenoir.fr,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
-54420,Mairie - Petit-Failly,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+54420,Mairie - Petit-Failly,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 68254,Mairie - Petit-Landau,independent,petit-landau.fr,100,multiple_mx; spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 57540,Mairie - Phalsbourg,microsoft,phalsbourg.fr,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
-80623,Mairie - Piennes-Onvillers,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+80623,Mairie - Piennes-Onvillers,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 54426,Mairie - Pierre-la-Treiche,independent,gmx.fr,100,multiple_mx; mx_spf_match; provider_classified; french_regional_hoster
-65364,Mairie - Pintac,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
-80626,Mairie - Pissy,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+65364,Mairie - Pintac,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+80626,Mairie - Pissy,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 59463,Mairie - Pitgam,microsoft,pitgam.fr,100,multiple_mx; spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 29171,Mairie - Plomeur,independent,plomeur.bzh,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 29173,Mairie - Plonéis,microsoft,ploneis.com,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
@@ -34711,17 +34712,17 @@ insee,name,provider,domain,confidence,flags
 56167,Mairie - Plougoumelen,microsoft,plougoumelen.fr,100,multiple_mx; spf_softfail; mx_spf_match; provider_classified; french_regional_hoster
 22219,Mairie - Plouguenast-Langast,independent,plouguenast-langast.fr,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 22176,Mairie - Plédran,independent,pledran.bzh,100,multiple_mx; spf_softfail; mx_spf_match; provider_classified; french_regional_hoster
-77370,Mairie - Poligny,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+77370,Mairie - Poligny,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 53180,Mairie - Pommerieux,independent,pommerieux53.fr,100,multiple_mx; spf_strict; mx_spf_match; provider_classified; french_regional_hoster
-14511,Mairie - Pont-Bellenger,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+14511,Mairie - Pont-Bellenger,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 66145,Mairie - Ponteilla,independent,mairie-ponteilla-nyls.fr,100,multiple_mx; spf_softfail; mx_spf_match; provider_classified; french_regional_hoster
 13078,Mairie - Port-Saint-Louis-du-Rhone,microsoft,portsaintlouis.fr,100,multiple_mx; spf_softfail; mx_spf_match; provider_classified; provider_via_gateway_spf; french_regional_hoster
-80638,Mairie - Potte,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+80638,Mairie - Potte,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 21506,Mairie - Premeaux-Prissey,independent,premeaux-prissey.fr,100,multiple_mx; spf_softfail; mx_spf_match; provider_classified; french_regional_hoster
-08346,Mairie - Prix-les-Mézières,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+08346,Mairie - Prix-les-Mézières,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 59475,Mairie - Prouvy,independent,mairie-prouvy.fr,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
-77379,Mairie - Provins,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
-65372,Mairie - Pujo,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+77379,Mairie - Provins,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+65372,Mairie - Pujo,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 98737,Mairie - Puka-Puka,independent,mail.pf,100,multiple_mx; mx_spf_match; provider_classified; french_regional_hoster
 63291,Mairie - Puy-Guillaume,microsoft,puy-guillaume.fr,100,multiple_mx; spf_softfail; mx_spf_match; provider_classified; french_regional_hoster
 19169,Mairie - Puy-d Arnac,independent,puy-darnac.fr,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
@@ -34729,24 +34730,24 @@ insee,name,provider,domain,confidence,flags
 19159,Mairie - Péret-Bel-Air,independent,mairie19.fr,100,multiple_mx; mx_spf_match; provider_classified; french_regional_hoster
 19160,Mairie - Pérols-sur-Vézère,independent,mairie19.fr,100,multiple_mx; mx_spf_match; provider_classified; french_regional_hoster
 59479,Mairie - Quarouble,independent,mairie-quarouble.fr,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
-54442,Mairie - Quevilloncourt,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
-80658,Mairie - Quivières,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+54442,Mairie - Quevilloncourt,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+80658,Mairie - Quivières,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 98740,Mairie - Rangiroa,microsoft,sivmtg.pf,100,multiple_mx; spf_strict; mx_spf_match; provider_classified; french_regional_hoster
-55415,Mairie - Ranzières,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+55415,Mairie - Ranzières,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 98741,Mairie - Rapa,independent,mail.pf,100,multiple_mx; mx_spf_match; provider_classified; french_regional_hoster
-51452,Mairie - Rapsécourt,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+51452,Mairie - Rapsécourt,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 98742,Mairie - Reao,microsoft,sivmtg.pf,100,multiple_mx; spf_strict; mx_spf_match; provider_classified; french_regional_hoster
-80666,Mairie - Remaisnil,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
-80667,Mairie - Remaugies,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+80666,Mairie - Remaisnil,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+80667,Mairie - Remaugies,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 78518,Mairie - Rennemoulin,independent,rennemoulin.fr,100,multiple_mx; spf_softfail; mx_spf_match; provider_classified; french_regional_hoster
-14533,Mairie - Repentigny,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+14533,Mairie - Repentigny,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 60533,Mairie - Ressons-sur-Matz,local,ressons-sur-matz.fr,100,multiple_mx; spf_strict; mx_spf_match; provider_classified; provider_via_gateway_spf; french_regional_hoster
-80669,Mairie - Rethonvillers,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+80669,Mairie - Rethonvillers,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 68268,Mairie - Retzwiller,independent,retzwiller.fr,100,multiple_mx; spf_softfail; mx_spf_match; provider_classified; french_regional_hoster
-80670,Mairie - Revelles,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+80670,Mairie - Revelles,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 19173,Mairie - Rilhac-Xaintrie,independent,mairie19.fr,100,multiple_mx; mx_spf_match; provider_classified; french_regional_hoster
 37200,Mairie - Rivarennes,independent,mairie-rivarennes-37.fr,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
-80674,Mairie - Rivery,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+80674,Mairie - Rivery,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 68278,Mairie - Rixheim,independent,rixheim.fr,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 46240,Mairie - Rocamadour,independent,rocamadour.com,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 43164,Mairie - Roche-en-Régnier,independent,rocheenregnier.fr,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
@@ -34755,13 +34756,13 @@ insee,name,provider,domain,confidence,flags
 72255,Mairie - Rouessé-Vassé,independent,rouesse-vasse.fr,100,multiple_mx; spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 81232,Mairie - Rouffiac,microsoft,rouffiac81.fr,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 90089,Mairie - Rougemont-le-Château,independent,rougemont-le-chateau.fr,100,multiple_mx; spf_softfail; mx_spf_match; provider_classified; french_regional_hoster
-80683,Mairie - Rouy-le-Grand,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
-80687,Mairie - Rubescourt,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
-77395,Mairie - Rumont,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+80683,Mairie - Rouy-le-Grand,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+80687,Mairie - Rubescourt,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+77395,Mairie - Rumont,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 54456,Mairie - Réméréville,independent,remereville.fr,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
-46246,Mairie - Saignes,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
-80691,Mairie - Saigneville,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
-80693,Mairie - Sailly-Laurette,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+46246,Mairie - Saignes,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+80691,Mairie - Saigneville,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+80693,Mairie - Sailly-Laurette,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 22272,Mairie - Saint-Agathon,independent,saintagathon.fr,100,multiple_mx; spf_softfail; mx_spf_match; provider_classified; french_regional_hoster
 31467,Mairie - Saint-Alban,microsoft,saint-alban31.fr,100,multiple_mx; spf_softfail; mx_spf_match; provider_classified; french_regional_hoster
 24366,Mairie - Saint-André-Allas,independent,saintandreallas.fr,100,multiple_mx; spf_softfail; mx_spf_match; provider_classified; french_regional_hoster
@@ -34772,17 +34773,17 @@ insee,name,provider,domain,confidence,flags
 73228,Mairie - Saint-Cassin,independent,saint-cassin.com,100,multiple_mx; spf_softfail; mx_spf_match; provider_classified; french_regional_hoster
 19191,Mairie - Saint-Cernin-de-Larche,independent,saint-cernin-de-larche.fr,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 42207,Mairie - Saint-Chamond,independent,saint-chamond.fr,100,multiple_mx; spf_strict; mx_spf_match; provider_classified; french_regional_hoster
-80701,Mairie - Saint-Christ-Briost,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+80701,Mairie - Saint-Christ-Briost,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 36185,Mairie - Saint-Christophe-en-Bazelle,independent,stchristopheenbazelle.fr,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 43174,Mairie - Saint-Christophe-sur-Dolaison,independent,saintchristophesurdolaizon.fr,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 24397,Mairie - Saint-Cyr-les-Champagnes,independent,saint-cyr-les-champagnes.fr,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 46251,Mairie - Saint-Céré,independent,saint-cere.fr,100,multiple_mx; spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 85208,Mairie - Saint-Denis-la-Chevasse,independent,saintdenislachevasse.fr,100,multiple_mx; spf_softfail; mx_spf_match; provider_classified; french_regional_hoster
 69204,Mairie - Saint-Genis-Laval,microsoft,saintgenislaval.fr,100,multiple_mx; spf_softfail; mx_spf_match; provider_classified; french_regional_hoster
-77409,Mairie - Saint-Germain-Laval,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+77409,Mairie - Saint-Germain-Laval,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 24417,Mairie - Saint-Germain-des-Prés,independent,stgermaindespres.fr,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 90091,Mairie - Saint-Germain-le-Châtelet,independent,saint-germain-le-chatelet.fr,100,multiple_mx; spf_softfail; mx_spf_match; provider_classified; french_regional_hoster
-50482,Mairie - Saint-Germain-sur-Sèves,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+50482,Mairie - Saint-Germain-sur-Sèves,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 57612,Mairie - Saint-Hubert,microsoft,mairiesthubert57.fr,100,multiple_mx; spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 31487,Mairie - Saint-Ignan,microsoft,saint-ignan.fr,100,multiple_mx; spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 40264,Mairie - Saint-Jean-de-Marsacq,independent,saintjeandemarsacq.fr,100,multiple_mx; spf_softfail; mx_spf_match; provider_classified; french_regional_hoster
@@ -34792,12 +34793,12 @@ insee,name,provider,domain,confidence,flags
 19215,Mairie - Saint-Julien-le-Pèlerin,microsoft,stjulienlepelerin.fr,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 19216,Mairie - Saint-Julien-le-Vendômois,independent,stjulienlevendomois.fr,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 63372,Mairie - Saint-Laure,independent,saint-laure.fr,100,multiple_mx; spf_softfail; mx_spf_match; provider_classified; french_regional_hoster
-80706,Mairie - Saint-Léger-lès-Domart,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
-80707,Mairie - Saint-Léger-sur-Bresle,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+80706,Mairie - Saint-Léger-lès-Domart,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+80707,Mairie - Saint-Léger-sur-Bresle,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 24443,Mairie - Saint-Léon-sur-Vézère,independent,slve.fr,100,multiple_mx; spf_softfail; mx_spf_match; provider_classified; french_regional_hoster
-80708,Mairie - Saint-Mard,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+80708,Mairie - Saint-Mard,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 40272,Mairie - Saint-Martin-de-Hinx,independent,saintmartindehinx.fr,100,multiple_mx; mx_spf_match; provider_classified; french_regional_hoster
-77424,Mairie - Saint-Martin-du-Boschet,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+77424,Mairie - Saint-Martin-du-Boschet,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 31503,Mairie - Saint-Martory,microsoft,commune-saintmartory.fr,100,multiple_mx; spf_softfail; mx_spf_match; provider_classified; french_regional_hoster
 16341,Mairie - Saint-Michel,independent,stmichel16470.fr,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 35297,Mairie - Saint-Méen-le-Grand,microsoft,stmeen.fr,100,multiple_mx; spf_strict; mx_spf_match; provider_classified; french_regional_hoster
@@ -34806,16 +34807,16 @@ insee,name,provider,domain,confidence,flags
 19234,Mairie - Saint-Pardoux-l Ortigier,independent,mairie19.fr,100,multiple_mx; mx_spf_match; provider_classified; french_regional_hoster
 74249,Mairie - Saint-Paul-en-Chablais,microsoft,saintpaulenchablais.fr,100,multiple_mx; spf_softfail; mx_spf_match; provider_classified; french_regional_hoster
 43217,Mairie - Saint-Pierre-du-Champ,independent,saintpierreduchamp43.fr,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
-23235,Mairie - Saint-Priest-la-Feuille,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+23235,Mairie - Saint-Priest-la-Feuille,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 18232,Mairie - Saint-Priest-la-Marche,independent,stpriestlamarche.fr,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 43221,Mairie - Saint-Privat-d'Allier,independent,mairie-saintprivatdallier.fr,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
-58262,Mairie - Saint-Péreuse,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
-55465,Mairie - Saint-Remy-la-Calonne,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+58262,Mairie - Saint-Péreuse,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+55465,Mairie - Saint-Remy-la-Calonne,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 19240,Mairie - Saint-Salvadour,independent,saint-salvadour.fr,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
-80718,Mairie - Saint-Sauveur,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+80718,Mairie - Saint-Sauveur,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 17404,Mairie - Saint-Simon-de-Pellouaille,independent,saint-simon.fr,100,multiple_mx; spf_softfail; mx_spf_match; provider_classified; french_regional_hoster
 19243,Mairie - Saint-Sornin-Lavolps,ovh,saintsornin.fr,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
-27605,Mairie - Saint-Sylvestre-de-Cormeilles,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+27605,Mairie - Saint-Sylvestre-de-Cormeilles,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 19246,Mairie - Saint-Viance,independent,saintviance.fr,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 43230,Mairie - Saint-Vincent,independent,saintvincent43.fr,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 24513,Mairie - Saint-Vincent-sur-l Isle,independent,saintvincentsurlisle.fr,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
@@ -34823,70 +34824,69 @@ insee,name,provider,domain,confidence,flags
 63404,Mairie - Saint-Yvoine,ovh,saint-yvoine.fr,100,multiple_mx; spf_softfail; mx_spf_match; provider_classified; french_regional_hoster
 43181,Mairie - Saint-Étienne-Lardeyrol,independent,saintetiennelardeyrol43.fr,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 27537,Mairie - Saint-Étienne-du-Vauvray,independent,st-etienne-vauvray.fr,100,multiple_mx; spf_strict; mx_spf_match; provider_classified; french_regional_hoster
-80719,Mairie - Sainte Segrée,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+80719,Mairie - Sainte Segrée,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 42197,Mairie - Sainte-Agathe-la-Bouteresse,microsoft,ste-agathe-la-bouteresse.fr,100,multiple_mx; spf_softfail; mx_spf_match; provider_classified; french_regional_hoster
-25513,Mairie - Sainte-Anne,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+25513,Mairie - Sainte-Anne,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 37212,Mairie - Sainte-Catherine-de-Fierbois,independent,saintecatherinedefierbois.fr,100,multiple_mx; spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 69189,Mairie - Sainte-Colombe,infomaniak,ste-colombe.fr,100,multiple_mx; mx_spf_match; provider_classified; french_regional_hoster
-30239,Mairie - Sainte-Cécile-d'Andorge,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
-14619,Mairie - Sainte-Marie-Outre-L'Eau,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+30239,Mairie - Sainte-Cécile-d'Andorge,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+14619,Mairie - Sainte-Marie-Outre-L'Eau,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 70469,Mairie - Sainte-Marie-en-Chanois,independent,sainte-marie-en-chanois.fr,100,multiple_mx; spf_softfail; mx_spf_match; provider_classified; french_regional_hoster
 97129,Mairie - Sainte-Rose,independent,sainte-rose.fr,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
-58271,Mairie - Saizy,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+58271,Mairie - Saizy,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 81274,Mairie - Saliès,microsoft,salies-tarn.fr,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 19250,Mairie - Salon-la-Tour,independent,salonlatour.fr,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 27614,Mairie - Sancourt,microsoft,pole-secretariat.fr,100,multiple_mx; spf_softfail; mx_spf_match; provider_classified; french_regional_hoster
-77444,Mairie - Sancy-lès-Provins,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+77444,Mairie - Sancy-lès-Provins,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 67433,Mairie - Sand,independent,commune-sand.fr,100,multiple_mx; spf_softfail; mx_spf_match; provider_classified; french_regional_hoster
 40293,Mairie - Saubusse,independent,saubusse.fr,100,multiple_mx; spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 59557,Mairie - Saultain,independent,ville-saultain.fr,100,multiple_mx; mx_spf_match; provider_classified; french_regional_hoster
-54494,Mairie - Saulxerotte,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+54494,Mairie - Saulxerotte,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 34298,Mairie - Sauvian,microsoft,ville-sauvian.com,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 49330,Mairie - Sceaux-d'Anjou,independent,sceauxdanjou.fr,100,multiple_mx; spf_strict; mx_spf_match; provider_classified; french_regional_hoster
-67440,Mairie - Schaffhouse-près-Seltz,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+67440,Mairie - Schaffhouse-près-Seltz,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 67444,Mairie - Scherlenheim,microsoft,payszorn.com,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 67460,Mairie - Schwindratzheim,microsoft,payszorn.com,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
-89385,Mairie - Sennevoy-le-Bas,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+89385,Mairie - Sennevoy-le-Bas,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 59567,Mairie - Seranvillers-Forenville,independent,seranvillers-forenville.fr,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 24531,Mairie - Sergeac,independent,sergeac.fr,100,multiple_mx; spf_softfail; mx_spf_match; provider_classified; french_regional_hoster
 71517,Mairie - Sermesse,independent,sermesse-71350.fr,100,multiple_mx; spf_softfail; mx_spf_match; provider_classified; french_regional_hoster
-30318,Mairie - Servas,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
-80735,Mairie - Seux,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+30318,Mairie - Servas,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+80735,Mairie - Seux,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 54505,Mairie - Sexey-aux-Forges,independent,sexeyauxforges.fr,100,multiple_mx; spf_softfail; mx_spf_match; provider_classified; french_regional_hoster
-25546,Mairie - Silley-Bléfond,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+25546,Mairie - Silley-Bléfond,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 62796,Mairie - Simencourt,independent,latronche19.fr,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 19260,Mairie - Sioniac,microsoft,sioniac.fr,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
-51537,Mairie - Sivry Ante,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+51537,Mairie - Sivry Ante,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 59572,Mairie - Solre-le-Château,ovh,solrelechateau.fr,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 01410,Mairie - Sonthonnax-la-Montagne,independent,sonthonnax-la-montagne.fr,100,multiple_mx; spf_softfail; mx_spf_match; provider_classified; french_regional_hoster
-80738,Mairie - Soues,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+80738,Mairie - Soues,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 46309,Mairie - Souillac,independent,souillac.fr,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 40310,Mairie - Soustons,independent,mairie-soustons.fr,100,multiple_mx; spf_strict; mx_spf_match; provider_classified; french_regional_hoster
-80741,Mairie - Soyécourt,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+80741,Mairie - Soyécourt,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 59579,Mairie - Steene,microsoft,steene.fr,100,multiple_mx; spf_strict; mx_spf_match; provider_classified; french_regional_hoster
-80742,Mairie - Surcamps,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+80742,Mairie - Surcamps,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 17434,Mairie - Surgères,microsoft,ville-surgeres.fr,100,multiple_mx; spf_softfail; mx_spf_match; provider_classified; french_regional_hoster
-09304,Mairie - Suzan,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+09304,Mairie - Suzan,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 07312,Mairie - Sécheras,independent,secheras.fr,100,multiple_mx; spf_softfail; mx_spf_match; provider_classified; french_regional_hoster
 19256,Mairie - Sérandon,independent,serandon.fr,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 98746,Mairie - Tahuata,independent,commune-tahuata.pf,100,multiple_mx; spf_softfail; mx_spf_match; provider_classified; french_regional_hoster
-43242,Mairie - Tailhac,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+43242,Mairie - Tailhac,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 26347,Mairie - Tain-l'Hermitage,independent,ville-tain.com,100,multiple_mx; spf_softfail; mx_spf_match; provider_classified; french_regional_hoster
 59583,Mairie - Taisnières-en-Thiérache,ovh,taisnieres-en-thierache.fr,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 69242,Mairie - Taponas,independent,taponas.fr,100,multiple_mx; spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 98751,Mairie - Tatakoto,independent,mail.pf,100,multiple_mx; mx_spf_match; provider_classified; french_regional_hoster
-58288,Mairie - Teigny,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
-80748,Mairie - Templeux-le-Guérard,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
-80750,Mairie - Tertry,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
-80753,Mairie - Thiepval,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
-80757,Mairie - Thoix,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+58288,Mairie - Teigny,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+80748,Mairie - Templeux-le-Guérard,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+80750,Mairie - Tertry,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+80753,Mairie - Thiepval,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+80757,Mairie - Thoix,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 49344,Mairie - Thorigné-d'Anjou,independent,thorignedanjou.fr,100,multiple_mx; spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 87197,Mairie - Thouron,independent,mairiedethouron.fr,100,multiple_mx; spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 59594,Mairie - Thun-Saint-Amand,microsoft,thunsaintamand.fr,100,multiple_mx; spf_strict; mx_spf_match; provider_classified; french_regional_hoster
-80759,Mairie - Tilloloy,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
-16382,Mairie - Torsac,microsoft,laposte.fr,100,multiple_mx; spf_strict; mx_spf_match; provider_classified; provider_via_gateway_spf; autodiscover_confirms
-08458,Mairie - Tourteron,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
-77471,Mairie - Tousson,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+80759,Mairie - Tilloloy,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+08458,Mairie - Tourteron,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+77471,Mairie - Tousson,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 68337,Mairie - Traubach-le-Haut,independent,traubach-le-haut.fr,100,multiple_mx; spf_softfail; mx_spf_match; provider_classified; french_regional_hoster
 29296,Mairie - Tréméoc,independent,tremeoc.bzh,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 29297,Mairie - Tréméven,independent,tremeven.fr,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
@@ -34898,13 +34898,13 @@ insee,name,provider,domain,confidence,flags
 15244,Mairie - Ussel,ovh,ussel.fr,100,multiple_mx; spf_softfail; mx_spf_match; provider_classified; french_regional_hoster
 22384,Mairie - Uzel,independent,mairie-uzel.fr,100,multiple_mx; spf_softfail; mx_spf_match; provider_classified; french_regional_hoster
 68192,Mairie - Valdieu-Lutran,independent,valdieu-lutran.fr,100,multiple_mx; spf_softfail; mx_spf_match; provider_classified; french_regional_hoster
-25583,Mairie - Valonne,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
-58302,Mairie - Varennes-lès-Narcy,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
-02762,Mairie - Vassens,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+25583,Mairie - Valonne,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+58302,Mairie - Varennes-lès-Narcy,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+02762,Mairie - Vassens,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 62836,Mairie - Vaudricourt,independent,vaudricourt.com,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
-80782,Mairie - Vaux-en-Amiénois,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+80782,Mairie - Vaux-en-Amiénois,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 46330,Mairie - Vayrac,independent,vayrac.fr,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
-25599,Mairie - Vennans,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+25599,Mairie - Vennans,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 43258,Mairie - Vergongheon,independent,vergongheon.fr,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 19284,Mairie - Viam,independent,mairie19.fr,100,multiple_mx; mx_spf_match; provider_classified; french_regional_hoster
 59613,Mairie - Vicq,independent,ville-vicq.fr,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
@@ -34912,49 +34912,49 @@ insee,name,provider,domain,confidence,flags
 45334,Mairie - Vieilles-Maisons-sur-Joudry,independent,vieillesmaisons.fr,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 38544,Mairie - Vienne,ovh,mairie-vienne.fr,100,multiple_mx; spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 19285,Mairie - Vigeois,independent,vigeois.fr,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
-58308,Mairie - Vignol,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+58308,Mairie - Vignol,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 36238,Mairie - Vigoulant,independent,mairie-vigoulant.fr,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 24580,Mairie - Villac,independent,mairie-villac.fr,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
-80807,Mairie - Ville-sur-Ancre,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
-80794,Mairie - Villecourt,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
-02804,Mairie - Villemontoire,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+80807,Mairie - Ville-sur-Ancre,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+80794,Mairie - Villecourt,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+02804,Mairie - Villemontoire,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 31585,Mairie - Villeneuve-de-Rivière,microsoft,villeneuvederiviere.fr,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 34337,Mairie - Villeneuve-lès-Maguelone,independent,villeneuvelesmaguelone.fr,100,multiple_mx; spf_strict; mx_spf_match; provider_classified; french_regional_hoster
-80805,Mairie - Villers-Tournelle,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+80805,Mairie - Villers-Tournelle,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 59620,Mairie - Villers-au-Tertre,ovh,villersautertre.fr,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
-62859,Mairie - Villers-l'Hôpital,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+62859,Mairie - Villers-l'Hôpital,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 30353,Mairie - Vissec,independent,vissec.fr,100,multiple_mx; spf_softfail; mx_spf_match; provider_classified; french_regional_hoster
 94081,Mairie - Vitry-sur-Seine,independent,vitry94.fr,100,multiple_mx; spf_strict; mx_spf_match; provider_classified; french_regional_hoster
-52522,Mairie - Viéville,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+52522,Mairie - Viéville,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 73329,Mairie - Voglans,independent,voglans.fr,100,multiple_mx; spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 01456,Mairie - Vongnes,microsoft,vongnes.fr,100,multiple_mx; spf_strict; mx_spf_match; provider_classified; french_regional_hoster
-52547,Mairie - Vouécourt,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
-34326,Mairie - Vélieux,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+52547,Mairie - Vouécourt,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+34326,Mairie - Vélieux,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 69259,Mairie - Vénissieux,independent,ville-venissieux.fr,100,multiple_mx; spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 90104,Mairie - Vézelois,independent,vezelois.fr,100,multiple_mx; spf_softfail; mx_spf_match; provider_classified; french_regional_hoster
-80822,Mairie - Warsy,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+80822,Mairie - Warsy,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 59649,Mairie - Wattignies-la-Victoire,ovh,wattignieslavictoire.fr,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 67530,Mairie - Wickersheim-Wilshausen,microsoft,payszorn.com,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 59658,Mairie - Wicres,independent,wicres.fr,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 62893,Mairie - Wimereux,independent,ville-wimereux.fr,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 67539,Mairie - Wingersheim les Quatre Bans,microsoft,payszorn.com,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
-80825,Mairie - Wiry-au-Mont,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
-80828,Mairie - Woirel,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+80825,Mairie - Wiry-au-Mont,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+80828,Mairie - Woirel,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 68378,Mairie - Wolfersdorf,independent,wolfersdorf.fr,100,multiple_mx; spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 67554,Mairie - Wolxheim,independent,wolxheim.fr,100,multiple_mx; spf_softfail; mx_spf_match; provider_classified; french_regional_hoster
 59663,Mairie - Wormhout,microsoft,wormhout.fr,100,multiple_mx; spf_strict; mx_spf_match; provider_classified; french_regional_hoster
-80829,Mairie - Y,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+80829,Mairie - Y,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 28423,Mairie - Yermenonville,independent,yermenonville.fr,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 41297,Mairie - Yvoy-le-Marron,microsoft,yvoy-le-marron.fr,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
-80835,Mairie - Yzeux,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
-51226,Mairie - Écury-le-Repos,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+80835,Mairie - Yzeux,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+51226,Mairie - Écury-le-Repos,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 36070,Mairie - Éguzon-Chantôme,independent,eguzon-chantome.fr,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
-80269,Mairie - Épaumesnil,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+80269,Mairie - Épaumesnil,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 88160,Mairie - Épinal,microsoft,epinal.fr,100,multiple_mx; mx_spf_match; provider_classified; french_regional_hoster
-80270,Mairie - Épécamps,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
-80272,Mairie - Épénancourt,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
-26119,Mairie - Érôme,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
-80295,Mairie - Étinehem-Méricourt,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
-54185,Mairie - Étreval,local,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+80270,Mairie - Épécamps,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+80272,Mairie - Épénancourt,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+26119,Mairie - Érôme,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+80295,Mairie - Étinehem-Méricourt,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
+54185,Mairie - Étreval,independent,laposte.net,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
 90041,Mairie - Étueffont,independent,etueffont.fr,100,multiple_mx; spf_softfail; mx_spf_match; provider_classified; french_regional_hoster
 02299,Mairie - Évergnicourt,independent,evergnicourt.fr,100,spf_strict; mx_spf_match; provider_classified; french_regional_hoster
