@@ -143,8 +143,12 @@ def url_to_domain(url: str | None) -> str | None:
     """Extrait le domaine de base depuis une URL."""
     if not url:
         return None
-    parsed = urlparse(url if "://" in url else f"https://{url}")
-    host = parsed.hostname or ""
+    try:
+        parsed = urlparse(url if "://" in url else f"https://{url}")
+        host = parsed.hostname or ""
+    except ValueError:
+        # URL malformée dans la DILA (ex: crochets -> "Invalid IPv6 URL")
+        return None
     if host.startswith("www."):
         host = host[4:]
     return host if host else None

@@ -129,8 +129,10 @@ def build_urls(domain: str) -> list[str]:
     """Build candidate URLs to scrape, trying www. prefix first."""
     domain = domain.strip()
     if domain.startswith(("http://", "https://")):
-        parsed = urlparse(domain)
-        domain = parsed.hostname or domain
+        try:
+            domain = urlparse(domain).hostname or domain
+        except ValueError:
+            pass
     if domain.startswith("www."):
         bare = domain[4:]
     else:
