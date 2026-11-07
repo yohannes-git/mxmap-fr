@@ -22,6 +22,7 @@ from mail_sovereignty.constants import (
     CONCURRENCY_SMTP,
     EMAIL_RE,
     GATEWAY_KEYWORDS,
+    KNOWN_EMAIL_DOMAINS,
     SKIP_DOMAINS,
     SHARED_EMAIL_DOMAINS,
     SUBPAGES,
@@ -345,6 +346,93 @@ MANUAL_OVERRIDES: dict[str, dict[str, Any]] = {
 }
 
 
+def _root_domain(host: str) -> str:
+    parts = host.lower().rstrip(".").split(".")
+    return ".".join(parts[-2:]) if len(parts) >= 2 else host.lower()
+
+
+# Providers trop génériques pour remplacer ce que le probe webmail a vu
+# (ex : MX auto-hébergé + webmail Zimbra -> on garde "zimbra").
+_GENERIC_PROVIDERS = {"independent", "local", "french-isp", "unknown"}
+
+
+async def backfill_dns_for_probe_classified(communes: dict[str, dict[str, Any]]) -> int:
+    """Interroge MX/SPF pour les communes classées sans DNS.
+
+    Le probe webmail de preprocess retourne sans lookup DNS quand il trouve
+    une interface (Zimbra, BlueMind, Roundcube…). Une page webmail ne dit pas
+    où le courrier est livré : sur un échantillon, la majorité de ces communes
+    avaient un MX Microsoft 365, OVH ou une passerelle (Mailinblack…).
+    On récupère donc le DNS et on reclasse quand le MX désigne un hébergeur
+    précis ; sinon on garde la classification du probe.
+    Les domaines FAI/mutualisés (@orange.fr…) ne sont pas concernés : leur
+    classification vient du domaine lui-même.
+    """
+    overridden = {i for i, o in MANUAL_OVERRIDES.items() if "provider" in o or "mx" in o}
+    candidates = [
+        m
+        for m in communes.values()
+        if m.get("domain")
+        and not m.get("mx")
+        and m.get("provider") not in ("unknown", "merged")
+        and m["insee"] not in overridden
+        and _root_domain(m["domain"]) not in SHARED_EMAIL_DOMAINS
+        and m["domain"] not in KNOWN_EMAIL_DOMAINS
+    ]
+    if not candidates:
+        return 0
+    print(f"\nDNS pour {len(candidates)} communes classées sans MX (probe webmail)...")
+
+    async def _one(m: dict[str, Any], sem: asyncio.Semaphore) -> bool:
+        async with sem:
+            domain = m["domain"]
+            mx = await lookup_mx(domain)
+            if not mx:
+                return False
+            spf = await lookup_spf(domain)
+            spf_resolved = await resolve_spf_includes(spf) if spf else ""
+            mx_cnames = await resolve_mx_cnames(mx)
+            mx_asns = await resolve_mx_asns(mx)
+            autodiscover = await lookup_autodiscover(domain)
+        provider = classify(
+            mx,
+            spf,
+            mx_cnames=mx_cnames,
+            mx_asns=mx_asns or None,
+            resolved_spf=spf_resolved or None,
+            autodiscover=autodiscover or None,
+        )
+        m["mx"] = mx
+        m["spf"] = spf
+        if spf_resolved and spf_resolved != spf:
+            m["spf_resolved"] = spf_resolved
+        gateway = detect_gateway(mx)
+        if gateway:
+            m["gateway"] = gateway
+        if mx_cnames:
+            m["mx_cnames"] = mx_cnames
+        if mx_asns:
+            m["mx_asns"] = sorted(mx_asns)
+        if autodiscover:
+            m["autodiscover"] = autodiscover
+        old = m["provider"]
+        if provider not in _GENERIC_PROVIDERS and provider != old:
+            m["provider"] = provider
+            print(f"  {m['insee']:>6} {domain:<35} {old} -> {provider}")
+            return True
+        if provider in _GENERIC_PROVIDERS and old in _GENERIC_PROVIDERS:
+            # MX sur le domaine de la commune = auto-hébergé
+            if all(_root_domain(h) == _root_domain(domain) for h in mx):
+                m["provider"] = "local"
+        return False
+
+    sem = asyncio.Semaphore(CONCURRENCY_POSTPROCESS)
+    results = await asyncio.gather(*[_one(m, sem) for m in candidates])
+    changed = sum(results)
+    print(f"  {sum(1 for m in candidates if m.get('mx'))} MX trouvés, {changed} reclassées")
+    return changed
+
+
 async def run(data_path: Path) -> None:
     with open(data_path, encoding="utf-8") as f:
         data = json.load(f)
@@ -461,6 +549,9 @@ async def run(data_path: Path) -> None:
             print(
                 f"  {insee:>6} {communes[insee]['name']:<30} -> {provider} (DNS re-lookup)"
             )
+
+    # Step 1.2 : communes classées par le probe webmail HTTP sans aucun MX
+    await backfill_dns_for_probe_classified(communes)
 
     # Step 1.5 : Pour les communes unknown/independent sans MX,
     # tenter autodiscover et SPF comme signaux de classification

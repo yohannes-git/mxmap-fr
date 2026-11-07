@@ -361,7 +361,7 @@ Seuils adaptés à la réalité française :
 - Haute confiance minimum : **45%**
 
 Le scorer donne des bonus pour :
-- `classified_via_known_email_domain` (+60) : domaine FAI connu sans lookup MX
+- `classified_via_known_email_domain` (+70) : domaine FAI connu sans lookup MX (score 95)
 - `provider == "local"` : MX auto-hébergé
 - `french_regional_hoster` (+10) : hébergeur régional identifié
 - `signal_classification` : classifié via autodiscover/SPF sans MX (plafonné à 70)

@@ -10,9 +10,15 @@ from mail_sovereignty.classify import (
     classify_from_mx,
     classify_from_smtp_banner,
     classify_from_spf,
+    detect_gateway,
     spf_mentions_providers,
 )
-from mail_sovereignty.constants import FRENCH_REGIONAL_HOSTERS, GATEWAY_KEYWORDS, PROVIDER_KEYWORDS
+from mail_sovereignty.constants import (
+    FRENCH_REGIONAL_HOSTERS,
+    GATEWAY_KEYWORDS,
+    KNOWN_EMAIL_DOMAINS,
+    PROVIDER_KEYWORDS,
+)
 
 # Quality gate thresholds (override via env vars in CI)
 # Seuils adaptés à la réalité française : beaucoup de communes sans domaine propre
@@ -129,6 +135,15 @@ def score_entry(entry: dict[str, Any]) -> dict[str, Any]:
         if mx_provider == spf_provider:
             score += 20
             flags.append("mx_spf_match")
+        elif (
+            mx_provider == "independent"
+            and spf_provider == provider
+            and detect_gateway(mx)
+        ):
+            # MX = passerelle de filtrage connue (Mailinblack, Vade…) : le vrai
+            # hébergeur est lu dans le SPF, et il concorde avec la classification.
+            score += 20
+            flags.append("gateway_spf_match")
         elif mx_provider == "independent" and spf_provider:
             score += 10
             flags.append("independent_mx_with_cloud_spf")
@@ -152,19 +167,9 @@ def score_entry(entry: dict[str, Any]) -> dict[str, Any]:
     if not mx and provider not in ("unknown", "merged"):
         domain = entry.get("domain", "")
         # Domaines FAI/cloud connus : classification directe depuis le domaine = fiable
-        KNOWN_DIRECT = [
-            "orange.fr","wanadoo.fr","voila.fr","francetelecom.fr",
-            "free.fr","freebox.fr","aliceadsl.fr","alice.fr","tiscali.fr","infonie.fr","proxad.net",
-            "sfr.fr","sfr.com","sfr.net","neuf.fr","cegetel.net","numericable.fr","noos.fr",
-            "9online.fr","cario.fr","guideo.fr","mageos.com","fnac.net","waika9.com","akeonet.com",
-            "bbox.fr","bouyguestelecom.fr","bouygtel.com","dartybox.com",
-            "gmail.com","googlemail.com",
-            "ovh.net","ovh.com","ovhcloud.com","gandi.net",
-            "outlook.fr","hotmail.fr","live.fr",
-        ]
-        if domain in KNOWN_DIRECT:
+        if domain in KNOWN_EMAIL_DOMAINS:
             # Classification directe depuis domaine FAI/cloud connu = très fiable
-            score += 60
+            score += 70
             flags.append("classified_via_known_email_domain")
         elif provider == "local":
             # Domaine .fr propre à la mairie = hébergement local, classification fiable

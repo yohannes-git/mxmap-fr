@@ -371,6 +371,18 @@ FRENCH_REGIONAL_HOSTERS = [
 
 # Domaines mutualisés connus : jamais de l'auto-hébergement communal
 # Utilisé dans postprocess pour exclure la sonde webmail sur ces domaines
+# Domaines email FAI/cloud : une adresse @orange.fr suffit à classer la commune
+KNOWN_EMAIL_DOMAINS = frozenset({
+    "orange.fr", "wanadoo.fr", "voila.fr", "francetelecom.fr",
+    "free.fr", "freebox.fr", "aliceadsl.fr", "alice.fr", "tiscali.fr", "infonie.fr", "proxad.net",
+    "sfr.fr", "sfr.com", "sfr.net", "neuf.fr", "cegetel.net", "numericable.fr", "noos.fr",
+    "9online.fr", "cario.fr", "guideo.fr", "mageos.com", "fnac.net", "waika9.com", "akeonet.com",
+    "bbox.fr", "bouyguestelecom.fr", "bouygtel.com", "dartybox.com",
+    "gmail.com", "googlemail.com",
+    "ovh.net", "ovh.com", "ovhcloud.com", "gandi.net",
+    "outlook.fr", "hotmail.fr", "live.fr",
+})
+
 SHARED_EMAIL_DOMAINS = {
     "laposte.net",
     "gmail.com",
